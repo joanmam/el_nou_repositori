@@ -10,7 +10,7 @@ import streamlit as st
 
 conn = sqlite3.connect('C:/Users/Joan/Receptes/LesReceptes2/nova_base_de_dades.db')
 cursor = conn.cursor()
-query = 'SELECT IDRecepte, Data_formatejada, Titol, Descripcio, blob, Etiquetes FROM Receptes'
+query = 'SELECT ID_Recepte, Data_formatejada, Titol, Descripcio, blob, Etiquetes FROM Receptes'
 df = pd.read_sql_query(query, conn)
 
 # Función para convertir el BLOB a una imagen en base64
@@ -39,7 +39,7 @@ html_card_template = """
 
 def create_card(row):
     img_base64 = get_image_base64(row['blob'])
-    return html_card_template.format(row['IDRecepte'], row['Data_formatejada'], row['Descripcio'], row['Titol'], row['Etiquetes'], img_base64)
+    return html_card_template.format(row['ID_Recepte'], row['Data_formatejada'], row['Descripcio'], row['Titol'], row['Etiquetes'], img_base64)
 
 # Aplicación Streamlit
 st.title('Posts')
