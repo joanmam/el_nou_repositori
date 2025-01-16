@@ -7,7 +7,7 @@ import pandas as pd
 import base64
 import io
 import requests
-
+st.set_page_config(layout="wide")
 st.title("Post")
 st.write("contenido")
 
@@ -31,7 +31,6 @@ CREATE TABLE IF NOT EXISTS ingredients (
     ID_ingredient INTEGER PRIMARY KEY AUTOINCREMENT,
     nom TEXT NOT NULL,
     quantitat TEXT NOT NULL,
-    unitats TEXT NOT NULL,
     ID_Recepte INTEGER,
     FOREIGN KEY (ID_Recepte) REFERENCES Receptes(id)
 )
@@ -82,21 +81,20 @@ if 'ingredientes' not in st.session_state:
 with st.form(key="Form2"):
     nom = st.text_input('Nombre del ingrediente')
     quantitat = st.text_input('Cantidad')
-    unitats = st.text_input('Unitats')
     añadir_ingrediente = st.form_submit_button("Añadir ingrediente")
     finalizar = st.form_submit_button("Finalizar e Ingredientes")
 
     if añadir_ingrediente:
-        if nom and quantitat and unitats:
-            st.session_state.ingredientes.append((nom, quantitat, unitats))
+        if nom and quantitat:
+            st.session_state.ingredientes.append((nom, quantitat))
         else:
             st.error("please")
 
     if finalizar:
         if st.session_state.ultimo_id is not None:
-            for nom, quantitat, unitats in st.session_state.ingredientes:
-                cursor.execute('INSERT INTO ingredients (nom, quantitat, unitats, ID_Recepte) VALUES (?, ?, ?, ?)',
-                           (nom, quantitat, unitats, st.session_state.ultimo_id))
+            for nom, quantitat in st.session_state.ingredientes:
+                cursor.execute('INSERT INTO ingredients (nom, quantitat, ID_Recepte) VALUES (?, ?, ?)',
+                           (nom, quantitat, st.session_state.ultimo_id))
             conn.commit()
             st.success('Todos los ingredientes han sido guardados con éxito!')
             st.session_state.ingredientes = []
@@ -105,8 +103,8 @@ with st.form(key="Form2"):
 
 if st.session_state.ingredientes:
     st.write("Ingredientes añadidos:")
-    for idx, (nom, quantitat, unitats) in enumerate(st.session_state.ingredientes, start=1):
-        st.write(f'{idx}. Ingrediente: {nom}, Cantidad: {quantitat}, Unitats: {unitats}')
+    for idx, (nom, quantitat) in enumerate(st.session_state.ingredientes, start=1):
+        st.write(f'{idx}. Ingrediente: {nom}, Cantidad: {quantitat}')
 
 # Cerrar la conexión
 conn.close()
