@@ -78,11 +78,17 @@ if 'ingredientes' not in st.session_state:
     st.session_state.ingredientes = []
 
 # Formulario para añadir ingredientes
+
+
 with st.form(key="Form2"):
-    nom = st.text_input('Nombre del ingrediente')
-    quantitat = st.text_input('Cantidad')
-    añadir_ingrediente = st.form_submit_button("Añadir ingrediente")
-    finalizar = st.form_submit_button("Finalizar e Ingredientes")
+    col1, col2 = st.columns(2)
+    with col1:
+        nom = st.text_input('Nombre del ingrediente')
+        añadir_ingrediente = st.form_submit_button("Añadir ingrediente")
+    with col2:
+        quantitat = st.text_input('Cantidad')
+        finalizar = st.form_submit_button("Finalizar")
+
 
     if añadir_ingrediente:
         if nom and quantitat:
