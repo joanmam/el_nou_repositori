@@ -1,11 +1,16 @@
-import streamlit as st
 import sqlite3
+import streamlit as st
+import pandas as pd
+from visualizar import create_card, get_image_base64
 
 # Conectarse a la base de datos
 conn = sqlite3.connect('C:/Users/Joan/Receptes/LesReceptes2/nova_base_de_dades.db')
 cursor = conn.cursor()
 
 conn.commit()
+
+query = 'SELECT ID_Recepte, Data_formatejada, Titol, Descripcio, blob, Etiquetes FROM Receptes'
+df = pd.read_sql_query(query, conn)
 
 # Función para obtener la lista de ingredientes
 def obtener_ingredientes():
@@ -16,7 +21,8 @@ def obtener_ingredientes():
 def obtener_recetas(ingredients_seleccionats):
     placeholders = ', '.join(['?']*len(ingredients_seleccionats))
     query = f"""
-    SELECT Receptes.Titol, Receptes.Data_formatejada, Receptes.ID_Recepte
+    SELECT Receptes.Titol, Receptes.Data_formatejada, Receptes.ID_Recepte, Receptes.Descripcio,
+    Receptes.Etiquetes, Receptes.blob
     FROM Receptes
     JOIN ingredients ON Receptes.ID_Recepte = ingredients.ID_Recepte
     WHERE ingredients.nom IN ({placeholders})
@@ -41,13 +47,16 @@ if ingredients_seleccionats:
     if receptes:
         st.write("Recetas encontradas:")
         for recepte in receptes:
-            Titol, Data_formatejada, ID_Recepte = recepte
-            st.markdown(f"### {Titol}")
-            st.write(f"**Fecha de Publicación:** {Data_formatejada}")
-            st.write(f"**ID de la Receta:** {ID_Recepte}")
-    else:
-        st.write("No se encontraron recetas con los ingredientes seleccionados.")
+            row = {
+                'Titol': recepte[0],
+                'Data_formatejada': recepte[1],
+                'ID_Recepte': recepte[2],
+                'Descripcio': recepte[3],
+                'Etiquetes': recepte[4],
+                'blob': recepte[5],
+            }
+            tarjeta = create_card(row)
+            st.markdown(tarjeta, unsafe_allow_html=True)
 else:
     st.write("Selecciona uno o más ingredientes para ver las recetas.")
-
 
