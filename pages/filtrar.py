@@ -9,8 +9,6 @@ cursor = conn.cursor()
 
 conn.commit()
 
-query = 'SELECT ID_Recepte, Data_formatejada, Titol, Descripcio, blob, Etiquetes FROM Receptes'
-df = pd.read_sql_query(query, conn)
 
 # Función para obtener la lista de ingredientes
 def obtener_ingredientes():
@@ -19,17 +17,25 @@ def obtener_ingredientes():
 
 # Función para obtener recetas con los ingredientes seleccionados
 def obtener_recetas(ingredients_seleccionats):
-    placeholders = ', '.join(['?']*len(ingredients_seleccionats))
+    placeholders = ','.join(['?'] * len(ingredients_seleccionats))
     query = f"""
-    SELECT Receptes.Titol, Receptes.Data_formatejada, Receptes.ID_Recepte, Receptes.Descripcio,
-    Receptes.Etiquetes, Receptes.blob
+    SELECT Receptes.ID_Recepte, 
+             Receptes.Data_formatejada, 
+             Receptes.Titol,
+             Receptes.Descripcio,
+             Receptes.blob,
+             Receptes.Etiquetes,
+             Receptes.Categoria,
+             Receptes.Preparacio,
+             Receptes.Temps
     FROM Receptes
     JOIN ingredients ON Receptes.ID_Recepte = ingredients.ID_Recepte
     WHERE ingredients.nom IN ({placeholders})
     GROUP BY Receptes.Titol
     HAVING COUNT(DISTINCT ingredients.nom) = ?
     """
-    cursor.execute(query, (*ingredients_seleccionats, len(ingredients_seleccionats)))
+    params = (*ingredients_seleccionats, len(ingredients_seleccionats))
+    cursor.execute(query, params)
     return cursor.fetchall()
 
 # Interfaz de usuario con Streamlit
@@ -48,15 +54,20 @@ if ingredients_seleccionats:
         st.write("Recetas encontradas:")
         for recepte in receptes:
             row = {
-                'Titol': recepte[0],
+                'Titol': recepte[2],
                 'Data_formatejada': recepte[1],
-                'ID_Recepte': recepte[2],
+                'ID_Recepte': recepte[0],
                 'Descripcio': recepte[3],
-                'Etiquetes': recepte[4],
-                'blob': recepte[5],
+                'Etiquetes': recepte[5],
+                'Categoria': recepte[6],
+                'Preparacio': recepte[7],
+                'Temps': recepte[8],
+                'blob': recepte[4]
             }
             tarjeta = create_card(row)
             st.markdown(tarjeta, unsafe_allow_html=True)
+        else:
+            st.write("No se encontraron")
 else:
     st.write("Selecciona uno o más ingredientes para ver las recetas.")
 

@@ -23,7 +23,10 @@ cursor.execute('''CREATE TABLE IF NOT EXISTS Receptes (
              Titol TEXT,
              Descripcio TEXT,
              blob BLOB,
-             Etiquetes TEXT)''')
+             Etiquetes TEXT,
+             Categoria TEXT,
+             Preparacio TEXT,
+             Temps TEXT)''')
 
 # Crear una tabla para los ingredientes
 cursor.execute('''
@@ -47,6 +50,9 @@ with st.form(key="Form"):
     Titol = st.text_input("Titol")
     Descripcio = st.text_area("Descripcio")
     tags = st.text_area("Etiquetes")
+    Categoria = st.selectbox("Seleciona", ["Cat1","Cat2", "Cat3"])
+    Temps = st.text_input("Temps")
+    Preparacio = st.text_input("Preparacio")
     enviar = st.form_submit_button()
     if enviar:
         if foto is not None:
@@ -60,8 +66,9 @@ with st.form(key="Form"):
             blob = buffer.getvalue()
             Etiquetes = ', '.join([tag.strip() for tag in tags.split(',')])
             Data_formatejada = Data.strftime("%d-%m-%Y")
-            sql = "INSERT INTO Receptes (Data_formatejada, Titol, Descripcio, Etiquetes, blob) VALUES (?, ?, ?, ?, ?)"
-            datos = Data, Titol, Descripcio, Etiquetes, blob
+            sql = ("INSERT INTO Receptes (Data_formatejada, Titol, Descripcio, Etiquetes, blob, Temps, Preparacio, Categoria)"
+                   "VALUES (?, ?, ?, ?, ?, ?, ?, ?)")
+            datos = Data_formatejada, Titol, Descripcio, Etiquetes, blob, Temps, Preparacio, Categoria
             cursor.execute(sql, datos)
             conn.commit()
 
