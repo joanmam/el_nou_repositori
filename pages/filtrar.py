@@ -1,5 +1,6 @@
 import sqlite3
 import streamlit as st
+import base64
 import pandas as pd
 from visualizar import create_card, get_image_base64
 
@@ -22,7 +23,7 @@ def obtener_recetas(ingredients_seleccionats):
     SELECT Receptes.ID_Recepte, 
              Receptes.Data_formatejada, 
              Receptes.Titol,
-             Receptes.Descripcio,
+             Receptes.Metode,
              Receptes.blob,
              Receptes.Etiquetes,
              Receptes.Categoria,
@@ -57,17 +58,14 @@ if ingredients_seleccionats:
                 'Titol': recepte[2],
                 'Data_formatejada': recepte[1],
                 'ID_Recepte': recepte[0],
-                'Descripcio': recepte[3],
-                'Etiquetes': recepte[5],
-                'Categoria': recepte[6],
-                'Preparacio': recepte[7],
-                'Temps': recepte[8],
+                'Metode': recepte[3],
                 'blob': recepte[4]
             }
-            tarjeta = create_card(row)
+            img_base64 = get_image_base64(row['blob'])
+            tarjeta = create_card(row['ID_Recepte'], row['Data_formatejada'], row['Titol'], img_base64, row['Metode'])
             st.markdown(tarjeta, unsafe_allow_html=True)
-        else:
-            st.write("No se encontraron")
+    else:
+        st.write("No se encontraron")
 else:
     st.write("Selecciona uno o más ingredientes para ver las recetas.")
 

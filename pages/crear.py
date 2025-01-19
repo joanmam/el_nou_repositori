@@ -21,7 +21,7 @@ cursor.execute('''CREATE TABLE IF NOT EXISTS Receptes (
              ID_Recepte INTEGER PRIMARY KEY AUTOINCREMENT, 
              Data_formatejada TEXT, 
              Titol TEXT,
-             Descripcio TEXT,
+             Metode TEXT,
              blob BLOB,
              Etiquetes TEXT,
              Categoria TEXT,
@@ -48,7 +48,7 @@ with st.form(key="Form"):
     Data = st.date_input("seleccionar fecha")
     foto = st.file_uploader("elige",type=["jpg","png"])
     Titol = st.text_input("Titol")
-    Descripcio = st.text_area("Descripcio")
+    Metode = st.text_area("Metode")
     tags = st.text_area("Etiquetes")
     Categoria = st.selectbox("Seleciona", ["Cat1","Cat2", "Cat3"])
     Temps = st.text_input("Temps")
@@ -66,9 +66,9 @@ with st.form(key="Form"):
             blob = buffer.getvalue()
             Etiquetes = ', '.join([tag.strip() for tag in tags.split(',')])
             Data_formatejada = Data.strftime("%d-%m-%Y")
-            sql = ("INSERT INTO Receptes (Data_formatejada, Titol, Descripcio, Etiquetes, blob, Temps, Preparacio, Categoria)"
+            sql = ("INSERT INTO Receptes (Data_formatejada, Titol, Metode, Etiquetes, blob, Temps, Preparacio, Categoria)"
                    "VALUES (?, ?, ?, ?, ?, ?, ?, ?)")
-            datos = Data_formatejada, Titol, Descripcio, Etiquetes, blob, Temps, Preparacio, Categoria
+            datos = Data_formatejada, Titol, Metode, Etiquetes, blob, Temps, Preparacio, Categoria
             cursor.execute(sql, datos)
             conn.commit()
 
