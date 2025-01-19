@@ -26,9 +26,10 @@ ingredients_seleccionats = st.multiselect('Selecciona los ingredientes:', llista
 
 # Generar la consulta dinámica
 query = '''
-    SELECT Receptes.ID_Recepte, Receptes.Data_formatejada, Receptes.Titol, Receptes.Metode, Receptes.Categoria, Receptes.Preparacio, GROUP_CONCAT(ingredients.nom, ', ') as ingredients, Receptes.blob
+    SELECT Receptes.ID_Recepte, Receptes.Data_formatejada, Receptes.Titol, Receptes.Metode, Receptes.Categoria, Receptes.Preparacio, Receptes.blob, GROUP_CONCAT(ingredients.nom, ', ') as ingredients
     FROM Receptes
-    LEFT JOIN ingredients ON Receptes.ID_Recepte = ingredients.ID_Recepte'''
+    LEFT JOIN ingredients
+    ON Receptes.ID_Recepte = ingredients.ID_Recepte'''
 
 params = []
 conditions = []
