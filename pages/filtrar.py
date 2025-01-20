@@ -3,6 +3,8 @@ import streamlit as st
 import base64
 import pandas as pd
 from visualizar import create_card, get_image_base64
+import streamlit.components.v1 as components
+from datetime import datetime
 
 # Conectarse a la base de datos
 conn = sqlite3.connect('C:/Users/Joan/Receptes/LesReceptes2/nova_base_de_dades.db')
@@ -11,6 +13,40 @@ cursor = conn.cursor()
 
 conn.commit()
 
+
+# Obtenir la data actual
+current_date = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
+
+# CSS per a posicionar la data a la cantonada superior dreta
+date_css = """
+<style>
+.date-corner {
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    font-size: 16px;
+    background-color: rgba(125, 125, 255, 0.8);
+    padding: 5px 10px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    z-index: 1000; /* Assegura que la data estigui al damunt de qualsevol contingut */
+}
+</style>
+"""
+
+# HTML per a mostrar la data amb l'estil definit
+date_html = f"""
+<div class="date-corner">
+    {current_date}
+</div>
+"""
+
+# Aplicar el CSS i HTML personalitzat a l'aplicació
+components.html(date_css + date_html, height=100)
+
+
+# Interfaz de usuario con Streamlit
+st.title('Filtro de Recetas por Ingredientes')
 
 # Función para obtener la lista de ingredientes
 def obtener_ingredientes():
@@ -57,8 +93,7 @@ query += " GROUP BY Receptes.ID_Recepte"
 cursor.execute(query, params)
 resultados = cursor.fetchall()
 
-# Interfaz de usuario con Streamlit
-st.title('Filtro de Recetas por Ingredientes')
+
 
 # Selección de ingredientes
 # llista_ingredients = obtener_ingredientes()

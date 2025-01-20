@@ -17,7 +17,7 @@ def get_image_base64(blob):
     return base64.b64encode(blob).decode('utf-8')
 
 
-st.write("Selecciona uno o más ingredientes para ver las recetas.")
+
 
 
 # Función para generar la tarjeta con los datos proporcionados
@@ -34,12 +34,14 @@ def create_card(ID_Recepte, Data_formatejada, Titol, img_base64, Metode):
         </div>
         <!-- Tercera fila: una columna con imagen centrada -->
         <div style="text-align: center; padding-top: 10px; border-bottom: 1px solid #ccc; padding-bottom: 10px; margin-bottom: 10px;">
-            <img src="data:image/jpeg;base64,{}" alt="Imagen" style="max-width: 50%; height: auto; border-radius: 5px;"/>
+            <img src="data:image/jpeg;base64,{}" alt="Imagen" style="max-width: 100%; height: auto; border-radius: 5px;"/>
         </div>
         <!-- Cuarta fila: una columna -->
         <div style="padding-top: 10px; border-bottom: 1px solid #ccc; padding-bottom: 10px; margin-bottom: 10px;"> <strong>{}</strong>
         </div>
     </div>
+    <!-- Separador -->
+    <div style="width: 100%; height: 2px; background-color: #123456; margin: 20px 0;"></div>
     '''
     return html_card_template.format(ID_Recepte, Data_formatejada, Titol, img_base64, Metode)
 
@@ -55,3 +57,6 @@ def create_card(ID_Recepte, Data_formatejada, Titol, img_base64, Metode):
 
 # Cerrar la conexión a la base de datos
 conn.close()
+
+
+
