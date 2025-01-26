@@ -1,26 +1,29 @@
-import streamlit as st
 import sqlite3
+import streamlit as st
+import streamlit.components.v1 as components
+from datetime import datetime
+from io import BytesIO, StringIO
+from PIL import Image
+import pandas as pd
+import base64
+import io
+import requests
+st.set_page_config(layout="wide")
 
-# Connectar-se a la base de dades amb les claus estrangeres habilitades
+
+# Conectarse a la base de datos
 conn = sqlite3.connect('C:/Users/Joan/Receptes/LesReceptes2/nova_base_de_dades.db')
-conn.execute("PRAGMA foreign_keys = ON")  # Assegurar que les claus estrangeres estan habilitades
+conn.execute("PRAGMA foreign_keys = ON")
 cursor = conn.cursor()
 
-# Obtenir l'ID del registre a esborrar amb valor mínim de 1
-record_id = int(st.number_input("ID del registre a borrar", min_value=1, step=1))
+record_id = int(st.number_input("ID del registre a borrar",min_value=1, step=1))
 
-st.write(f"El registre seleccionat és el {record_id}")
-st.write("Aquesta és la Recepta")
-
-# Executar l'ordre SELECT amb el paràmetre
+st.write(f"El registre seleccionat es el {record_id}")
+st.write("Aquesta es la Recepte")
 cursor.execute('SELECT * FROM Receptes WHERE ID_Recepte = ?', (record_id,))
 record = cursor.fetchone()
 
-# Mostrar el registre seleccionat
-if record:
-    st.write(f"ID: {record[0]}, Títol: {record[2]}, Data_formatejada: {record[1]}")
-else:
-    st.write("No s'ha trobat cap registre amb aquest ID.")
+st.write(f"ID: {record[0]}, Titol: {record[2]}, Data_formatejada: {record[1]}")
 
 # Esborrar el registre seleccionat si existeix
 if st.button("Esborrar"):
@@ -41,3 +44,4 @@ if st.button("Esborrar"):
 
 # Tancar la connexió
 conn.close()
+

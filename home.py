@@ -52,7 +52,7 @@ background_css = f"""
 st.markdown(background_css, unsafe_allow_html=True)
 
 # Contingut de l'aplicació
-st.markdown("<div class='centered-title-container'><div class='centered-title'>Aplicació Streamlit amb Imatge de Fons</div></div>", unsafe_allow_html=True)
+st.markdown("<div class='centered-title-container'><div class='centered-title'>Les Receptes de la Mamen</div></div>", unsafe_allow_html=True)
 
 
 

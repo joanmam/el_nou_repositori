@@ -92,7 +92,7 @@ CREATE TABLE IF NOT EXISTS ingredients (
     nom TEXT NOT NULL,
     quantitat TEXT NOT NULL,
     ID_Recepte INTEGER,
-    FOREIGN KEY (ID_Recepte) REFERENCES Receptes(id)
+    FOREIGN KEY (ID_Recepte) ,REFERENCES Receptes(ID_Recepte) ON DELETE CASCADE
 )
 ''')
 conn.commit()
