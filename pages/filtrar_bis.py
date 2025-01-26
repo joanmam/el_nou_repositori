@@ -94,7 +94,7 @@ llista_ingredients = obtenir_ingredients()
 
 # Widgets de Streamlit per obtenir les condicions
 categoria = st.multiselect('Categoria', ['Tots', 'Cat1', 'Cat2', 'Cat3'], default=['Tots'])
-temps_prep = st.slider('Preparació', 0, 240, (0, 240), step=1)
+temps_prep = st.slider('Preparacio', 0, 240, (0, 240), step=1)
 ingredients_seleccionats = st.multiselect('Selecciona els ingredients:', llista_ingredients)
 
 # Definir la consulta SQL amb els paràmetres necessaris
@@ -115,7 +115,7 @@ if 'Tots' not in categoria:
     params.extend(categoria)
 
 if temps_prep != (0, 240):
-    conditions.append("Receptes.Preparació BETWEEN ? AND ?")
+    conditions.append("Receptes.Preparacio BETWEEN ? AND ?")
     params.extend([temps_prep[0], temps_prep[1]])
 
 if ingredients_seleccionats:
