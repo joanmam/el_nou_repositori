@@ -1,58 +1,62 @@
-<div style="background-color:#ffffff; padding:10px; border-radius:5px; margin:10px; border:1px solid #ccc;">
-    <!-- Taula amb tres columnes -->
-    <table style="width: 100%; border-collapse: collapse;">
-        <tr>
-            <td style="width: 33.33%; padding-right: 10px; text-align: left; border-bottom: 1px solid #ccc;"><strong>ID:</strong> {ID_Recepte}</td>
-            <td style="width: 33.33%; padding-left: 10px; text-align: left; border-bottom: 1px solid #ccc;"><strong>Data:</strong> {Data_formatejada}</td>
-            <td style="width: 33.33%; padding-right: 10px; text-align: left; border-bottom: 1px solid #ccc;"><strong>Categoria:</strong> {Categoria}</td>
-        </tr>
-    </table>
-    <!-- Segona fila: una columna -->
-    <div style="padding-top: 10px; border-bottom: 1px solid #ccc; padding-bottom: 10px; margin-bottom: 10px;">
-        <strong>Titol: </strong>{Titol}
-    </div>
-    <!-- Tercera fila: dos columnas con relación 80% - 20% -->
-    <table style="width: 100%; border-collapse: collapse;">
-        <tr>
-            <!-- Columna de imagen (80%) -->
-            <td style="width: 80%; padding: 10px; text-align: left; border: 1px solid #000;">
-                <img src="data:image/jpeg;base64,{img_base64}" alt="Imagen" style="width: 100%; height: auto; border-radius: 5px;"/>
-            </td>
-            <!-- Columna de detalles (20%) dividida en tres filas con encabezados arriba -->
-            <td style="width: 20%; padding: 0; text-align: left; border: 1px solid #000; height: 300px; vertical-align: top;">
-                <table style="width: 100%; height: 100%; border-collapse: collapse;">
-                    <tr style="height: 33.33%;">
-                        <td style="border: 1px solid #000; padding: 10px; vertical-align: top;">
-                            <strong>Temps:</strong> <br> {Temps}
-                        </td>
-                    </tr>
-                    <tr style="height: 33.33%;">
-                        <td style="border: 1px solid #000; padding: 10px; vertical-align: top;">
-                            <strong>Ingredients:</strong> <br> {components}
-                        </td>
-                    </tr>
-                    <tr style="height: 33.33%;">
-                        <td style="border: 1px solid #000; padding: 10px; vertical-align: top;">
-                            <strong>Categoria:</strong> <br> {Categoria}
-                        </td>
-                    </tr>
-                </table>
-            </td>
-        </tr>
-    </table>
-    <!-- Quarta fila: una columna -->
-    <div style="padding-top: 10px; padding-right: 10px; padding-left: 10px; border-bottom: 1px solid #ccc; padding-bottom: 10px; margin-bottom: 10px;">
-        <strong>Metode:</strong>
-        <p>{Metode}</p>
-    </div>
-    <!-- Quinta fila amb tres columnes -->
-    <table style="width: 100%; border-collapse: collapse;">
-        <tr>
-            <td style="width: 33.33%; padding-right: 10px; text-align: left; border-bottom: 1px solid #ccc;"><strong>Temps:</strong> {Temps}</td>
-            <td style="width: 33.33%; padding: 0 10px; text-align: left; border-bottom: 1px solid #ccc;"><strong>Ingredients: </strong> {components}</td>
-            <td style="width: 33.33%; padding-left: 10px; text-align: right; border-bottom: 1px solid #ccc;"><strong>Categoria:</strong> {Categoria}</td>
-        </tr>
-    </table>
-</div>
-<!-- Separador -->
-<div style="width: 100%; height: 2px; background-color: #123456; margin: 20px 0;"></div>
+import streamlit as st
+
+# CSS per canviar la mida de la lletra del títol, ajustar el marge inferior i afegir un fons gris
+st.markdown(
+    """
+    <style>
+    .custom-title {
+        font-size: 24px; /* Ajusta aquesta mida segons les teves necessitats */
+        font-weight: bold;
+        margin-bottom: 0.2em; /* Utilitza una unitat més petita per ajustar la separació */
+    }
+    .custom-element {
+        background-color: #f0f0f0; /* Tono gris clar */
+        padding: 10px;
+        border-radius: 5px;
+        margin-bottom: 20px; /* Ajusta el marge inferior */
+    }
+    .separator {
+        width: 100%;
+        height: 2px;
+        background-color: #123456; /* Pots canviar el color segons les teves necessitats */
+        margin: 20px 0; /* Ajusta el marge segons les teves necessitats */
+    }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
+
+# Utilitza HTML per aplicar la classe CSS al títol del primer multiselect i el fons gris
+st.markdown('<div class="custom-element"><p class="custom-title">Selecciona una categoria:</p>', unsafe_allow_html=True)
+
+# El teu primer st.multiselect aquí
+categoria1 = st.multiselect('', ['Tots', 'Cat1', 'Cat2', 'Cat3'], default=['Tots'])
+
+st.markdown('</div>', unsafe_allow_html=True)
+
+# Afegir separador després del primer st.multiselect
+st.markdown('<div class="separator"></div>', unsafe_allow_html=True)
+
+# Utilitza HTML per aplicar la classe CSS al títol del segon slider i el fons gris
+st.markdown('<div class="custom-element"><p class="custom-title">Selecciona un valor:</p>', unsafe_allow_html=True)
+
+# El teu st.slider aquí
+valor = st.slider('', min_value=0, max_value=100, value=50)
+
+st.markdown('</div>', unsafe_allow_html=True)
+
+# Afegir separador després del st.slider
+st.markdown('<div class="separator"></div>', unsafe_allow_html=True)
+
+# Un altre multiselect d'exemple amb fons gris
+st.markdown('<div class="custom-element"><p class="custom-title">Selecciona un altre element:</p>', unsafe_allow_html=True)
+categoria2 = st.multiselect('', ['Element 1', 'Element 2', 'Element 3'], default=['Element 1'])
+
+st.markdown('</div>', unsafe_allow_html=True)
+
+# Afegir separador després del segon st.multiselect
+st.markdown('<div class="separator"></div>', unsafe_allow_html=True)
+
+st.write(f"Has seleccionat de la primera categoria: {categoria1}")
+st.write(f"Has seleccionat el valor: {valor}")
+st.write(f"Has seleccionat de la segona categoria: {categoria2}")

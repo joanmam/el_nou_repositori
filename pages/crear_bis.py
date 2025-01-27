@@ -40,7 +40,7 @@ date_html = f"""
 # Aplicar el CSS i HTML personalitzat a l'aplicació
 components.html(date_css + date_html, height=100)
 
-st.title("Grava una receta")
+st.header("Grava una receta")
 
 #___________________________________________
 # URL de la imatge

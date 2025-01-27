@@ -6,8 +6,12 @@ import streamlit.components.v1 as components
 from datetime import datetime
 from io import BytesIO
 
+from pages.filtrar import ingredients_seleccionats
 
 st.set_page_config(layout="wide")
+
+
+
 
 # Conectarse a la base de datos
 conn = sqlite3.connect('C:/Users/Joan/Receptes/LesReceptes2/nova_base_de_dades.db')
@@ -46,6 +50,9 @@ date_html = f"""
 # Aplicar el CSS i HTML personalitzat a l'aplicació
 components.html(date_css + date_html, height=100)
 #___________________________________________________________________________________
+st.header('Filtre de Receptes')
+
+#______________________________________________________________________________________
 
 # URL de la imatge
 img_url = "https://imagenes.20minutos.es/files/image_990_556/uploads/imagenes/2024/05/07/pimientos.jpeg"  # Utilitza una imatge amb l'amplada de la pàgina (1920px) i l'alçada (113px)
@@ -76,10 +83,7 @@ def convert_blob_to_base64(blob):
         return base64.b64encode(blob).decode('utf-8')
     return ''
 
-
-
-# Interfaz de usuario con Streamlit
-st.title('Filtro de Recetas por Ingredientes')
+#_____________________________________________________________________________
 
 conn = sqlite3.connect('C:/Users/Joan/Receptes/LesReceptes2/nova_base_de_dades.db')
 cursor = conn.cursor()
@@ -93,9 +97,58 @@ def obtenir_ingredients():
 llista_ingredients = obtenir_ingredients()
 
 # Widgets de Streamlit per obtenir les condicions
-categoria = st.multiselect('Categoria', ['Tots', 'Cat1', 'Cat2', 'Cat3'], default=['Tots'])
-temps_prep = st.slider('Preparacio', 0, 240, (0, 240), step=1)
-ingredients_seleccionats = st.multiselect('Selecciona els ingredients:', llista_ingredients)
+st.text("")
+st.text("")
+
+
+# CSS per canviar la mida de la lletra del nom de la variable
+st.markdown(
+    """
+    <style>
+    .custom-title {
+        font-size: 24px; /* Ajusta aquesta mida segons les teves necessitats */
+        font-weight: bold;
+        margin-bottom: 0.02em;
+    }
+    .slider-title {
+        font-size: 24px; /* Ajusta aquesta mida segons les teves necessitats */
+        font-weight: bold;
+        margin-bottom: 0.2em; /* Utilitza una unitat més petita per ajustar la separació */
+    }
+    .separator {
+        width: 100%;
+        height: 2px;
+        background-color: #123456; /* Pots canviar el color segons les teves necessitats */
+        margin: 20px 0; /* Ajusta el marge segons les teves necessitats */
+    }
+    .custom-element {
+        background-color: #d4edda; /* Tono gris clar */
+        padding: 10px;
+        border-radius: 5px;
+        margin-bottom: 20px; /* Ajusta el marge inferior */
+    }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
+
+
+
+# Utilitza HTML per aplicar la classe CSS al títol
+st.markdown('<div class="custom-element"><p class="custom-title">Selecciona una categoria:</p>', unsafe_allow_html=True)
+categoria = st.multiselect('', ['Tots', 'Cat1', 'Cat2', 'Cat3'], default=['Tots'])
+st.markdown('</div>', unsafe_allow_html=True)
+st.markdown('<div class="separator"></div>', unsafe_allow_html=True)
+st.markdown('<div class="custom-element"><p class="custom-title">Selecciona un valor:</p>', unsafe_allow_html=True)
+temps_prep = st.slider('', 0, 240, (0, 240), step=1)
+st.markdown('</div>', unsafe_allow_html=True)
+st.markdown('<div class="separator"></div>', unsafe_allow_html=True)
+st.markdown('<div class="custom-element"><p class="custom-title">Selecciona una categoria:</p>', unsafe_allow_html=True)
+ingredients_seleccionats = st.multiselect('',llista_ingredients)
+st.markdown('</div>', unsafe_allow_html=True)
+st.markdown('<div class="separator"></div>', unsafe_allow_html=True)
+
+
 
 # Definir la consulta SQL amb els paràmetres necessaris
 query = '''
