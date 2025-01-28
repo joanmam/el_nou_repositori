@@ -2,11 +2,13 @@ import sqlite3
 import streamlit as st
 import base64
 import pandas as pd
+import re
+import emoji
 import streamlit.components.v1 as components
 from datetime import datetime
 from io import BytesIO
 
-from pages.filtrar import ingredients_seleccionats
+
 
 st.set_page_config(layout="wide")
 
@@ -183,7 +185,8 @@ if conditions:
 
 query += " GROUP BY Receptes.ID_Recepte"
 
-# Executar la consulta
+# Executar la co
+# Explicació dels Canvis:nsulta
 cursor.execute(query, params)
 resultados = cursor.fetchall()
 
@@ -230,7 +233,7 @@ def create_card(data):
                         </tr>
                         <tr style="height: 33.33%;">
                             <td style="border: 1px solid #000; padding: 10px; vertical-align: top;">
-                                <strong>Ingredients:</strong> <br> {components}
+                                <strong>Preparacio:</strong> <br> {Preparacio}
                             </td>
                         </tr>
                         <tr style="height: 33.33%;">
@@ -255,13 +258,55 @@ def create_card(data):
                 <td style="width: 33.33%; padding-left: 10px; text-align: right; border-bottom: 1px solid #ccc;"><strong>Categoria:</strong> {Categoria}</td>
             </tr>
         </table>
+        <!-- Sexta fila amb una columna -->        
+        <div style="padding-top: 10px; padding-right: 10px; padding-left: 10px; border-bottom: 1px solid #ccc; padding-bottom: 10px; margin-bottom: 10px;"><strong>Ingredients:
+            <strong>{components}
+        </div>
     </div>
     <!-- Separador -->
     <div style="width: 100%; height: 2px; background-color: #123456; margin: 20px 0;"></div>
     '''
     return html_card_template
 
+#Icones
+# Diccionari de emojis
+emojis = {
+    'maduixes': emoji.emojize(':strawberry:'),
+    'arros': emoji.emojize(':rice:'),
+    'pesols': emoji.emojize(':pea:'),
+    'ou': emoji.emojize(':egg:'),
+    'pressec': emoji.emojize(':peach:'),
+    'faves': emoji.emojize(':bean:'),
+    'carbasso': emoji.emojize(':cucumber:'),
+    'mel': emoji.emojize(':honey:'),
+    'pollastre': emoji.emojize(':chicken:'),
+    'lechuga': emoji.emojize(':lettuce:'),
+}
 
+# Funció per obtenir l'emoji basat en el valor de la cel·la
+def obtenir_emoji(components):
+    emoji_noms = re.findall(r'(\w+)\s*\(([^)]+)\)', components)
+    resultat_emoji = []
+
+    for nom, quantitat in emoji_noms:
+        emoji_nom = emojis.get(nom.lower(), nom)
+        resultat_emoji.append(f"{emoji_nom} {nom} ({quantitat})")
+
+    return resultat_emoji
+
+# Interfície d'usuari en Streamlit
+st.title("Productes amb Icones")
+
+# Mostrar les dades amb icones
+for resultado in resultados:
+    ID_Recepte, Data_formatejada, Titol, Metode, Categoria, Preparacio, blob, Temps, Components = resultado
+    if not isinstance(Components, str):
+        st.error("Expected string or bytes-like object, got {}".format(type(Components).__name__))
+        continue
+    components_amb_emojis = obtenir_emoji(Components)
+    components_amb_emoji_str = ', '.join(components_amb_emojis)
+
+#___________________________________________________________________________
 # Mostrar targetes a Streamlit
 for resultado in resultados:
     data = {
@@ -273,7 +318,7 @@ for resultado in resultados:
         'Preparacio': resultado[5],
         'img_base64': convert_blob_to_base64(resultado[6]),
         'Temps': resultado[7],
-        'components': resultado[8]
+        'components': components_amb_emoji_str  # Utilitzar components_amb_emoji_str
     }
     card_html = create_card(data)
     st.markdown(card_html, unsafe_allow_html=True)
