@@ -2,12 +2,13 @@ import sqlite3
 import streamlit as st
 import base64
 import pandas as pd
-import re
-import emoji
 import streamlit.components.v1 as components
 from datetime import datetime
 from io import BytesIO
-
+from altres.funcions import obtenir_emoji
+import re
+import emoji
+from altres.manteniment import emojis
 
 
 st.set_page_config(layout="wide")
@@ -96,7 +97,8 @@ def obtenir_ingredients():
     return [row[0] for row in cursor.fetchall()]
 
 # Obtenir la llista d'ingredients
-llista_ingredients = obtenir_ingredients()
+llista_ingredients_sense_ordenar = list(set(obtenir_ingredients()))
+llista_ingredients = sorted(llista_ingredients_sense_ordenar)
 
 # Widgets de Streamlit per obtenir les condicions
 st.text("")
@@ -268,41 +270,16 @@ def create_card(data):
     '''
     return html_card_template
 
-#Icones
-# Diccionari de emojis
-emojis = {
-    'maduixes': emoji.emojize(':strawberry:'),
-    'arros': emoji.emojize(':rice:'),
-    'pesols': emoji.emojize(':pea:'),
-    'ou': emoji.emojize(':egg:'),
-    'pressec': emoji.emojize(':peach:'),
-    'faves': emoji.emojize(':bean:'),
-    'carbasso': emoji.emojize(':cucumber:'),
-    'mel': emoji.emojize(':honey:'),
-    'pollastre': emoji.emojize(':chicken:'),
-    'lechuga': emoji.emojize(':lettuce:'),
-}
 
-# Funció per obtenir l'emoji basat en el valor de la cel·la
-def obtenir_emoji(components):
-    emoji_noms = re.findall(r'(\w+)\s*\(([^)]+)\)', components)
-    resultat_emoji = []
 
-    for nom, quantitat in emoji_noms:
-        emoji_nom = emojis.get(nom.lower(), nom)
-        resultat_emoji.append(f"{emoji_nom} {nom} ({quantitat})")
-
-    return resultat_emoji
-
-# Interfície d'usuari en Streamlit
-st.title("Productes amb Icones")
+#_____________________________________________________________________
 
 # Mostrar les dades amb icones
+
+
 for resultado in resultados:
     ID_Recepte, Data_formatejada, Titol, Metode, Categoria, Preparacio, blob, Temps, Components = resultado
-    if not isinstance(Components, str):
-        st.error("Expected string or bytes-like object, got {}".format(type(Components).__name__))
-        continue
+
     components_amb_emojis = obtenir_emoji(Components)
     components_amb_emoji_str = ', '.join(components_amb_emojis)
 
