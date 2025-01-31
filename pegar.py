@@ -1,39 +1,35 @@
-import sqlite3
 import streamlit as st
 
-# Connecta a la base de dades
-conn = sqlite3.connect('C:/Users/Joan/Receptes/LesReceptes2/nova_base_de_dades.db')
-cursor = conn.cursor()
+# Definició del CSS per al marc i el text
+css = """
+<style>
+.marco {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 300px;
+    height: 150px;
+    border: 5px solid #000000;  /* Borde de color negre */
+    border-radius: 15px;  /* Bordes arrodonits */
+    font-size: 24px;  /* Mida de la font */
+    font-weight: bold;
+    color: #000000;  /* Color del text */
+    background-color: #FFFFFF;  /* Fons blanc */
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);  /* Una mica d'ombra per a millorar la visibilitat */
+    text-align: center;  /* Text centrat */
+    padding: 10px;  /* Espai intern al voltant del contingut */
+}
+</style>
+"""
 
-# Consulta SQL per comptar el nombre de registres
-query = "SELECT COUNT(*) FROM Receptes"
+# Aplica el CSS utilitzant st.markdown
+st.markdown(css, unsafe_allow_html=True)
 
-# Executa la consulta
-cursor.execute(query)
-num_registres = cursor.fetchone()[0]
+# Contingut de l'aplicació
+st.title("Benvingut a la meva pàgina")
+st.write("Això és un paràgraf d'exemple.")
 
-# Aplica el CSS utilitzant st.write per assegurar la mida de la font
-st.write(f"""
-    <div style='
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        width: 300px;
-        height: 300px;
-        border: 5px solid #000000;  /* Afegir un marc */
-        border-radius: 15px;  /* Bordes arrodonits */
-        font-size: 48px;  /* Augmenta la mida de la font */
-        font-weight: bold;
-        color: #000000;  /* Color del text */
-        background-color: #FFFFFF;  /* Fons blanc */
-        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);  /* Una mica d'ombra per a millorar la visibilitat */
-        text-align: center;
-        line-height: 300px;  /* Assegura que el text estigui centrat verticalment */
-    '>
-        {num_registres}
-    </div>
-""", unsafe_allow_html=True)
+# Afegir text dins d'un marc amb l'estil definit
+st.markdown('<div class="marco">Les Receptes de la Mamen</div>', unsafe_allow_html=True)
 
-# Tanca la connexió a la base de dades
-conn.close()
 
