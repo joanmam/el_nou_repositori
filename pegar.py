@@ -1,28 +1,61 @@
+import pandas as pd
 import streamlit as st
 
-# Exemple de resultats
-resultados = [
-    (1, '2025-01-01', 'Recepta 1', 'Metode 1', 'radio 1', 'Preparacio 1', b'imatge1', '10 min', 'Components 1'),
-    (2, '2025-01-02', 'Recepta 2', 'Metode 2', 'radio 2', 'Preparacio 2', b'imatge2', '20 min', 'Components 2'),
-]
-
-# Inicialitzar l'estat de les pàgines si no està inicialitzat
-if 'page' not in st.session_state:
-    st.session_state.page = {}
-
-
-# Funció per convertir blob a base64
+# Función para convertir BLOB a base64
 def convert_blob_to_base64(blob):
-    return "base64"
+    # Implementa tu lógica aquí
+    pass
 
+# Función para obtener emojis
+def obtenir_emoji(ingredients):
+    # Implementa tu lógica aquí
+    pass
 
-# Funció per obtenir emojis (dummy function for the example)
-def obtenir_emoji(components):
-    return components.split(', ')
+# Función para agregar estilos CSS
+def agregar_estilos_css():
+    st.markdown(
+        """
+        <style>
+        .etiqueta {
+            display: inline-block;
+            border: 1px solid black;
+            background-color: #ff9933;
+            padding: 2px 5px;
+            margin: 2px;
+            border-radius: 5px;
+        }
+        .card {
+            background-color: #ffffff; 
+            padding: 10px; 
+            border-radius: 5px; 
+            margin: 10px; 
+            border: 1px solid #ccc;
+        }
+        .card-table {
+            width: 100%; 
+            border-collapse: collapse;
+        }
+        .card-table td {
+            border-bottom: 1px solid #ccc;
+            padding: 5px;
+        }
+        .card-separator {
+            width: 100%; 
+            height: 2px; 
+            background-color: #123456; 
+            margin: 20px 0;
+        }
+        </style>
+        """,
+        unsafe_allow_html=True
+    )
 
+# Función para crear etiquetas HTML con estilo
+def crear_etiquetas_html(etiquetas):
+    return " ".join([f'<span class="etiqueta">{etiqueta.strip()}</span>' for etiqueta in etiquetas.split(' ')])
 
-# Funció per crear la targeta HTML amb el botó de ràdio dins la cel·la 'radio'
-def create_card(data, radio_html):
+# Función para crear una tarjeta HTML
+def crear_tarjeta_html(data):
     ID_Recepte = data['ID_Recepte']
     Data_formatejada = data['Data_formatejada']
     Titol = data['Titol']
@@ -31,75 +64,55 @@ def create_card(data, radio_html):
     Temps = data['Temps']
     Preparacio = data['Preparacio']
     components = data['components']
+    Categoria = data['Categoria']
+    Etiquetes = crear_etiquetas_html(data['Etiquetes'])
 
-    html_card_template = f'''
-    <div style="background-color:#ffffff; padding:10px; border-radius:5px; margin:10px; border:1px solid #ccc;">
-        <!-- Taula amb tres columnes -->
-        <table style="width: 100%; border-collapse: collapse;">
+    return f'''
+    <div class="card">
+        <table class="card-table">
             <tr>
-                <td style="width: 33.33%; padding-right: 10px; text-align: left; border-bottom: 1px solid #ccc;"><strong>ID:</strong> {ID_Recepte}</td>
-                <td style="width: 33.33%; padding-left: 10px; text-align: left; border-bottom: 1px solid #ccc;"><strong>Data:</strong> {Data_formatejada}</td>
-                <td style="width: 33.33%; padding-right: 10px; text-align: left; border-bottom: 1px solid #ccc;"><strong>Radio:</strong> {radio_html}</td>
+                <td style="width: 33%;">ID: {ID_Recepte}</td>
+                <td style="width: 33%;">Data: {Data_formatejada}</td>
+                <td style="width: 33%;">Categoria: {Categoria}</td>
             </tr>
         </table>
-        <!-- Segona fila: una columna -->
-        <div style="padding-top: 10px; border-bottom: 1px solid #ccc; padding-bottom: 10px; margin-bottom: 10px;">
-            <strong>Titol: <strong>{Titol}</strong>
-        </div>
-        <!-- Tercera fila: dues columnes amb relació 80% - 20% -->
-        <table style="width: 100%; border-collapse: collapse;">
+        <div style="padding-top: 10px; margin-bottom: 10px;">Titol: <strong>{Titol}</strong></div>
+        <table class="card-table">
             <tr>
-                <!-- Columna d'imatge (80%) -->
-                <td style="width: 80%; padding: 10px; text-align: left; border: 1px solid #000;">
+                <td style="width: 80%; text-align: left;">
                     <img src="data:image/jpeg;base64,{img_base64}" alt="Imatge" style="width: 100%; height: auto; border-radius: 5px;"/>
                 </td>
-                <!-- Columna de detalls (20%) dividida en tres files amb encapçalaments a dalt -->
-                <td style="width: 20%; padding: 0; text-align: left; border: 1px solid #000; height: 300px; vertical-align: top;">
+                <td style="width: 20%; vertical-align: top;">
                     <table style="width: 100%; height: 100%; border-collapse: collapse;">
-                        <tr style="height: 33.33%;">
-                            <td style="border: 1px solid #000; padding: 10px; vertical-align: top;">
-                                <strong>Temps:</strong> <br> {Temps}
-                            </td>
-                        </tr>
-                        <tr style="height: 33.33%;">
-                            <td style="border: 1px solid #000; padding: 10px; vertical-align: top;">
-                                <strong>Preparació:</strong> <br> {Preparacio}
-                            </td>
-                        </tr>
-                        <tr style="height: 33.33%;">
-                            <td style="border: 1px solid #000; padding: 10px; vertical-align: top;">
-                                <strong>Radio:</strong> <br> {radio_html}
-                            </td>
-                        </tr>
+                        <tr><td style="padding: 10px;">Temps: {Temps}</td></tr>
+                        <tr><td style="padding: 10px;">Preparació: {Preparacio}</td></tr>
+                        <tr><td style="padding: 10px;">Etiquetes: {Etiquetes}</td></tr>
                     </table>
                 </td>
             </tr>
         </table>
-         <!-- Quarta fila: una columna -->
-        <div style="padding-top: 10px; padding-right: 10px; padding-left: 10px; border-bottom: 1px solid #ccc; padding-bottom: 10px; margin-bottom: 10px;"><strong>Mètode:
-            <strong>
-            <p>{Metode}</p>
-        </div>
-        <!-- Cinquena fila amb tres columnes -->
-        <table style="width: 100%; border-collapse: collapse;">
+        <div style="padding-top: 10px; margin-bottom: 10px;">Mètode: {Metode}</div>
+        <table class="card-table">
             <tr>
-                <td style="width: 33.33%; padding-right: 10px; text-align: left; border-bottom: 1px solid #ccc;"><strong>Temps:</strong> {Temps}</td>
-                <td style="width: 33.33%; padding: 0 10px; text-align: left; border-bottom: 1px solid #ccc;"><strong>Ingredients: </strong> {components}</td>
-                <td style="width: 33.33%; padding-left: 10px; text-align: right; border-bottom: 1px solid #ccc;"><strong>Radio:</strong> {radio_html}</td>
+                <td style="width: 33%;">Temps: {Temps}</td>
+                <td style="width: 33%;">Ingredients: {components}</td>
+                <td style="width: 33%; text-align: right;">Categoria: {Categoria}</td>
             </tr>
         </table>
-        <!-- Sisena fila amb una columna -->
-        <div style="padding-top: 10px; padding-right: 10px; padding-left: 10px; border-bottom: 1px solid #ccc; padding-bottom: 10px; margin-bottom: 10px;"><strong>Ingredients:
-            <strong>{components}
-        </div>
+        <div style="padding-top: 10px; margin-bottom: 10px;">Ingredients: {components}</div>
     </div>
-    <!-- Separador -->
-    <div style="width: 100%; height: 2px; background-color: #123456; margin: 20px 0;"></div>
+    <div class="card-separator"></div>
     '''
-    return html_card_template
 
+# Ejemplo de resultados
+resultados = [
+    # Añade tus datos aquí
+]
 
-# Bucle a través dels resultats per crear targetes
+# Agregar estilos CSS
+agregar_estilos_css()
+
+# Bucle a través de los resultados para crear tarjetas
 for resultado in resultados:
     data = {
         'ID_Recepte': resultado[0],
@@ -108,40 +121,15 @@ for resultado in resultados:
         'Metode': resultado[3],
         'Categoria': resultado[4],
         'Preparacio': resultado[5],
+        'Etiquetes': resultado[8],
         'img_base64': convert_blob_to_base64(resultado[6]),
         'Temps': resultado[7],
-        'components': ', '.join(obtenir_emoji(resultado[8]))  # Convertir components a cadena amb emojis
+        'components': ', '.join(obtenir_emoji(resultado[9]))  # Convertir components a cadena amb emojis
     }
 
-    # Inicialitzar l'estat de la pàgina de cada targeta si no està inicialitzat
-    if str(data['ID_Recepte']) not in st.session_state.page:
-        st.session_state.page[str(data['ID_Recepte'])] = "Crear"
-
-    # Crear una radio button amb opcions de redirecció de pàgines per a cada targeta
-    with st.form(key=f"radio_form_{data['ID_Recepte']}"):
-        radio = st.radio(
-            f"Selecciona una opció per {data['Titol']}:",
-            ("Crear", "Borrar"),
-            index=("Crear", "Borrar").index(st.session_state.page[str(data['ID_Recepte'])]),
-            key=f"radio_{data['ID_Recepte']}"
-        )
-        submit_button = st.form_submit_button(label='Submit')
-
-        if submit_button:
-            st.session_state.page[str(data['ID_Recepte'])] = radio
-
-        # Generar el codi HTML del botó de ràdio per incloure'l a la cel·la 'radio'
-        radio_html = f'''
-        <div>
-            <input type="radio" id="crear_{data['ID_Recepte']}" name="radio_{data['ID_Recepte']}" value="Crear" {'checked' if st.session_state.page[str(data['ID_Recepte'])] == "Crear" else ''}>
-            <label for="crear_{data['ID_Recepte']}">Crear</label><br>
-            <input type="radio" id="borrar_{data['ID_Recepte']}" name="radio_{data['ID_Recepte']}" value="Borrar" {'checked' if st.session_state.page[str(data['ID_Recepte'])] == "Borrar" else ''}>
-            <label for="borrar_{data['ID_Recepte']}">Borrar</label><br>
-        </div>
-        '''
-
-    # Crear la targeta amb l'opció seleccionada
-    card_html = create_card(data, radio_html)
+    # Crear la tarjeta con la opción seleccionada
+    card_html = crear_tarjeta_html(data)
     st.markdown(card_html, unsafe_allow_html=True)
 
-    # Mostrar el contingut segons la pàgina seleccionada per a cada target
+# Cerrar la conexión a la base de datos si corresponde
+# conn.close()
