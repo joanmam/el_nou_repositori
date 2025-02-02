@@ -72,20 +72,6 @@ st.markdown('<div class="custom-background"></div>', unsafe_allow_html=True)
 conn = sqlite3.connect('C:/Users/Joan/Receptes/LesReceptes2/nova_base_de_dades.db')
 cursor = conn.cursor()
 
-# Crear tabla de clientes con ID autoincremental
-
-cursor.execute('''CREATE TABLE IF NOT EXISTS Receptes (
-             ID_Recepte INTEGER PRIMARY KEY AUTOINCREMENT, 
-             Data_formatejada TEXT, 
-             Titol TEXT,
-             Metode TEXT,
-             blob BLOB,
-             Etiquetes TEXT,
-             Categoria TEXT,
-             Preparacio INTEGER,
-             Temps INTEGER)''')
-
-# Crear una tabla para los ingredientes
 
 conn.commit()
 

@@ -1,6 +1,7 @@
 #emoji
 
 import re
+import streamlit as st
 import emoji
 from altres.manteniment import emojis
 
@@ -19,3 +20,9 @@ def obtenir_emoji(components):
         resultat_emoji.append(f"{emoji_nom} {nom} ({quantitat})")
 
     return resultat_emoji
+
+
+#_____________________________________________________________
+# Funció per gestionar la redirecció de pàgina
+def redirigir_opcio(opcio):
+    st.session_state.page = opcio

@@ -9,6 +9,7 @@ from altres.funcions import obtenir_emoji
 import re
 import emoji
 from altres.manteniment import emojis
+from altres.funcions import redirigir_opcio
 
 
 st.set_page_config(layout="wide")
@@ -156,7 +157,7 @@ st.markdown('<div class="separator"></div>', unsafe_allow_html=True)
 
 # Definir la consulta SQL amb els paràmetres necessaris
 query = '''
-    SELECT Receptes.ID_Recepte, Receptes.Data_formatejada, Receptes.Titol, Receptes.Metode, Receptes.Categoria, Receptes.Preparacio, Receptes.blob, Receptes.Temps,
+    SELECT Receptes.ID_Recepte, Receptes.Data_formatejada, Receptes.Titol, Receptes.Metode, Receptes.Categoria, Receptes.Preparacio, Receptes.blob, Receptes.Temps, Receptes.Etiquetes,
     GROUP_CONCAT(Ingredients.nom || ' (' || Ingredients.quantitat || ')', ', ') AS components
     FROM Receptes
     LEFT JOIN ingredients
@@ -187,12 +188,15 @@ if conditions:
 
 query += " GROUP BY Receptes.ID_Recepte"
 
-# Executar la co
-# Explicació dels Canvis:nsulta
+
 cursor.execute(query, params)
 resultados = cursor.fetchall()
 
+
+
+#____________________________________________________________________
 # Funció per crear targetes amb classes CSS específiques
+# Funció per crear la targeta HTML amb el botó de ràdio
 def create_card(data):
     ID_Recepte = data['ID_Recepte']
     Data_formatejada = data['Data_formatejada']
@@ -200,9 +204,13 @@ def create_card(data):
     img_base64 = data['img_base64']
     Metode = data['Metode']
     Temps = data['Temps']
-    Categoria = data['Categoria']
     Preparacio = data['Preparacio']
     components = data['components']
+    Categoria = data['Categoria']
+    Etiquetes = data['Etiquetes']
+
+
+
 
     html_card_template = f'''
     <div style="background-color:#ffffff; padding:10px; border-radius:5px; margin:10px; border:1px solid #ccc;">
@@ -218,14 +226,14 @@ def create_card(data):
         <div style="padding-top: 10px; border-bottom: 1px solid #ccc; padding-bottom: 10px; margin-bottom: 10px;">
             <strong>Titol: <strong>{Titol}</strong>
         </div>
-        <!-- Tercera fila: dos columnas con relación 80% - 20% -->
+        <!-- Tercera fila: dues columnes amb relació 80% - 20% -->
         <table style="width: 100%; border-collapse: collapse;">
             <tr>
-                <!-- Columna de imagen (80%) -->
+                <!-- Columna d'imatge (80%) -->
                 <td style="width: 80%; padding: 10px; text-align: left; border: 1px solid #000;">
-                    <img src="data:image/jpeg;base64,{img_base64}" alt="Imagen" style="width: 100%; height: auto; border-radius: 5px;"/>
+                    <img src="data:image/jpeg;base64,{img_base64}" alt="Imatge" style="width: 100%; height: auto; border-radius: 5px;"/>
                 </td>
-                <!-- Columna de detalles (20%) dividida en tres filas con encabezados arriba -->
+                <!-- Columna de detalls (20%) dividida en tres files amb encapçalaments a dalt -->
                 <td style="width: 20%; padding: 0; text-align: left; border: 1px solid #000; height: 300px; vertical-align: top;">
                     <table style="width: 100%; height: 100%; border-collapse: collapse;">
                         <tr style="height: 33.33%;">
@@ -235,12 +243,12 @@ def create_card(data):
                         </tr>
                         <tr style="height: 33.33%;">
                             <td style="border: 1px solid #000; padding: 10px; vertical-align: top;">
-                                <strong>Preparacio:</strong> <br> {Preparacio}
+                                <strong>Preparació:</strong> <br> {Preparacio}
                             </td>
                         </tr>
                         <tr style="height: 33.33%;">
                             <td style="border: 1px solid #000; padding: 10px; vertical-align: top;">
-                                <strong>Categoria:</strong> <br> {Categoria}
+                                <strong>Etiquetes:</strong> <br> {Etiquetes}
                             </td>
                         </tr>
                     </table>
@@ -248,11 +256,11 @@ def create_card(data):
             </tr>
         </table>
          <!-- Quarta fila: una columna -->
-        <div style="padding-top: 10px; padding-right: 10px; padding-left: 10px; border-bottom: 1px solid #ccc; padding-bottom: 10px; margin-bottom: 10px;"><strong>Metode:
+        <div style="padding-top: 10px; padding-right: 10px; padding-left: 10px; border-bottom: 1px solid #ccc; padding-bottom: 10px; margin-bottom: 10px;"><strong>Mètode:
             <strong>
             <p>{Metode}</p>
         </div>
-        <!-- Quinta fila amb tres columnes -->
+        <!-- Cinquena fila amb tres columnes -->
         <table style="width: 100%; border-collapse: collapse;">
             <tr>
                 <td style="width: 33.33%; padding-right: 10px; text-align: left; border-bottom: 1px solid #ccc;"><strong>Temps:</strong> {Temps}</td>
@@ -260,7 +268,7 @@ def create_card(data):
                 <td style="width: 33.33%; padding-left: 10px; text-align: right; border-bottom: 1px solid #ccc;"><strong>Categoria:</strong> {Categoria}</td>
             </tr>
         </table>
-        <!-- Sexta fila amb una columna -->        
+        <!-- Sisena fila amb una columna -->
         <div style="padding-top: 10px; padding-right: 10px; padding-left: 10px; border-bottom: 1px solid #ccc; padding-bottom: 10px; margin-bottom: 10px;"><strong>Ingredients:
             <strong>{components}
         </div>
@@ -271,20 +279,7 @@ def create_card(data):
     return html_card_template
 
 
-
-#_____________________________________________________________________
-
-# Mostrar les dades amb icones
-
-
-for resultado in resultados:
-    ID_Recepte, Data_formatejada, Titol, Metode, Categoria, Preparacio, blob, Temps, Components = resultado
-
-    components_amb_emojis = obtenir_emoji(Components)
-    components_amb_emoji_str = ', '.join(components_amb_emojis)
-
-#___________________________________________________________________________
-# Mostrar targetes a Streamlit
+# Bucle a través dels resultats per crear targetes
 for resultado in resultados:
     data = {
         'ID_Recepte': resultado[0],
@@ -293,10 +288,14 @@ for resultado in resultados:
         'Metode': resultado[3],
         'Categoria': resultado[4],
         'Preparacio': resultado[5],
+        'Etiquetes': resultado[8],
         'img_base64': convert_blob_to_base64(resultado[6]),
         'Temps': resultado[7],
-        'components': components_amb_emoji_str  # Utilitzar components_amb_emoji_str
+        'components': ', '.join(obtenir_emoji(resultado[9]))  # Convertir components a cadena amb emojis
     }
+
+
+    # crear la targeta amb l'opció seleccionada
     card_html = create_card(data)
     st.markdown(card_html, unsafe_allow_html=True)
 
