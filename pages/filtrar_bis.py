@@ -209,7 +209,26 @@ def create_card(data):
     Categoria = data['Categoria']
     Etiquetes = data['Etiquetes']
 
+    # Afegir estil CSS per a les etiquetes
+    st.markdown(
+        """
+        <style>
+        .etiqueta {
+            display: inline-block;
+            border: 1px solid black;
+            background-color: orange;
+            padding: 2px 5px;
+            margin: 2px;
+            border-radius: 5px;
+        }
+        </style>
+        """,
+        unsafe_allow_html=True
+    )
 
+    # Processar etiquetes per afegir l'estil CSS
+    etiquetes_html = " ".join(
+        [f'<span class="etiqueta">{etiqueta.strip()}</span>' for etiqueta in Etiquetes.split(' ')])
 
 
     html_card_template = f'''
@@ -248,7 +267,7 @@ def create_card(data):
                         </tr>
                         <tr style="height: 33.33%;">
                             <td style="border: 1px solid #000; padding: 10px; vertical-align: top;">
-                                <strong>Etiquetes:</strong> <br> {Etiquetes}
+                                <strong>Etiquetes:</strong> <br> {etiquetes_html}
                             </td>
                         </tr>
                     </table>
