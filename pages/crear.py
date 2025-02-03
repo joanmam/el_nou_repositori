@@ -8,84 +8,21 @@ import pandas as pd
 import base64
 import io
 import requests
+from altres.funcions import rellotge
+from altres.funcions import banner
+
 st.set_page_config(layout="wide")
 
-# Obtenir la data actual
-current_date = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
+rellotge()
+#_______________________________
+st.header("Grava una receta")
 
-# CSS per a posicionar la data a la cantonada superior dreta
-date_css = """
-<style>
-.date-corner {
-    position: fixed;
-    top: 10px;
-    right: 10px;
-    font-size: 16px;
-    background-color: rgba(125, 125, 255, 0.8);
-    padding: 5px 10px;
-    border-radius: 5px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    z-index: 1000; /* Assegura que la data estigui al damunt de qualsevol contingut */
-}
-</style>
-"""
-
-# HTML per a mostrar la data amb l'estil definit
-date_html = f"""
-<div class="date-corner">
-    {current_date}
-</div>
-"""
-
-# Aplicar el CSS i HTML personalitzat a l'aplicació
-components.html(date_css + date_html, height=100)
-
-st.title("Grava una receta")
-
+banner()
 #___________________________________________
-# URL de la imatge
-img_url = "https://imagenes.20minutos.es/files/image_990_556/uploads/imagenes/2024/05/07/pimientos.jpeg"  # Utilitza una imatge amb l'amplada de la pàgina (1920px) i l'alçada (113px)
-
-# Injectar CSS per a la imatge de fons
-background_css = f"""
-<style>
-body .custom-background {{
-    background-image: url('{img_url}');
-    background-size: 100% ;  /* Ajusta l'amplada al 100% i l'alçada a 113 píxels (3 cm) */
-    background-repeat: no-repeat;
-    background-position: top;
-    margin: 0;
-    padding: 0;
-    height: 256px;  /* Assegura que l'alçada sigui la desitjada */
-}}
-</style>
-"""
-st.markdown(background_css, unsafe_allow_html=True)
-
-# Aplicar la classe CSS específica al contenidor principal
-st.markdown('<div class="custom-background"></div>', unsafe_allow_html=True)
-
-
-
 
 # Conectarse a la base de datos
 conn = sqlite3.connect('C:/Users/Joan/Receptes/LesReceptes2/nova_base_de_dades.db')
 cursor = conn.cursor()
-
-# Crear tabla de clientes con ID autoincremental
-
-cursor.execute('''CREATE TABLE IF NOT EXISTS Receptes (
-             ID_Recepte INTEGER PRIMARY KEY AUTOINCREMENT, 
-             Data_formatejada TEXT, 
-             Titol TEXT,
-             Metode TEXT,
-             blob BLOB,
-             Etiquetes TEXT,
-             Categoria TEXT,
-             Preparacio INTEGER,
-             Temps INTEGER)''')
-
-# Crear una tabla para los ingredientes
 
 conn.commit()
 
