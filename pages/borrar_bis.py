@@ -8,8 +8,8 @@ import pandas as pd
 import base64
 import io
 import requests
-from altres.funcions import agregar_estilos_css
-
+from altres.funcions import agregar_estilos_css, crear_tarjeta_html_resumida
+from altres.funcions import lletra_variable
 
 st.set_page_config(layout="wide")
 
@@ -82,7 +82,11 @@ conn.execute("PRAGMA foreign_keys = ON")
 cursor = conn.cursor()
 
 # Obtenir els IDs dels registres a esborrar
-ids_to_delete = st.text_input("Introdueix els IDs dels registres a esborrar, separats per comes", "1,2,3")
+st.write("")
+st.write("")
+lletra_variable()
+st.markdown('<div class="custom-element"><p class="custom-title">Registres a borrar separats per commes:</p>', unsafe_allow_html=True)
+ids_to_delete = st.text_input("", "1,2,3")
 ids_to_delete = [int(x) for x in ids_to_delete.split(",")]
 
 st.write(f"Els registres seleccionats per esborrar són: {ids_to_delete}")
@@ -97,12 +101,15 @@ records_to_show = cursor.fetchall()
 
 
 
-if records_to_show:
-    st.write("Registres seleccionats per esborrar:")
-    for record in records_to_show:
-        st.write(f"ID: {record[0]}, Nom: {record[1]}")
-else:
-    st.error("No s'ha trobat cap registre amb aquests IDs.")
+for record in records_to_show:
+    data = {
+        'ID_Recepte': record[0],
+        'Titol': record[1],
+    }
+    card_html = crear_tarjeta_html_resumida(data)
+    st.markdown(card_html, unsafe_allow_html=True)
+
+
 # Esborrar el registre seleccionat si existeix
 if st.button("Esborrar"):
     for record_id in ids_to_delete:

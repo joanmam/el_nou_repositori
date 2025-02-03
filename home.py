@@ -9,9 +9,7 @@ from altres.variables import path
 from altres.funcions import estils_marc_home
 from altres.funcions import background_home
 
-
-
-
+#___________________________________________________________
 sys.path.append(os.path.join(os.path.dirname(__file__), 'pages'))
 
 conn = sqlite3.connect(path)
@@ -25,12 +23,10 @@ num_registres = cursor.fetchone()[0]
 cursor.execute(query)
 result = cursor.fetchone()
 
+#_______________________________________________________
+# Afegir text dins d'un marc amb l'estil definit
 text_personalitzat = "Receptes"
 
-
-
-
-# Afegir text dins d'un marc amb l'estil definit
 st.markdown(f'''
 <div class="marco">
         <div class="text-personalitzat">{text_personalitzat}</div>
@@ -38,7 +34,6 @@ st.markdown(f'''
 </div>''', unsafe_allow_html=True)
 
 conn.commit()
-
 
 #_____________________________
 

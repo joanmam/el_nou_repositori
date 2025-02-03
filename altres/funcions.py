@@ -289,7 +289,7 @@ def lletra_variable():
         .custom-title {
             font-size: 24px; /* Ajusta aquesta mida segons les teves necessitats */
             font-weight: bold;
-            margin-bottom: 0.02em;
+            margin-bottom: 0.002em;
         }
         .slider-title {
             font-size: 24px; /* Ajusta aquesta mida segons les teves necessitats */
@@ -306,9 +306,24 @@ def lletra_variable():
             background-color: #d4edda; /* Tono gris clar */
             padding: 10px;
             border-radius: 5px;
-            margin-bottom: 20px; /* Ajusta el marge inferior */
+            margin-bottom: 1px; /* Ajusta el marge inferior */
         }
         </style>
         """,
         unsafe_allow_html=True
     )
+#_____________________________________________________________________
+def crear_tarjeta_html_resumida(data):
+    ID_Recepte = data['ID_Recepte']
+    Titol = data['Titol']
+    return f'''
+    <div class="card">
+        <table class="card-table">
+            <tr>
+                <td style="width: 10%;">ID: {ID_Recepte}</td>
+                <td style="width: 90%;">Categoria: {Titol}</td>
+            </tr>
+        </table>
+    </div>
+    <div class="card-separator"></div>
+    '''
