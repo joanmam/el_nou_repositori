@@ -6,6 +6,8 @@ import base64
 import sqlite3
 from altres.variables import path
 from altres.variables import background_image_url
+from datetime import datetime
+import streamlit.components.v1 as components
 
 
 
@@ -173,53 +175,140 @@ def estils_marc_home():
     )
 
 #___________________________________________________
-# def background_estil():
-#     st.markdown(
-#     '''
-#     <style>
-#     .stApp {{
-#         background: url("{background_image_url}") no-repeat center center;
-#         background-size: 70%;
-#         height: 100vh;
-#         display: flex;
-#         justify-content: flex-end;
-#         align-items: flex-end;
-#         position: relative;
-#     }}
-#     .title-container {{
-#         display: flex;
-#         justify-content: flex-end;
-#         align-items: flex-end;
-#         height: 100vh;
-#         width: 100%;
-#         position: fixed;
-#         top: 0;
-#         left: 0;
-#         padding: 1em;
-#     }}
-#     .title {{
-#         color: white;
-#         font-size: 3em;
-#         text-align: right;
-#         background: rgba(0, 0, 0, 0.5);
-#         padding: 0.5em;
-#         border-radius: 0.5em;
-#     }}
-#     .custom-text {{
-#         position: fixed;
-#         bottom: 200px;
-#         right: 200px;
-#         font-size: 100px; /* Augmenta la mida de la font */
-#         font-weight: bold;
-#         color: #003366; /* Pots canviar el color segons les teves necessitats */
-#         background-color: transparent;
-#         padding: 10px;
-#         border: 2px solid #003366;
-#         border-radius: 15px; /* Bordes arrodonits */
-#         box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1); /* Afegir una mica d'ombra per a millorar la visibilitat */
-#     }}
-#     </style>
-#     ''',
-#     unsafe_allow_html=True
-#     )
-#
+def background_home():
+    # URL de la imatge de fons
+    background_image_url = "https://cuidateplus.marca.com/sites/default/files/styles/natural/public/cms/platanos_0.jpg.webp?itok"
+    # CSS personalitzat per posar la imatge de fons
+    background_css = f"""
+<style>
+.stApp {{
+    background: url("{background_image_url}") no-repeat center center;
+    background-size: 70%;
+    height: 100vh;
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-end;
+    position: relative;
+}}
+.title-container {{
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-end;
+    height: 100vh;
+    width: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    padding: 1em;
+}}
+.title {{
+    color: white;
+    font-size: 3em;
+    text-align: right;
+    background: rgba(0, 0, 0, 0.5);
+    padding: 0.5em;
+    border-radius: 0.5em;
+}}
+.custom-text {{
+    position: fixed;
+    bottom: 200px;
+    right: 200px;
+    font-size: 100px; /* Augmenta la mida de la font */
+    font-weight: bold;
+    color: #003366; /* Pots canviar el color segons les teves necessitats */
+    background-color: transparent;
+    padding: 10px;
+    border: 2px solid #003366;
+    border-radius: 15px; /* Bordes arrodonits */
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1); /* Afegir una mica d'ombra per a millorar la visibilitat */
+}}
+</style>
+"""
+    # Aplica el CSS utilitzant st.markdown
+    st.markdown(background_css, unsafe_allow_html=True)
+    # Afegir text personalitzat a l'extrem inferior dret
+    st.markdown('<div class="custom-text">Les Receptes de la Mamen</div>', unsafe_allow_html=True)
+
+#________________________________________________________________________
+#Rellotge
+def rellotge():
+    # Obtenir la data actual
+    current_date = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
+    # CSS per a posicionar la data a la cantonada superior dreta
+    date_css = """
+<style>
+.date-corner {
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    font-size: 16px;
+    background-color: rgba(125, 125, 255, 0.8);
+    padding: 5px 10px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    z-index: 1000; /* Assegura que la data estigui al damunt de qualsevol contingut */
+}
+</style>
+"""
+    # HTML per a mostrar la data amb l'estil definit
+    date_html = f"""
+<div class="date-corner">
+    {current_date}
+</div>
+"""
+    # Aplicar el CSS i HTML personalitzat a l'aplicació
+    components.html(date_css + date_html, height=100)
+
+#__________________________________________________________________
+def banner():
+    # URL de la imatge
+    img_url = "https://imagenes.20minutos.es/files/image_990_556/uploads/imagenes/2024/05/07/pimientos.jpeg"  # Utilitza una imatge amb l'amplada de la pàgina (1920px) i l'alçada (113px)
+    # Injectar CSS per a la imatge de fons
+    background_css = f"""
+<style>
+body .custom-background {{
+    background-image: url('{img_url}');
+    background-size: 100% ;  /* Ajusta l'amplada al 100% i l'alçada a 113 píxels (3 cm) */
+    background-repeat: no-repeat;
+    background-position: top;
+    margin: 0;
+    padding: 0;
+    height: 256px;  /* Assegura que l'alçada sigui la desitjada */
+}}
+</style>
+"""
+    st.markdown(background_css, unsafe_allow_html=True)
+    # Aplicar la classe CSS específica al contenidor principal
+    st.markdown('<div class="custom-background"></div>', unsafe_allow_html=True)
+
+#___________________________________________________________________
+def lletra_variable():
+    st.markdown(
+        """
+        <style>
+        .custom-title {
+            font-size: 24px; /* Ajusta aquesta mida segons les teves necessitats */
+            font-weight: bold;
+            margin-bottom: 0.02em;
+        }
+        .slider-title {
+            font-size: 24px; /* Ajusta aquesta mida segons les teves necessitats */
+            font-weight: bold;
+            margin-bottom: 0.2em; /* Utilitza una unitat més petita per ajustar la separació */
+        }
+        .separator {
+            width: 100%;
+            height: 2px;
+            background-color: #123456; /* Pots canviar el color segons les teves necessitats */
+            margin: 20px 0; /* Ajusta el marge segons les teves necessitats */
+        }
+        .custom-element {
+            background-color: #d4edda; /* Tono gris clar */
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 20px; /* Ajusta el marge inferior */
+        }
+        </style>
+        """,
+        unsafe_allow_html=True
+    )
