@@ -34,51 +34,54 @@ conn.execute("PRAGMA foreign_keys = ON")
 cursor = conn.cursor()
 
 #__________________________________________________________
+accio = "Fet"
+data_accio = datetime.now().strftime('%d-%m-%Y %H:%M:%S')
+
+
+
 
 # Obtenir els IDs dels registres a esborrar
 st.write("")
 st.write("")
 lletra_variable()
-st.markdown('<div class="custom-element"><p class="custom-title">Registres a esborrar separats per commes:</p>', unsafe_allow_html=True)
-ids_to_delete = st.text_input("", "1,2,3")
-ids_to_delete = [int(x) for x in ids_to_delete.split(",")]
+st.markdown('<div class="custom-element"><p class="custom-title">Registres:</p>', unsafe_allow_html=True)
+ids_to_action = st.text_input("", "1")
 
-st.write(f"Els registres seleccionats per esborrar són: {ids_to_delete}")
+
+st.write(f"El registre fet es: {ids_to_action}")
 
 # Crear la cadena de placeholders per a la consulta
-placeholders = ', '.join(['?' for _ in ids_to_delete])
+# placeholders = ', '.join(['?' for _ in ids_to_action])
 
 # Mostrar informació dels registres seleccionats
-query = f'SELECT ID_Recepte, Titol FROM Receptes WHERE ID_Recepte IN ({placeholders})'
-cursor.execute(query, ids_to_delete)
-records_to_show = cursor.fetchall()
+query = 'SELECT ID_Recepte, Titol FROM Receptes WHERE ID_Recepte = ?'
+cursor.execute(query, ids_to_action)
+record_to_show = cursor.fetchone()
 
-
-
-for record in records_to_show:
-    data = {
-        'ID_Recepte': record[0],
-        'Titol': record[1],
-    }
+if record_to_show is not None:
+    data = {'ID_Recepte': record_to_show[0],
+        'Titol': record_to_show[1],
+        }
     card_html = crear_tarjeta_html_resumida(data)
     st.markdown(card_html, unsafe_allow_html=True)
+    if st.button('fet'):
+        cursor.execute('INSERT INTO Accions (ID_Recepte, Data_accio) VALUES (?, ?)', (record_to_show[0], data_accio))
+        conn.commit()
+        st.write("Accion registrada")
+else:
+    st.write("EL registro no esta")
 
 
-# Esborrar el registre seleccionat si existeix
-if st.button("Esborrar"):
-    for record_id in ids_to_delete:
-        cursor.execute('DELETE FROM Receptes WHERE ID_Recepte = ?', (record_id,))
-    conn.commit()
+
 
 
     # Comprovar si els registres relacionats s'han esborrat de la taula ingredients
-    cursor.execute('SELECT * FROM ingredients WHERE ID_Recepte IN ({})'.format(','.join(['?'] * len(ids_to_delete))),
-                   ids_to_delete)
-    remaining_records = cursor.fetchall()
-    if not remaining_records:
-        st.success("Els registres relacionats s'han esborrat correctament.")
-    else:
-        st.error("Els registres relacionats NO s'han esborrat.")
+# cursor.execute('SELECT * FROM Accions WHERE ID_Recepte = ?'
+# remaining_records = cursor.fetchall()
+# if not remaining_records:
+#     st.success("Els registres relacionats s'han esborrat correctament.")
+# else:
+#     st.error("Els registres relacionats NO s'han esborrat.")
 
 # Tancar la connexió
 conn.close()

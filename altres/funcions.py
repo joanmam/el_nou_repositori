@@ -327,3 +327,20 @@ def crear_tarjeta_html_resumida(data):
     </div>
     <div class="card-separator"></div>
     '''
+
+
+def crear_tarjeta_html_fet(data):
+    ID_Recepte = data['ID_Recepte']
+    Titol = data['Titol']
+    return f'''
+    <div class="card">
+        <table class="card-table">
+            <tr>
+                <td style="width: 10%;">ID: {ID_Recepte}</td>
+                <td style="width: 90%;">Categoria: {accio}</td>
+                <td style="width: 90%;">Categoria: {data_accio}</td>
+            </tr>
+        </table>
+    </div>
+    <div class="card-separator"></div>
+    '''
