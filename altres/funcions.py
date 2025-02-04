@@ -317,8 +317,8 @@ def crear_tarjeta_html_resumida(data):
     ID_Recepte = data['ID_Recepte']
     Titol = data['Titol']
     return f'''
-    <div class="card">
-        <table class="card-table">
+    <div class="card" style="width: 100%; border: 1px solid #ccc; padding: 10px; box-shadow: 2px 2px 10px rgba(0,0,0,0.1); margin-bottom: 10px;">
+        <table class="card-table" style="width: 100%; border-collapse: collapse;">
             <tr>
                 <td style="width: 10%;">ID: {ID_Recepte}</td>
                 <td style="width: 90%;">Categoria: {Titol}</td>
@@ -332,15 +332,33 @@ def crear_tarjeta_html_resumida(data):
 def crear_tarjeta_html_fet(data):
     ID_Recepte = data['ID_Recepte']
     Titol = data['Titol']
+    Accio = data['Accio']
+    Data_accio = data['Data_accio']
     return f'''
     <div class="card">
         <table class="card-table">
             <tr>
                 <td style="width: 10%;">ID: {ID_Recepte}</td>
-                <td style="width: 90%;">Categoria: {accio}</td>
-                <td style="width: 90%;">Categoria: {data_accio}</td>
+                <td style="width: 70%;">Titol: {Titol}</td>
+                <td style="width: 5%;">Accio: {Accio}</td>
+                <td style="width: 15%;">Data Accio: {Data_accio}</td>
             </tr>
         </table>
     </div>
     <div class="card-separator"></div>
     '''
+
+def separador():
+    st.markdown(
+        '''
+        <style>
+        .separator {
+            width: 100%;
+            height: 10px;
+            background-color: #123456; /* Pots canviar el color segons les teves necessitats */
+            margin: 20px 0; /* Ajusta el marge segons les teves necessitats */
+        }
+        </style>
+        ''',
+        unsafe_allow_html=True
+    )

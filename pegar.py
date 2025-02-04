@@ -1,135 +1,73 @@
-import pandas as pd
 import streamlit as st
+import streamlit.components.v1 as components
 
-# Función para convertir BLOB a base64
-def convert_blob_to_base64(blob):
-    # Implementa tu lógica aquí
-    pass
+# Títol de l'aplicació
+st.title('Entrada de data amb format DD-MM-YY')
 
-# Función para obtener emojis
-def obtenir_emoji(ingredients):
-    # Implementa tu lógica aquí
-    pass
+# HTML i JavaScript per al selector de dates flatpickr
+date_picker_html = """
+<html>
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.6.9/flatpickr.min.css">
+</head>
+<body>
+    <input type="text" id="datepicker" style="width: 100%; padding: 10px; font-size: 16px;"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.6.9/flatpickr.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            flatpickr("#datepicker", {
+                dateFormat: "d-m-Y",
+                locale: {
+                    firstDayOfWeek: 1,
+                    weekdays: {
+                        shorthand: ['Dg', 'Dl', 'Dt', 'Dc', 'Dj', 'Dv', 'Ds'],
+                        longhand: [
+                            'Diumenge', 'Dilluns', 'Dimarts', 'Dimecres',
+                            'Dijous', 'Divendres', 'Dissabte'
+                        ]
+                    },
+                    months: {
+                        shorthand: ['Gen', 'Feb', 'Març', 'Abr', 'Maig', 'Jun', 'Jul', 'Ag', 'Set', 'Oct', 'Nov', 'Des'],
+                        longhand: [
+                            'Gener', 'Febrer', 'Març', 'Abril', 'Maig', 'Juny',
+                            'Juliol', 'Agost', 'Setembre', 'Octubre', 'Novembre', 'Desembre'
+                        ]
+                    }
+                },
+                onChange: function(selectedDates, dateStr, instance) {
+                    document.dispatchEvent(new CustomEvent('dateSelected', {detail: dateStr}));
+                }
+            });
+        });
+    </script>
+</body>
+</html>
+"""
 
-# Función para agregar estilos CSS
-def agregar_estilos_css():
-    st.markdown(
-        """
-        <style>
-        .etiqueta {
-            display: inline-block;
-            border: 1px solid black;
-            background-color: #ff9933;
-            padding: 2px 5px;
-            margin: 2px;
-            border-radius: 5px;
-        }
-        .card {
-            background-color: #ffffff; 
-            padding: 10px; 
-            border-radius: 5px; 
-            margin: 10px; 
-            border: 1px solid #ccc;
-        }
-        .card-table {
-            width: 100%; 
-            border-collapse: collapse;
-        }
-        .card-table td {
-            border-bottom: 1px solid #ccc;
-            padding: 5px;
-        }
-        .card-separator {
-            width: 100%; 
-            height: 2px; 
-            background-color: #123456; 
-            margin: 20px 0;
-        }
-        </style>
-        """,
-        unsafe_allow_html=True
-    )
+# Inserir el selector de dates a Streamlit
+selected_date = components.html(date_picker_html, height=300)
 
-# Función para crear etiquetas HTML con estilo
-def crear_etiquetas_html(etiquetas):
-    return " ".join([f'<span class="etiqueta">{etiqueta.strip()}</span>' for etiqueta in etiquetas.split(' ')])
+# Recuperar la data seleccionada utilitzant JavaScript
+date_placeholder = st.empty()
+date_placeholder.text('Selecciona una data en el calendari.')
 
-# Función para crear una tarjeta HTML
-def crear_tarjeta_html(data):
-    ID_Recepte = data['ID_Recepte']
-    Data_formatejada = data['Data_formatejada']
-    Titol = data['Titol']
-    img_base64 = data['img_base64']
-    Metode = data['Metode']
-    Temps = data['Temps']
-    Preparacio = data['Preparacio']
-    components = data['components']
-    Categoria = data['Categoria']
-    Etiquetes = crear_etiquetas_html(data['Etiquetes'])
+# Capturar l'esdeveniment de selecció de data
+st.session_state.selected_date = None
 
-    return f'''
-    <div class="card">
-        <table class="card-table">
-            <tr>
-                <td style="width: 33%;">ID: {ID_Recepte}</td>
-                <td style="width: 33%;">Data: {Data_formatejada}</td>
-                <td style="width: 33%;">Categoria: {Categoria}</td>
-            </tr>
-        </table>
-        <div style="padding-top: 10px; margin-bottom: 10px;">Titol: <strong>{Titol}</strong></div>
-        <table class="card-table">
-            <tr>
-                <td style="width: 80%; text-align: left;">
-                    <img src="data:image/jpeg;base64,{img_base64}" alt="Imatge" style="width: 100%; height: auto; border-radius: 5px;"/>
-                </td>
-                <td style="width: 20%; vertical-align: top;">
-                    <table style="width: 100%; height: 100%; border-collapse: collapse;">
-                        <tr><td style="padding: 10px;">Temps: {Temps}</td></tr>
-                        <tr><td style="padding: 10px;">Preparació: {Preparacio}</td></tr>
-                        <tr><td style="padding: 10px;">Etiquetes: {Etiquetes}</td></tr>
-                    </table>
-                </td>
-            </tr>
-        </table>
-        <div style="padding-top: 10px; margin-bottom: 10px;">Mètode: {Metode}</div>
-        <table class="card-table">
-            <tr>
-                <td style="width: 33%;">Temps: {Temps}</td>
-                <td style="width: 33%;">Ingredients: {components}</td>
-                <td style="width: 33%; text-align: right;">Categoria: {Categoria}</td>
-            </tr>
-        </table>
-        <div style="padding-top: 10px; margin-bottom: 10px;">Ingredients: {components}</div>
-    </div>
-    <div class="card-separator"></div>
-    '''
+date_js = """
+<script>
+document.addEventListener('dateSelected', function(e) {
+    const selectedDate = e.detail;
+    document.querySelector("#date-output").innerText = 'Data seleccionada: ' + selectedDate;
+    streamlit.setComponentValue(selectedDate);
+});
+</script>
+"""
+components.html(date_js, height=0)
 
-# Ejemplo de resultados
-resultados = [
-    # Añade tus datos aquí
-]
-
-# Agregar estilos CSS
-agregar_estilos_css()
-
-# Bucle a través de los resultados para crear tarjetas
-for resultado in resultados:
-    data = {
-        'ID_Recepte': resultado[0],
-        'Data_formatejada': resultado[1],
-        'Titol': resultado[2],
-        'Metode': resultado[3],
-        'Categoria': resultado[4],
-        'Preparacio': resultado[5],
-        'Etiquetes': resultado[8],
-        'img_base64': convert_blob_to_base64(resultado[6]),
-        'Temps': resultado[7],
-        'components': ', '.join(obtenir_emoji(resultado[9]))  # Convertir components a cadena amb emojis
-    }
-
-    # Crear la tarjeta con la opción seleccionada
-    card_html = crear_tarjeta_html(data)
-    st.markdown(card_html, unsafe_allow_html=True)
-
-# Cerrar la conexión a la base de datos si corresponde
-# conn.close()
+# Mostrar la data seleccionada
+date_output = st.empty()
+if st.session_state.selected_date:
+    date_output.text('Data seleccionada: ' + st.session_state.selected_date)
+else:
+    date_output.text('Selecciona una data en el calendari.')
