@@ -317,11 +317,11 @@ def crear_tarjeta_html_resumida(data):
     ID_Recepte = data['ID_Recepte']
     Titol = data['Titol']
     return f'''
-    <div class="card" style="width: 100%; border: 1px solid #ccc; padding: 10px; box-shadow: 2px 2px 10px rgba(0,0,0,0.1); margin-bottom: 10px;">
+    <div class="card" style="width: 100%; border: 1px solid #ccc; padding: 10px; box-shadow: 2px 2px 10px rgba(0,0,0,0.1); margin-bottom: 10px; font-weight: bold">
         <table class="card-table" style="width: 100%; border-collapse: collapse;">
             <tr>
                 <td style="width: 10%;">ID: {ID_Recepte}</td>
-                <td style="width: 90%;">Categoria: {Titol}</td>
+                <td style="width: 90%;">Titol: {Titol}</td>
             </tr>
         </table>
     </div>
@@ -354,11 +354,12 @@ def separador():
         <style>
         .separator {
             width: 100%;
-            height: 10px;
+            height: 25px;
             background-color: #123456; /* Pots canviar el color segons les teves necessitats */
-            margin: 20px 0; /* Ajusta el marge segons les teves necessitats */
+            margin: 5px 0; /* Ajusta el marge segons les teves necessitats */
         }
         </style>
+        <div class="separator"></div>
         ''',
         unsafe_allow_html=True
     )

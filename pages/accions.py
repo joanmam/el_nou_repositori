@@ -90,7 +90,7 @@ WHERE Receptes.ID_Recepte = ?;'''
 cursor.execute(query,ids_to_action)
 records = cursor.fetchall()
 
-if st.button('Resum'):
+if st.button('**Resum**'):
     for record in records:
         data = {'ID_Recepte': record[0],
                 'Titol': record[1],
