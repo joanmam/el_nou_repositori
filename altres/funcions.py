@@ -354,7 +354,7 @@ def separador():
         <style>
         .separator {
             width: 100%;
-            height: 25px;
+            height: 10px;
             background-color: #123456; /* Pots canviar el color segons les teves necessitats */
             margin: 5px 0; /* Ajusta el marge segons les teves necessitats */
         }
@@ -363,3 +363,4 @@ def separador():
         ''',
         unsafe_allow_html=True
     )
+

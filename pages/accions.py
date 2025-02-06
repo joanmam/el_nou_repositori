@@ -27,10 +27,15 @@ cursor = conn.cursor()
 
 conn.commit()
 #_______________________________________________________________
+
 rellotge()
+st.header("Accions")
+banner()
 
 #___________________________________________________________________________________
-banner()
+
+
+
 #_________________________________________________________________________________________
 # Conectarse a la base de datos
 conn = sqlite3.connect('C:/Users/Joan/Receptes/LesReceptes2/nova_base_de_dades.db')
