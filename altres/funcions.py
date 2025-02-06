@@ -154,7 +154,7 @@ def estils_marc_home():
         border-radius: 15px;  /* Bordes arrodonits */
         font-size: 24px;  /* Mida de la font */
         font-weight: bold;
-        color: #003366;  /* Color del text */
+        color: #00001a;  /* Color del text */
         box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);  /* Una mica d'ombra per a millorar la visibilitat */
         text-align: top;  /* Text centrat */
         padding: 10px;  /* Espai intern al voltant del contingut */
@@ -177,7 +177,8 @@ def estils_marc_home():
 #___________________________________________________
 def background_home():
     # URL de la imatge de fons
-    background_image_url = "https://cuidateplus.marca.com/sites/default/files/styles/natural/public/cms/platanos_0.jpg.webp?itok"
+   # background_image_url = "https://cuidateplus.marca.com/sites/default/files/styles/natural/public/cms/platanos_0.jpg.webp?itok"
+    background_image_url = "https://static01.nyt.com/images/2024/04/24/multimedia/aw-tomato-beansrex-mwfq/aw-tomato-beansrex-mwfq-threeByTwoMediumAt2X.jpg?quality=75&auto=webp"
     # CSS personalitzat per posar la imatge de fons
     background_css = f"""
 <style>
@@ -215,7 +216,7 @@ def background_home():
     right: 200px;
     font-size: 100px; /* Augmenta la mida de la font */
     font-weight: bold;
-    color: #003366; /* Pots canviar el color segons les teves necessitats */
+    color: #00001a; /* Pots canviar el color segons les teves necessitats */
     background-color: transparent;
     padding: 10px;
     border: 2px solid #003366;
@@ -227,7 +228,7 @@ def background_home():
     # Aplica el CSS utilitzant st.markdown
     st.markdown(background_css, unsafe_allow_html=True)
     # Afegir text personalitzat a l'extrem inferior dret
-    st.markdown('<div class="custom-text">Les Receptes de la Mamen</div>', unsafe_allow_html=True)
+    st.markdown('<div class="custom-text">Mamen i les seves receptes</div>', unsafe_allow_html=True)
 
 #________________________________________________________________________
 #Rellotge
@@ -262,7 +263,8 @@ def rellotge():
 #__________________________________________________________________
 def banner():
     # URL de la imatge
-    img_url = "https://imagenes.20minutos.es/files/image_990_556/uploads/imagenes/2024/05/07/pimientos.jpeg"  # Utilitza una imatge amb l'amplada de la pàgina (1920px) i l'alçada (113px)
+    img_url = "https://www.stevegranthealth.com/wp-content/uploads/2023/07/Aubergine.webp"  # Utilitza una imatge amb l'amplada de la pàgina (1920px) i l'alçada (113px)
+
     # Injectar CSS per a la imatge de fons
     background_css = f"""
 <style>
