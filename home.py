@@ -8,10 +8,13 @@ import sqlite3
 from altres.variables import path
 from altres.funcions import estils_marc_home
 from altres.funcions import background_home
+from pymongo import MongoClient
 
 #___________________________________________________________
 sys.path.append(os.path.join(os.path.dirname(__file__), 'pages'))
 
+
+#___________________________________________________
 conn = sqlite3.connect(path)
 cursor = conn.cursor()
 
