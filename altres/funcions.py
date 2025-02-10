@@ -376,5 +376,24 @@ def separador():
         unsafe_allow_html=True
     )
 
+def crear_tarjeta_html_pas(data):
+    ID_Recepte = data['ID_Recepte']
+    Titol = data['Titol']
+    Numero = data['Numero']
+    Pas = data['Pas']
+    return f'''
+    <div class="card">
+        <table class="card-table">
+            <tr>
+                <td style="width: 10%;">ID: {ID_Recepte}</td>
+                <td style="width: 70%;">Titol: {Titol}</td>
+                <td style="width: 5%;">Numero: {Numero}</td>
+                <td style="width: 15%;">Pas: {Pas}</td>
+            </tr>
+        </table>
+    </div>
+    <div class="card-separator"></div>
+    '''
+
 
 

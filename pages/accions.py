@@ -104,6 +104,7 @@ if st.button('**Resum**'):
     }
         card_html = crear_tarjeta_html_fet(data)
         st.markdown(card_html, unsafe_allow_html=True)
+#_____________________________________________________
 
 
 conn.close()

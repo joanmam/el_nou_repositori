@@ -15,6 +15,7 @@ from altres.funcions import lletra_variable
 from altres.funcions import agregar_estilos_css, crear_tarjeta_html_resumida
 from PIL import Image
 import io
+from altres.funcions import crear_tarjeta_html_pas
 
 
 st.set_page_config(layout="wide")
@@ -65,7 +66,7 @@ for i in range(st.session_state.num_passos):
     with col1:
         lletra_variable()
         st.markdown('<div class="custom-element2"><p class="custom-title2">Imatge:</p>', unsafe_allow_html=True)
-        image = st.file_uploader(f"Imatge {i + 1}", type=["jpg", "png"], key=f"image_{i}")
+        image = st.file_uploader(f"", type=["jpg", "png"], key=f"image_{i}")
 
         if image is not None:
             st.session_state.imatges[i] = image
@@ -73,7 +74,7 @@ for i in range(st.session_state.num_passos):
     with col2:
         lletra_variable()
         st.markdown('<div class="custom-element2"><p class="custom-title2">Pas:</p>', unsafe_allow_html=True)
-        pas = st.text_area(f"Pas {i + 1}", key=f"pas_{i}")
+        pas = st.text_area(f"", key=f"pas_{i}")
 
         if pas:
             st.session_state.passos[i] = pas
@@ -99,8 +100,8 @@ if st.button("Guardar", key="save_data"):
             imatge = buf.getvalue()
 
             cursor.execute('''
-                INSERT INTO Passos (ID_Recepte, Data_passos, Imatge_passos, Pas) VALUES (?, ?, ?, ?)
-            ''', (recepte_seleccionada, current_date, imatge, pas))
+                INSERT INTO Passos (ID_Recepte, Numero, Data_passos, Imatge_passos, Pas) VALUES (?, ?, ?, ?, ?)
+            ''', (recepte_seleccionada, i+1, current_date, imatge, pas))
 
     conn.commit()
     st.success("Guardado")
@@ -112,3 +113,25 @@ if st.button("Guardar", key="save_data"):
 
     # Reinicialitzar break_loop per evitar crear elements posteriors
     break_loop = False
+
+#________________________________
+
+query = ('SELECT Receptes.ID_Recepte, '
+         'Receptes.Titol, '
+         'Passos.Numero, '
+         'Passos.Pas '
+         'FROM Receptes '
+         'JOIN Passos '
+         'ON Receptes.ID_Recepte = Passos.ID_Recepte '
+         'WHERE Receptes.ID_Recepte = ?;')
+
+cursor.execute(query, (recepte_seleccionada,))
+records = cursor.fetchall()
+for record in records:
+    data = {'ID_Recepte': record[0],
+            'Titol': record[1],
+            'Numero': record[2],
+            'Pas': record[3]
+    }
+    card_html = crear_tarjeta_html_pas(data)
+    st.markdown(card_html, unsafe_allow_html=True)
