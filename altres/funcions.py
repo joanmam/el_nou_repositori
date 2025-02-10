@@ -293,6 +293,11 @@ def lletra_variable():
             font-weight: bold;
             margin-bottom: 0.002em;
         }
+        .custom-title2 {
+            font-size: 18px; /* Ajusta aquesta mida segons les teves necessitats */
+            font-weight: bold;
+            margin-bottom: 0.002em;
+        }   
         .slider-title {
             font-size: 24px; /* Ajusta aquesta mida segons les teves necessitats */
             font-weight: bold;
@@ -310,6 +315,11 @@ def lletra_variable():
             border-radius: 5px;
             margin-bottom: 1px; /* Ajusta el marge inferior */
         }
+        .custom-element2 {
+            background-color: #cc66ff; /* Tono gris clar */
+            padding: 5px;
+            border-radius: 5px;
+            margin-bottom: 1px; /* Ajusta el marge inferior */
         </style>
         """,
         unsafe_allow_html=True
@@ -365,4 +375,6 @@ def separador():
         ''',
         unsafe_allow_html=True
     )
+
+
 
