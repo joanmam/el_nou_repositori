@@ -8,6 +8,10 @@ from altres.variables import path
 from altres.variables import background_image_url
 from datetime import datetime
 import streamlit.components.v1 as components
+from PIL import Image
+import io
+import html
+
 
 
 
@@ -396,4 +400,184 @@ def crear_tarjeta_html_pas(data):
     '''
 
 
+def crear_tarjeta_html_protocol(data):
+    ID_Recepte = data['ID_Recepte']
+    Titol = data['Titol']
+    Numero = data['Numero']
+    Pas = data['Pas']
+    img_base64 = data['Imatge']
+    return f'''
+    <div class="card">
+        <table class="card-table">
+            <tr>
+                <td style="width: 10%;">ID: {ID_Recepte}</td>
+                <td style="width: 65%;">Titol: {Titol}</td>
+                <td style="width: 5%;">Numero: {Numero}</td>
+                <td style="width: 5%;"><img src="data:image/png;base64,{img_base64}" alt="Imatge del pas" /></td>
+                <td style="width: 15%;">Pas: {Pas}</td>
+            </tr>
+        </table>
+    </div>
+    <div class="card-separator"></div>
+    '''
 
+
+
+# Funcions de conversió d'imatges
+def convert_blob_to_image(blob_data):
+    try:
+        if isinstance(blob_data, bytes):
+            image = Image.open(io.BytesIO(blob_data))
+            return image
+        else:
+            st.error("El blob_data no està en bytes")
+            return None
+    except Exception as e:
+        st.error(f"Error convertint el blob a imatge: {e}")
+        return None
+
+def create_thumbnail(image, size=(100, 100)):
+    try:
+        thumbnail = image.copy()
+        thumbnail.thumbnail(size)
+        return thumbnail
+    except Exception as e:
+        st.error(f"Error creant la miniatura: {e}")
+        return None
+
+def convert_image_to_base64(image):
+    try:
+        buffered = io.BytesIO()
+        image.save(buffered, format="PNG")
+        return base64.b64encode(buffered.getvalue()).decode()
+    except Exception as e:
+        st.error(f"Error convertint la imatge a base64: {e}")
+        return
+
+# Funció per crear la taula HTML
+
+
+def crear_taula_html_protocol2(encapcalat, passos):
+    html = f"""
+    <div style='border: 1px solid #ccc; padding: 20px; margin: 20px; border-radius: 10px; box-shadow: 2px 2px 12px rgba(0, 0, 0, 0.1);'>
+        <h2>{encapcalat['Titol']}</h2>
+        <h4>ID Recepta: {encapcalat['ID_Recepte']}</h4>
+        <table style='width: 100%; border-collapse: collapse;'>
+            <thead>
+                <tr>
+                    <th style='border: 1px solid #ddd; padding: 8px; background-color: #f2f2f2;'>Número</th>
+                    <th style='border: 1px solid #ddd; padding: 8px; background-color: #f2f2f2;'>Imatge</th>
+                    <th style='border: 1px solid #ddd; padding: 8px; background-color: #f2f2f2;'>Pas</th>
+                </tr>
+            </thead>
+            <tbody>
+    """
+
+    for pas in passos:
+        imatge_html = f'<img src="data:image/png;base64,{pas["Imatge"]}" alt="Imatge del pas" style="width: 100px; height: auto;" />'
+        html += f"""
+        <tr>
+          <td style="border: 1px solid #ddd; padding: 8px;">{pas['Numero']}</td>
+          <td style="border: 1px solid #ddd; padding: 8px;">{imatge_html}</td>
+          <td style="border: 1px solid #ddd; padding: 8px;">{pas['Pas']}</td>
+        </tr>
+        """
+
+    html += """
+            </tbody>
+        </table>
+    </div>
+    """
+    return html
+
+
+def crear_taula_markdown(encapcalat, passos):
+    # Inicia el markdown amb el títol i l'encapçalament de la taula
+    markdown = f"""
+    ### {encapcalat['Titol']}
+    **ID Recepta**: {encapcalat['ID_Recepte']}
+
+    <table style="width: 100%; border-collapse: collapse;">
+        <thead>
+            <tr>
+                <th style="border: 1px solid #ddd; padding: 8px; background-color: #f2f2f2;">Número</th>
+                <th style="border: 1px solid #ddd; padding: 8px; background-color: #f2f2f2;">Imatge</th>
+                <th style="border: 1px solid #ddd; padding: 8px; background-color: #f2f2f2;">Pas</th>
+            </tr>
+        </thead>
+        <tbody>
+    """
+    st.write("Inici de la taula markdown:")
+    st.write(markdown)
+
+    # Afegeix les files de la taula amb els passos
+    for pas in passos:
+        imatge_html = f'<img src="data:image/png;base64,{pas["Imatge"]}" alt="Imatge del pas" style="width: 100px; height: auto;" />'
+        fila = f"""
+        <tr>
+            <td style="border: 1px solid #ddd; padding: 8px;">{pas['Numero']}</td>
+            <td style="border: 1px solid #ddd; padding: 8px;">{imatge_html}</td>
+            <td style="border: 1px solid #ddd; padding: 8px;">{pas['Pas']}</td>
+        </tr>
+        """
+        st.write("Afegint fila markdown:")
+        st.write(fila)
+        markdown += fila
+
+    # Tanca la taula
+    markdown += """
+        </tbody>
+    </table>
+    """
+    return markdown
+
+
+# Funció per crear l'encapçalament de la taula HTML
+import html
+
+def crear_taula_encapcalat(encapcalat):
+    html = f"""
+    <div>
+        <table style="width: 100%; border-collapse: collapse;">
+            <tr>
+                <th style="width: 10%; border: none;">ID Recepta</th>
+                <th style="width: 80%; border: none;">Títol</th>
+            </tr>
+            <tr>
+                <td style="border: none;">{encapcalat['ID_Recepte']}</td>
+                <td style="border: none;">{encapcalat['Titol']}</td>
+            </tr>
+        </table>
+    </div>
+    """
+    return html
+
+import html
+
+def crear_taula_passos_sense_encapcalat(passos):
+    html_table = """
+    <div>
+        <table style="width: 100%; border-collapse: collapse;">
+    """
+    for pas in passos:
+        numero = pas.get('Numero', 'N/A')
+        descripcio_pas = html.escape(pas.get('Pas', 'Sense descripció'))
+        imatge_base64 = pas.get('Imatge', None)
+
+        if imatge_base64:
+            imatge_html = f'<img src="data:image/png;base64,{imatge_base64}" alt="Imatge del pas" style="width: 100px;" />'
+        else:
+            imatge_html = "No hi ha imatge"
+
+        html_table += f"""
+        <tr>
+            <td style="width: 10%; border: none;">{numero}</td>
+            <td style="width: 10%; border: none;">{imatge_html}</td>
+            <td style="width: 80%; border: none;">{descripcio_pas}</td>
+        </tr>
+        """
+    html_table += """
+        </table>
+    </div>
+    """
+    return html_table
