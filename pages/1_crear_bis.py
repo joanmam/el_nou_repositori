@@ -10,6 +10,7 @@ import io
 import requests
 from altres.funcions import rellotge
 from altres.funcions import banner
+from altres.variables import cami_db
 
 st.set_page_config(layout="wide")
 
@@ -21,7 +22,7 @@ banner()
 #___________________________________________
 
 # Conectarse a la base de datos
-conn = sqlite3.connect('C:/Users/Joan/Receptes/LesReceptes2/nova_base_de_dades.db')
+conn = sqlite3.connect(cami_db)
 cursor = conn.cursor()
 
 conn.commit()

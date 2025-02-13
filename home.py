@@ -5,17 +5,19 @@ import streamlit as st
 import streamlit.components.v1 as components
 from datetime import datetime
 import sqlite3
-from altres.variables import path
 from altres.funcions import estils_marc_home
 from altres.funcions import background_home
-from pymongo import MongoClient
+from altres.variables import cami_db
 
-#___________________________________________________________
-sys.path.append(os.path.join(os.path.dirname(__file__), 'pages'))
+# #___________________________________________________________
+# sys.path.append(os.path.join(os.path.dirname(__file__), 'pages'))
 
 
 #___________________________________________________
-conn = sqlite3.connect(path)
+#Conectar a la base de dades usant la variable db_path
+
+
+conn = sqlite3.connect(cami_db)
 cursor = conn.cursor()
 
 query = "SELECT COUNT(*) FROM Receptes"

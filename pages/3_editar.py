@@ -7,12 +7,12 @@ from altres.funcions import agregar_estilos_css
 from altres.funcions import crear_tarjeta_html
 from altres.funcions import convert_blob_to_base64
 from altres.funcions import obtenir_ingredients
-from altres.variables import path
 from altres.funcions import rellotge
 from altres.funcions import separador
 from altres.funcions import banner
 from altres.funcions import lletra_variable
 from altres.funcions import agregar_estilos_css, crear_tarjeta_html_resumida
+from altres.variables import cami_db
 
 st.set_page_config(layout="wide")
 
@@ -23,7 +23,7 @@ st.header('Actualitzacio')
 banner()
 #_____________________________________________________________________________
 #connexio a la base de dades
-conn = sqlite3.connect('C:/Users/Joan/Receptes/LesReceptes2/nova_base_de_dades.db')
+conn = sqlite3.connect(cami_db)
 cursor = conn.cursor()
 
 # Obtenir els IDs dels registres a actualitzar

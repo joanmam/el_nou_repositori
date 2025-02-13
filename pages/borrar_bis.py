@@ -12,13 +12,14 @@ from altres.funcions import agregar_estilos_css, crear_tarjeta_html_resumida
 from altres.funcions import lletra_variable
 from altres.funcions import rellotge
 from altres.funcions import banner
+from altres.variables import cami_db
 
 st.set_page_config(layout="wide")
 
 
 
 # Conectarse a la base de datos
-conn = sqlite3.connect('C:/Users/Joan/Receptes/LesReceptes2/nova_base_de_dades.db')
+conn = sqlite3.connect(cami_db)
 cursor = conn.cursor()
 
 conn.commit()
@@ -28,7 +29,7 @@ st.header("Esborrar")
 banner()
 #_________________________________________________________________________________________
 # Conectarse a la base de datos
-conn = sqlite3.connect('C:/Users/Joan/Receptes/LesReceptes2/nova_base_de_dades.db')
+conn = sqlite3.connect(cami_db)
 conn.execute("PRAGMA foreign_keys = ON")
 cursor = conn.cursor()
 
