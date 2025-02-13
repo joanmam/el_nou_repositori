@@ -532,32 +532,31 @@ def crear_taula_markdown(encapcalat, passos):
     return markdown
 
 
-# Funció per crear l'encapçalament de la taula HTML
-import html
+
 
 def crear_taula_encapcalat(encapcalat):
     html = f"""
     <div>
-        <table style="width: 100%; border-collapse: collapse;">
-            <tr>
-                <th style="width: 10%; border: none;">ID Recepta</th>
-                <th style="width: 80%; border: none;">Títol</th>
+        <table style="width: 100%; border-collapse: collapse; padding: 0; margin: 0;">
+            <tr style="border-top: 1px solid black; border-bottom: 1px solid black;">
+                <th style="width: 10%; border: none; padding: 0; margin: 0;">ID Recepta</th>
+                <th style="width: 80%; border: none; padding: 0; margin: 0;">Títol</th>
             </tr>
-            <tr>
-                <td style="border: none;">{encapcalat['ID_Recepte']}</td>
-                <td style="border: none;">{encapcalat['Titol']}</td>
+            <tr style="border-bottom: 1px solid black;">
+                <td style="border: none; padding: 0; margin: 0;">{encapcalat['ID_Recepte']}</td>
+                <td style="border: none; padding: 0; margin: 0;">{encapcalat['Titol']}</td>
             </tr>
         </table>
     </div>
     """
     return html
 
-import html
+
 
 def crear_taula_passos_sense_encapcalat(passos):
     html_table = """
     <div>
-        <table style="width: 100%; border-collapse: collapse;">
+        <table style="width: 100%; border-collapse: collapse; padding: 5; margin: 5; border-top: 1px solid black;">
     """
     for pas in passos:
         numero = pas.get('Numero', 'N/A')
@@ -570,10 +569,10 @@ def crear_taula_passos_sense_encapcalat(passos):
             imatge_html = "No hi ha imatge"
 
         html_table += f"""
-        <tr>
-            <td style="width: 10%; border: none;">{numero}</td>
-            <td style="width: 10%; border: none;">{imatge_html}</td>
-            <td style="width: 80%; border: none;">{descripcio_pas}</td>
+        <tr style="border-bottom: 1px solid black;">
+            <td style="width: 10%; border: none; padding: 5; margin: 0;">{numero}</td>
+            <td style="width: 10%; border: none; padding: 5; margin: 0;">{imatge_html}</td>
+            <td style="width: 80%; border: none; padding: 5; margin: 0;">{descripcio_pas}</td>
         </tr>
         """
     html_table += """
