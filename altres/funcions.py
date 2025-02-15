@@ -114,14 +114,7 @@ def crear_tarjeta_html(data):
             </tr>
         </table>
         <div style="padding-top: 10px; margin-bottom: 10px;">Mètode: {Metode}</div>
-        <table class="card-table">
-            <tr>
-                <td style="width: 33%;">Temps: {Temps}</td>
-                <td style="width: 33%;">Ingredients: {components}</td>
-                <td style="width: 33%; text-align: right;">Categoria: {Categoria}</td>
-            </tr>
-        </table>
-        <div style="padding-top: 10px; margin-bottom: 10px;">Ingredients: {components}</div>
+       <div style="padding-top: 10px; margin-bottom: 10px;">Ingredients: {components}</div>
     </div>
     <div class="card-separator"></div>
     '''
