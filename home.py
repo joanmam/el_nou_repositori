@@ -8,7 +8,7 @@ import sqlite3
 from altres.funcions import estils_marc_home
 from altres.funcions import background_home
 from altres.variables import cami_db
-import sqlcloud
+import sqlitecloud
 
 
 # #___________________________________________________________
