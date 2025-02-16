@@ -8,10 +8,11 @@ import sqlite3
 from altres.funcions import estils_marc_home
 from altres.funcions import background_home
 from altres.variables import cami_db
+import sqlcloud
+
 
 # #___________________________________________________________
 # sys.path.append(os.path.join(os.path.dirname(__file__), 'pages'))
-
 
 #___________________________________________________
 #Conectar a la base de dades usant la variable db_path
