@@ -3,7 +3,7 @@ import streamlit as st
 import emoji
 from altres.manteniment import emojis
 import base64
-import sqlite3
+import sqlitecloud
 from altres.variables import background_image_url
 from datetime import datetime
 import streamlit.components.v1 as components
@@ -129,7 +129,7 @@ def convert_blob_to_base64(blob):
 #__________________________________________________________
 # Funció per obtenir la llista d'ingredients de la base de dades
 def obtenir_ingredients():
-    conn = sqlite3.connect(cami_db)
+    conn = sqlitecloud.connect(cami_db)
     cursor = conn.cursor()
     cursor.execute("SELECT nom FROM ingredients")
     return [row[0] for row in cursor.fetchall()]

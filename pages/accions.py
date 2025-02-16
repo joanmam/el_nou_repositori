@@ -1,4 +1,4 @@
-import sqlite3
+import sqlitecloud
 import streamlit as st
 import streamlit.components.v1 as components
 from datetime import datetime
@@ -24,7 +24,7 @@ st.set_page_config(layout="wide")
 
 
 # Conectarse a la base de datos
-conn = sqlite3.connect(cami_db)
+conn = sqlitecloud.connect(cami_db)
 cursor = conn.cursor()
 
 conn.commit()
@@ -40,7 +40,7 @@ banner()
 
 #_________________________________________________________________________________________
 # Conectarse a la base de datos
-conn = sqlite3.connect(cami_db)
+conn = sqlitecloud.connect(cami_db)
 conn.execute("PRAGMA foreign_keys = ON")
 cursor = conn.cursor()
 

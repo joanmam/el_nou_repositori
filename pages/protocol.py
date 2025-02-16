@@ -1,4 +1,4 @@
-import sqlite3
+import sqlitecloud
 import streamlit as st
 import streamlit.components.v1 as components
 from datetime import datetime
@@ -47,7 +47,7 @@ st.write(f"La recepte seleccionada per afegir un protocol es la numero **{recept
 
 
 # Connexió a la base de dades (ajusta la teva base de dades aquí)
-conn = sqlite3.connect(cami_db)
+conn = sqlitecloud.connect(cami_db)
 cursor = conn.cursor()
 
 # Consulta per obtenir el títol i l'ID de la recepta

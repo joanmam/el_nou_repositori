@@ -1,4 +1,4 @@
-import sqlite3
+import sqlitecloud
 import streamlit as st
 import streamlit.components.v1 as components
 from datetime import datetime
@@ -24,7 +24,7 @@ banner()
 #___________________________________________
 
 # Conectarse a la base de datos
-conn = sqlite3.connect(cami_db)
+conn = sqlitecloud.connect(cami_db)
 cursor = conn.cursor()
 
 conn.commit()

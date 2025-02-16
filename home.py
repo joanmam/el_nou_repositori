@@ -4,7 +4,7 @@ import base64
 import streamlit as st
 import streamlit.components.v1 as components
 from datetime import datetime
-import sqlite3
+import sqlitecloud
 from altres.funcions import estils_marc_home
 from altres.funcions import background_home
 from altres.variables import cami_db
@@ -22,7 +22,7 @@ import sqlitecloud
 
 
 
-conn = sqlite3.connect(cami_db)
+conn = sqlitecloud.connect(cami_db)
 cursor = conn.cursor()
 
 query = "SELECT COUNT(*) FROM Receptes"

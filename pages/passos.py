@@ -1,4 +1,4 @@
-import sqlite3
+import sqlitecloud
 import streamlit as st
 import streamlit.components.v1 as components
 from datetime import datetime
@@ -43,7 +43,7 @@ if 'passos' not in st.session_state:
     st.session_state.passos = [None] * max_passos
 
 # Connexió a la base de dades (ajusta la teva base de dades aquí)
-conn = sqlite3.connect(cami_db)
+conn = sqlitecloud.connect(cami_db)
 cursor = conn.cursor()
 
 # Obtenir els IDs de la recepte per introduir els passos

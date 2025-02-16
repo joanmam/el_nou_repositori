@@ -1,4 +1,4 @@
-import sqlite3
+import sqlitecloud
 import streamlit as st
 import streamlit.components.v1 as components
 from datetime import datetime
@@ -25,7 +25,7 @@ st.header('Actualitzacio')
 banner()
 #_____________________________________________________________________________
 #connexio a la base de dades
-conn = sqlite3.connect(cami_db)
+conn = sqlitecloud.connect(cami_db)
 cursor = conn.cursor()
 
 # Obtenir els IDs dels registres a actualitzar
