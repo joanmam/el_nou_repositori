@@ -8,7 +8,9 @@ import sqlite3
 from altres.funcions import estils_marc_home
 from altres.funcions import background_home
 from altres.variables import cami_db
+import emoji
 import sqlitecloud
+
 
 
 # #___________________________________________________________
@@ -16,6 +18,8 @@ import sqlitecloud
 
 #___________________________________________________
 #Conectar a la base de dades usant la variable db_path
+# pip install sqlitecloud
+
 
 
 conn = sqlite3.connect(cami_db)
