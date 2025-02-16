@@ -22,6 +22,8 @@ from altres.funcions import convert_blob_to_image
 from altres.funcions import crear_taula_encapcalat
 from altres.funcions import crear_taula_passos_sense_encapcalat
 from altres.variables import cami_db
+import emoji
+import sqlitecloud
 import html
 
 st.set_page_config(layout="wide")

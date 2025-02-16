@@ -11,6 +11,9 @@ from altres.funcions import rellotge
 from altres.funcions import banner
 from altres.funcions import lletra_variable
 from altres.variables import cami_db
+import emoji
+import sqlitecloud
+
 
 st.set_page_config(layout="wide")
 

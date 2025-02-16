@@ -13,6 +13,8 @@ from altres.funcions import banner
 from altres.funcions import lletra_variable
 from altres.funcions import agregar_estilos_css, crear_tarjeta_html_resumida
 from altres.variables import cami_db
+import emoji
+import sqlitecloud
 
 st.set_page_config(layout="wide")
 
