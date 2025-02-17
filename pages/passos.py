@@ -16,7 +16,6 @@ from PIL import Image
 import io
 from altres.funcions import crear_tarjeta_html_pas
 from altres.variables import cami_db
-import emoji
 import sqlitecloud
 
 

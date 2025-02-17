@@ -1,6 +1,5 @@
 import re
 import streamlit as st
-import emoji
 from altres.manteniment import emojis
 import base64
 import sqlitecloud
