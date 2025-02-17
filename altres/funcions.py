@@ -10,6 +10,7 @@ from PIL import Image
 import io
 import html
 from altres.variables import cami_db
+import emoji
 
 
 
