@@ -20,9 +20,12 @@ import sqlitecloud
 
 
 conn = sqlitecloud.connect(cami_db)
+
+
 cursor = conn.cursor()
 
 query = "SELECT COUNT(*) FROM Receptes"
+
 
 cursor.execute(query)
 num_registres = cursor.fetchone()[0]
