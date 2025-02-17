@@ -15,8 +15,7 @@ import sqlitecloud
 # sys.path.append(os.path.join(os.path.dirname(__file__), 'pages'))
 
 #___________________________________________________
-#Conectar a la base de dades usant la variable db_path
-# pip install sqlitecloud
+#Conectar a la base de dades usant la variable db_path pip install sqlitecloud
 
 
 
