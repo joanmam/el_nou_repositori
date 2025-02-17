@@ -1,7 +1,6 @@
 import re
 import streamlit as st
 import base64
-import sqlitecloud
 from altres.variables import background_image_url
 from datetime import datetime
 import streamlit.components.v1 as components
