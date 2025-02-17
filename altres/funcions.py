@@ -1,6 +1,5 @@
 import re
 import streamlit as st
-from altres.manteniment import emojis
 import base64
 import sqlitecloud
 from altres.variables import background_image_url
