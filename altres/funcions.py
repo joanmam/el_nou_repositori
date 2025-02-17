@@ -8,7 +8,7 @@ from PIL import Image
 import io
 import html
 from altres.variables import cami_db
-import emoji
+
 
 
 
@@ -133,7 +133,7 @@ def obtenir_ingredients():
     return [row[0] for row in cursor.fetchall()]
 
 #________________________________________________________________
-def estils_marc_home():
+def estils_marc():
     st.markdown(
     '''
     <style>
