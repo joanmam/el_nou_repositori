@@ -82,7 +82,7 @@ def crear_tarjeta_html(data):
     Data_formatejada = data['Data_formatejada']
     Titol = data['Titol']
     img_base64 = data['img_base64']
-    Metode = data['Metode']
+    Observacions = data['Observacions']
     Temps = data['Temps']
     Preparacio = data['Preparacio']
     components = data['components']
@@ -113,7 +113,7 @@ def crear_tarjeta_html(data):
                 </td>
             </tr>
         </table>
-        <div style="padding-top: 10px; margin-bottom: 10px;">Mètode: {Metode}</div>
+        <div style="padding-top: 10px; margin-bottom: 10px;">Observacions: {Observacions}</div>
        <div style="padding-top: 10px; margin-bottom: 10px;">Ingredients: {components}</div>
     </div>
     <div class="card-separator"></div>

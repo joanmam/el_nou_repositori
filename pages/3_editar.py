@@ -43,7 +43,7 @@ st.write(f"El registre seleccionat per actualitzar és: {id_to_update}")
 # Mostrar informació dels registres seleccionats
 query = ('SELECT ID_Recepte, '
          'Titol, '
-         'Metode, '
+         'Observacions, '
          'Etiquetes, '
          'Categoria, '
          'Preparacio, '
@@ -57,8 +57,8 @@ separador()
 
 st.markdown('<div class="custom-element"><p class="custom-title">Titol actual:</p>', unsafe_allow_html=True)
 new_Titol = st.text_input("", record[1])
-st.markdown('<div class="custom-element"><p class="custom-title">Metode actual:</p>', unsafe_allow_html=True)
-new_Metode =  st.text_area("", record[2])
+st.markdown('<div class="custom-element"><p class="custom-title">Observacions actual:</p>', unsafe_allow_html=True)
+new_Observacions =  st.text_area("", record[2])
 
 col1, col2, col3, col4 = st.columns(4)
 
@@ -83,7 +83,7 @@ with col4:
 
 query = ('UPDATE Receptes SET '
          'Titol = ?, '
-         'Metode = ?, '
+         'Observacions = ?, '
          'Etiquetes = ?, '
          'Categoria = ?, '
          'Preparacio = ?, '
@@ -91,7 +91,7 @@ query = ('UPDATE Receptes SET '
          'WHERE ID_Recepte = ?')
 
 
-nous_valors = (new_Titol, new_Metode, new_Etiquetes, new_Categoria, new_Preparacio, new_Temps, id_to_update)
+nous_valors = (new_Titol, new_Observacions, new_Etiquetes, new_Categoria, new_Preparacio, new_Temps, id_to_update)
 
 if st.button("Actualitzar"):
     cursor.execute(query, nous_valors)
@@ -103,7 +103,7 @@ if st.button("Actualitzar"):
 #     data = {
 #         'ID_Recepte': record[0],
 #         'Titol': record[1],
-#         'Metode': record[2],
+#         'Observacions': record[2],
 #         'Etiquetes': record[3],
 #         'Categoria': record[4],
 #         'Preparacio': record[5],

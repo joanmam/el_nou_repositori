@@ -36,7 +36,8 @@ rellotge()
 st.header('Protocol')
 #______________________________________________________________________________________
 banner()
-
+def row_style(row):
+    return ['background-color: #f0f0f0' if row.name % 2 == 0 else 'background-color: #ffffff' for _ in row]
 
 # Establir la connexió amb SQLite Cloud
 conn = sqlitecloud.connect(cami_db)
@@ -45,7 +46,26 @@ conn = sqlitecloud.connect(cami_db)
 db_name = "Mamen_Receptes.db"
 conn.execute(f"USE DATABASE {db_name}")
 
+# Llista d'ID de receptes disponibles per seleccionar
+
+
+
+
 # Executa una consulta SQL i guarda els resultats en un DataFrame de Pandas
-query = "SELECT ID_Receptes, Titol FROM Receptes"
-df = pd.read_sql(query, conn)
-st.write(df)
+
+receptes_seleccionades = st.text_input("Selecciona els ID de les receptes:")
+
+if st.button("Seleccionar"):
+    query = "SELECT ID_Recepte, Titol FROM Receptes WHERE ID_Recepte = ?"
+    df = pd.read_sql(query, conn, params=[receptes_seleccionades])
+    styled_df = df.style.apply(row_style, axis=1)
+
+# Genera l'HTML i oculta l'índex utilitzant CSS
+    html = styled_df.hide(axis='index').to_html()
+    html = html.replace('<style type="text/css">', '<style type="text/css">.row0 {background-color: #f0f0f0;}.row1 {background-color: #ffffff;}')
+
+# Mostra el DataFrame estilitzat utilitzant Streamlit
+    st.write(styled_df.to_html(), unsafe_allow_html=True)
+
+
+

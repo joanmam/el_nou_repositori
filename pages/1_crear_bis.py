@@ -58,7 +58,7 @@ with st.form(key="Form"):
         tags = st.text_input("Etiquetes")
         st.markdown("---")  # Separador
 
-    Metode = st.text_area("Metode")
+    Observacions = st.text_area("Observacions")
     st.markdown("---")  # Separador
 
     col5, col6 = st.columns(2)
@@ -90,9 +90,9 @@ with st.form(key="Form"):
             Preparacio = Hores_prep * 60 + Minuts_prep
 
 
-            sql = ("INSERT INTO Receptes (Data_formatejada, Titol, Metode, Etiquetes, blob, Temps, Preparacio, Categoria)"
+            sql = ("INSERT INTO Receptes (Data_formatejada, Titol, Observacions, Etiquetes, blob, Temps, Preparacio, Categoria)"
                    "VALUES (?, ?, ?, ?, ?, ?, ?, ?)")
-            datos = Data_formatejada, Titol, Metode, Etiquetes, blob, Temps, Preparacio, Categoria
+            datos = Data_formatejada, Titol, Observacions, Etiquetes, blob, Temps, Preparacio, Categoria
             cursor.execute(sql, datos)
             conn.commit()
 

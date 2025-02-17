@@ -60,7 +60,7 @@ st.markdown('<div class="separator"></div>', unsafe_allow_html=True)
 
 # Definir la consulta SQL amb els paràmetres necessaris
 query = '''
-    SELECT Receptes.ID_Recepte, Receptes.Data_formatejada, Receptes.Titol, Receptes.Metode, Receptes.Categoria, Receptes.Preparacio, Receptes.blob, Receptes.Temps, Receptes.Etiquetes,
+    SELECT Receptes.ID_Recepte, Receptes.Data_formatejada, Receptes.Titol, Receptes.Observacions, Receptes.Categoria, Receptes.Preparacio, Receptes.blob, Receptes.Temps, Receptes.Etiquetes,
     GROUP_CONCAT(Ingredients.nom || ' (' || Ingredients.quantitat || ')', ', ') AS components
     FROM Receptes
     LEFT JOIN ingredients
@@ -104,7 +104,7 @@ for resultado in resultados:
         'ID_Recepte': resultado[0],
         'Data_formatejada': resultado[1],
         'Titol': resultado[2],
-        'Metode': resultado[3],
+        'Observacions': resultado[3],
         'Categoria': resultado[4],
         'Preparacio': resultado[5],
         'Etiquetes': resultado[8],

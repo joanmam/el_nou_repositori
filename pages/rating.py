@@ -50,7 +50,7 @@ st.write(f"El registre seleccionat per actualitzar és: {id_to_update}")
 # Mostrar informació dels registres seleccionats
 query = ('SELECT ID_Recepte, '
          'Titol, '
-         'Metode, '
+         'Observacions, '
          'Etiquetes, '
          'Categoria, '
          'Preparacio, '
