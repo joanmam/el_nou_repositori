@@ -587,6 +587,8 @@ def dataframe_pagina(html):
     .dataframe-container {{
         width: 100%;
         overflow-x: auto;
+        margin: 0;  /* Elimina márgenes innecesarios */
+        padding: 0;  /* Elimina espacios innecesarios */
     }}
     .dataframe-container table {{
         width: 100%;
@@ -610,3 +612,55 @@ def dataframe_pagina(html):
     <div class="dataframe-container">{html}</div>
     """
     return taula
+
+
+def dataframe_passos(html):
+    taula = f"""
+    <style>
+    .dataframe-container {{
+        width: 100%;
+        overflow-x: auto;
+        margin: 0;  /* Elimina márgenes innecesarios */
+        padding: 0;  /* Elimina espacios innecesarios */
+    }}
+    .dataframe-container table {{
+        width: 100%;
+        border-collapse: collapse;
+        border: 1px solid #ddd;
+    }}
+    .dataframe-container th, .dataframe-container td {{
+        padding: 8px;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+        # border-left: 1px solid #000;
+        font-family: Arial, sans-serif;  /* Canviar el tipus de lletra aquí */
+        font-size: 14px;  /* Canviar la mida de la lletra aquí */
+    }}
+    .dataframe-container th.col0, .dataframe-container td.col0 {{
+        width: 10%;  /* Amplada de la primera columna */
+    }}
+    .dataframe-container th.col1, .dataframe-container td.col1 {{
+        width: 10%;  /* Amplada de la segona columna */
+    }}
+    .dataframe-container th.col2, .dataframe-container td.col2 {{
+        width: 80%;  /* Amplada de la tercera columna */
+    }}
+    </style>
+    <div class="dataframe-container">{html}</div>
+    """
+    return taula
+
+
+# Funció per convertir el blob a una imatge
+def blob_to_image(blob):
+    image = Image.open(io.BytesIO(blob))
+    return image
+
+# Funció per convertir el blob a una miniatura
+def create_thumbnail2(blob):
+    image = Image.open(io.BytesIO(blob))
+    image.thumbnail((100, 100))  # Redueix la mida de la imatge
+    buffered = io.BytesIO()
+    image.save(buffered, format="PNG")
+    img_str = base64.b64encode(buffered.getvalue()).decode()
+    return f'<img src="data:image/png;base64,{img_str}" alt="Imatge"/>'

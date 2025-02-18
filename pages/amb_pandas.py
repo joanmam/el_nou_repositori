@@ -2,6 +2,7 @@ import sqlitecloud
 import streamlit as st
 import streamlit.components.v1 as components
 from datetime import datetime
+from PIL import Image
 
 from jinja2.sandbox import unsafe
 
@@ -30,6 +31,10 @@ import html
 import pandas as pd
 from altres.funcions import row_style
 from altres.funcions import dataframe_pagina
+from altres.funcions import create_thumbnail2
+from altres.funcions import dataframe_passos
+
+
 
 st.set_page_config(layout="wide")
 
@@ -72,6 +77,31 @@ if st.button("Seleccionar"):
 
     # Crida la funció per mostrar el dataframe passant l'HTML com a paràmetre
     taula = dataframe_pagina(html)
+
+    # Mostra el DataFrame estilitzat utilitzant Streamlit
+    st.components.v1.html(taula, height=100, scrolling=True)
+
+
+# pels passos
+    query2 = "SELECT Numero, Imatge_passos, Pas FROM Passos WHERE ID_Recepte = ?"
+    df = pd.read_sql(query2, conn, params=[receptes_seleccionades])
+    # Converteix cada blob a una imatge i crea una nova columna amb les imatges
+    df['Miniatura'] = df['Imatge_passos'].apply(create_thumbnail2)
+
+    # Oculta la columna del blob
+    df = df[['Numero', 'Miniatura', 'Pas']]
+
+    # Aplica l'estil de les files i les columnes
+    styled_df = df.style.apply(row_style, axis=1)
+
+
+
+    # Genera l'HTML estilitzat
+    html = styled_df.hide(axis='index').to_html()
+    html = html.replace('<style type="text/css">', '<style type="text/css">.row0 {background-color: #f0f0f0;} .row1 {background-color: #ffffff;}')
+
+    # Crida la funció per mostrar el dataframe passant l'HTML com a paràmetre
+    taula = dataframe_passos(html)
 
     # Mostra el DataFrame estilitzat utilitzant Streamlit
     st.components.v1.html(taula, height=600, scrolling=True)
