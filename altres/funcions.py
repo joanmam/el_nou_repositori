@@ -573,3 +573,8 @@ def crear_taula_passos_sense_encapcalat(passos):
     </div>
     """
     return html_table
+
+
+def row_style(row):
+    return ['background-color: #f0f0f0'
+            if row.name % 2 == 0 else 'background-color: #ffffff' for _ in row]

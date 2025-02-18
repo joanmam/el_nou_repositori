@@ -25,7 +25,7 @@ from altres.variables import cami_db
 import sqlitecloud
 import html
 import pandas as pd
-
+from altres.funcions import row_style
 
 st.set_page_config(layout="wide")
 
@@ -35,8 +35,7 @@ rellotge()
 st.header('Protocol')
 #______________________________________________________________________________________
 banner()
-def row_style(row):
-    return ['background-color: #f0f0f0' if row.name % 2 == 0 else 'background-color: #ffffff' for _ in row]
+
 
 # Establir la connexió amb SQLite Cloud
 conn = sqlitecloud.connect(cami_db)
