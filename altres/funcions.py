@@ -578,3 +578,35 @@ def crear_taula_passos_sense_encapcalat(passos):
 def row_style(row):
     return ['background-color: #f0f0f0'
             if row.name % 2 == 0 else 'background-color: #ffffff' for _ in row]
+
+
+
+def dataframe_pagina(html):
+    taula = f"""
+    <style>
+    .dataframe-container {{
+        width: 100%;
+        overflow-x: auto;
+    }}
+    .dataframe-container table {{
+        width: 100%;
+        border-collapse: collapse;
+        border: 1px solid #ddd;
+    }}
+    .dataframe-container th, .dataframe-container td {{
+        padding: 8px;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+        font-family: Arial, sans-serif;  /* Canviar el tipus de lletra aquí */
+        font-size: 14px;  /* Canviar la mida de la lletra aquí */
+    }}
+    .dataframe-container th.col0 {{
+        width: 10%;  /* Amplada de la primera columna */
+    }}
+    .dataframe-container th.col1 {{
+        width: 90%;  /* Amplada de la segona columna */
+    }}
+    </style>
+    <div class="dataframe-container">{html}</div>
+    """
+    return taula

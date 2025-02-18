@@ -2,6 +2,9 @@ import sqlitecloud
 import streamlit as st
 import streamlit.components.v1 as components
 from datetime import datetime
+
+from jinja2.sandbox import unsafe
+
 from altres.funcions import agregar_estilos_css
 from altres.funcions import crear_tarjeta_html
 from altres.funcions import convert_blob_to_base64
@@ -26,6 +29,7 @@ import sqlitecloud
 import html
 import pandas as pd
 from altres.funcions import row_style
+from altres.funcions import dataframe_pagina
 
 st.set_page_config(layout="wide")
 
@@ -56,14 +60,18 @@ receptes_seleccionades = st.text_input("Selecciona els ID de les receptes:")
 if st.button("Seleccionar"):
     query = "SELECT ID_Recepte, Titol FROM Receptes WHERE ID_Recepte = ?"
     df = pd.read_sql(query, conn, params=[receptes_seleccionades])
+
+
+    # Aplica l'estil de les files i les columnes
     styled_df = df.style.apply(row_style, axis=1)
 
-# Genera l'HTML i oculta l'índex utilitzant CSS
+
+    # Genera l'HTML estilitzat
     html = styled_df.hide(axis='index').to_html()
-    html = html.replace('<style type="text/css">', '<style type="text/css">.row0 {background-color: #f0f0f0;}.row1 {background-color: #ffffff;}')
+    html = html.replace('<style type="text/css">', '<style type="text/css">.row0 {background-color: #f0f0f0;} .row1 {background-color: #ffffff;}')
 
-# Mostra el DataFrame estilitzat utilitzant Streamlit
-    st.write(styled_df.to_html(), unsafe_allow_html=True)
+    # Crida la funció per mostrar el dataframe passant l'HTML com a paràmetre
+    taula = dataframe_pagina(html)
 
-
-
+    # Mostra el DataFrame estilitzat utilitzant Streamlit
+    st.components.v1.html(taula, height=600, scrolling=True)
