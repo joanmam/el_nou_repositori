@@ -17,6 +17,7 @@ import io
 from altres.funcions import crear_tarjeta_html_pas
 from altres.variables import cami_db
 import sqlitecloud
+from altres.funcions import cropping
 
 
 st.set_page_config(layout="wide")
@@ -26,7 +27,8 @@ rellotge()
 #___________________________________________________________________________________
 st.header('Passos')
 #______________________________________________________________________________________
-banner()
+base64_image, cropped_image = cropping()
+banner(base64_image)
 
 
 max_passos = 10

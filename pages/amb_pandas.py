@@ -33,6 +33,7 @@ from altres.funcions import row_style
 from altres.funcions import dataframe_pagina
 from altres.funcions import create_thumbnail2
 from altres.funcions import dataframe_passos
+from altres.funcions import cropping
 
 
 
@@ -43,7 +44,8 @@ rellotge()
 #___________________________________________________________________________________
 st.header('Protocol')
 #______________________________________________________________________________________
-banner()
+base64_image, cropped_image = cropping()
+banner(base64_image)
 
 
 # Establir la connexió amb SQLite Cloud

@@ -18,6 +18,7 @@ from altres.funcions import banner
 from altres.funcions import separador
 from altres.variables import cami_db
 import sqlitecloud
+from altres.funcions import cropping
 
 st.set_page_config(layout="wide")
 
@@ -31,7 +32,8 @@ conn.commit()
 rellotge()
 
 #___________________________________________________________________________________
-banner()
+base64_image, cropped_image = cropping()
+banner(base64_image)
 #_________________________________________________________________________________________
 conn = sqlitecloud.connect(cami_db)
 cursor = conn.cursor()

@@ -15,6 +15,7 @@ from altres.funcions import agregar_estilos_css, crear_tarjeta_html_resumida
 from altres.variables import cami_db
 import emoji
 import sqlitecloud
+from altres.funcions import cropping
 
 st.set_page_config(layout="wide")
 
@@ -22,7 +23,8 @@ rellotge()
 #___________________________________________________________________________________
 st.header('Actualitzacio')
 #______________________________________________________________________________________
-banner()
+base64_image, cropped_image = cropping()
+banner(base64_image)
 #_____________________________________________________________________________
 #connexio a la base de dades
 conn = sqlitecloud.connect(cami_db)

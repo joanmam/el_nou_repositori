@@ -12,6 +12,7 @@ from altres.funcions import lletra_variable
 from altres.variables import cami_db
 import emoji
 import sqlitecloud
+from altres.funcions import cropping
 
 
 st.set_page_config(layout="wide")
@@ -20,7 +21,8 @@ rellotge()
 #___________________________________________________________________________________
 st.header('Filtre de Receptes')
 #______________________________________________________________________________________
-banner()
+base64_image, cropped_image = cropping()
+banner(base64_image)
 #_____________________________________________________________________________
 #connexio a la base de dades
 conn = sqlitecloud.connect(cami_db)

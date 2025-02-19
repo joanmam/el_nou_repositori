@@ -11,8 +11,10 @@ import requests
 from altres.funcions import rellotge
 from altres.funcions import banner
 from altres.variables import cami_db
+from altres.variables import img_url
 import emoji
 import sqlitecloud
+from altres.funcions import cropping
 
 st.set_page_config(layout="wide")
 
@@ -20,7 +22,9 @@ rellotge()
 #_______________________________
 st.header("Grava una receta")
 
-banner()
+base64_image, cropped_image = cropping()
+banner(base64_image)
+
 #___________________________________________
 
 # Conectarse a la base de datos

@@ -23,6 +23,7 @@ from altres.funcions import crear_taula_encapcalat
 from altres.funcions import crear_taula_passos_sense_encapcalat
 from altres.variables import cami_db
 import sqlitecloud
+from altres.funcions import cropping
 import html
 
 st.set_page_config(layout="wide")
@@ -32,7 +33,8 @@ rellotge()
 #___________________________________________________________________________________
 st.header('Protocol')
 #______________________________________________________________________________________
-banner()
+base64_image, cropped_image = cropping()
+banner(base64_image)
 
 # Obtenir els IDs de la recepte per introduir els passos
 st.write("")

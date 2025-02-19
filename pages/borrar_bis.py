@@ -14,6 +14,7 @@ from altres.funcions import rellotge
 from altres.funcions import banner
 from altres.variables import cami_db
 import sqlitecloud
+from altres.funcions import cropping
 
 st.set_page_config(layout="wide")
 
@@ -27,7 +28,8 @@ conn.commit()
 #_______________________________________________________________
 rellotge()
 st.header("Esborrar")
-banner()
+base64_image, cropped_image = cropping()
+banner(base64_image)
 #_________________________________________________________________________________________
 # Conectarse a la base de datos
 conn = sqlitecloud.connect(cami_db)

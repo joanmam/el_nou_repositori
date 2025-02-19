@@ -11,6 +11,9 @@ from altres.variables import cami_db
 import emoji
 from altres.manteniment import emojis
 import sqlitecloud
+import requests
+from altres.variables import img_url
+from io import BytesIO, StringIO
 
 
 
@@ -258,21 +261,18 @@ def rellotge():
     components.html(date_css + date_html, height=100)
 
 #__________________________________________________________________
-def banner():
-    # URL de la imatge
-    img_url = "https://www.stevegranthealth.com/wp-content/uploads/2023/07/Aubergine.webp"  # Utilitza una imatge amb l'amplada de la pàgina (1920px) i l'alçada (113px)
-
+def banner(base64_image):
     # Injectar CSS per a la imatge de fons
     background_css = f"""
 <style>
 body .custom-background {{
-    background-image: url('{img_url}');
+    background-image: url('data:image/png;base64,{base64_image}');
     background-size: 100% ;  /* Ajusta l'amplada al 100% i l'alçada a 113 píxels (3 cm) */
     background-repeat: no-repeat;
     background-position: top;
     margin: 0;
     padding: 0;
-    height: 256px;  /* Assegura que l'alçada sigui la desitjada */
+    height: 128px;  /* Assegura que l'alçada sigui la desitjada */
 }}
 </style>
 """
@@ -664,3 +664,19 @@ def create_thumbnail2(blob):
     image.save(buffered, format="PNG")
     img_str = base64.b64encode(buffered.getvalue()).decode()
     return f'<img src="data:image/png;base64,{img_str}" alt="Imatge"/>'
+
+
+def cropping():
+    # Descarregar la imatge
+    response = requests.get(img_url)
+    image = Image.open(BytesIO(response.content))
+    # Definir les coordenades del crop (left, top, right, bottom)
+    left = 100
+    top =50
+    right = 400
+    bottom = 100
+    cropped_image = image.crop((left, top, right, bottom))
+    buffered = BytesIO()
+    cropped_image.save(buffered, format="PNG")
+    img_str = base64.b64encode(buffered.getvalue()).decode()
+    return img_str, cropped_image

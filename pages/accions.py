@@ -19,6 +19,7 @@ from altres.funcions import separador
 from altres.variables import cami_db
 import emoji
 import sqlitecloud
+from altres.funcions import cropping
 
 st.set_page_config(layout="wide")
 
@@ -32,7 +33,8 @@ conn.commit()
 
 rellotge()
 st.header("Accions")
-banner()
+base64_image, cropped_image = cropping()
+banner(base64_image)
 
 #___________________________________________________________________________________
 
