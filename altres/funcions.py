@@ -272,7 +272,7 @@ body .custom-background {{
     background-position: top;
     margin: 0;
     padding: 0;
-    height: 128px;  /* Assegura que l'alçada sigui la desitjada */
+    height: 150px;  /* Assegura que l'alçada sigui la desitjada */
 }}
 </style>
 """
@@ -348,8 +348,8 @@ def crear_tarjeta_html_fet(data):
         <table class="card-table">
             <tr>
                 <td style="width: 10%;">ID: {ID_Recepte}</td>
-                <td style="width: 70%;">Titol: {Titol}</td>
-                <td style="width: 5%;">Accio: {Accio}</td>
+                <td style="width: 60%;">Titol: {Titol}</td>
+                <td style="width: 15%;">Accio: {Accio}</td>
                 <td style="width: 15%;">Data Accio: {Data_accio}</td>
             </tr>
         </table>
@@ -674,9 +674,48 @@ def cropping():
     left = 100
     top =50
     right = 400
-    bottom = 100
+    bottom = 200
     cropped_image = image.crop((left, top, right, bottom))
     buffered = BytesIO()
     cropped_image.save(buffered, format="PNG")
     img_str = base64.b64encode(buffered.getvalue()).decode()
     return img_str, cropped_image
+
+def dataframe_accions(html):
+    taula = f"""
+    <style>
+    .dataframe-container {{
+        width: 100%;
+        overflow-x: auto;
+        margin: 0;  /* Elimina márgenes innecesarios */
+        padding: 0;  /* Elimina espacios innecesarios */
+    }}
+    .dataframe-container table {{
+        width: 100%;
+        border-collapse: collapse;
+        border: 1px solid #ddd;
+    }}
+    .dataframe-container th, .dataframe-container td {{
+        padding: 8px;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+        # border-left: 1px solid #000;
+        font-family: Arial, sans-serif;  /* Canviar el tipus de lletra aquí */
+        font-size: 14px;  /* Canviar la mida de la lletra aquí */
+    }}
+    .dataframe-container th.col0, .dataframe-container td.col0 {{
+        width: 10%; 
+    }}   
+    .dataframe-container th.col1, .dataframe-container td.col1 {{
+        width: 60%; 
+    }}
+    .dataframe-container th.col2, .dataframe-container td.col2 {{
+        width: 15%; 
+    }}
+    .dataframe-container th.col3, .dataframe-container td.col3 {{
+        width: 15%;  
+    }}
+    </style>
+    <div class="dataframe-container">{html}</div>
+    """
+    return taula
