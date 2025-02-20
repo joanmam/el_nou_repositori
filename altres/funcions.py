@@ -719,3 +719,13 @@ def dataframe_accions(html):
     <div class="dataframe-container">{html}</div>
     """
     return taula
+
+def inici():
+    rellotge()
+    st.header("Accions")
+    base64_image, cropped_image = cropping()
+    banner(base64_image)
+
+def connexio():
+    conn = sqlitecloud.connect(cami_db)
+    return conn

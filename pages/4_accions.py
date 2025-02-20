@@ -1,49 +1,21 @@
-import sqlitecloud
-import streamlit as st
-import streamlit.components.v1 as components
-from datetime import datetime
-from datetime import date
-from io import BytesIO, StringIO
-from PIL import Image
-import pandas as pd
-import base64
-import io
-import requests
-from streamlit import date_input
-from altres.funcions import agregar_estilos_css, crear_tarjeta_html_resumida
-from altres.funcions import agregar_estilos_css, crear_tarjeta_html_fet
-from altres.funcions import lletra_variable
-from altres.funcions import rellotge
-from altres.funcions import banner
-from altres.funcions import separador
-from altres.variables import cami_db
-import emoji
-import sqlitecloud
-from altres.funcions import cropping
-from altres.funcions import row_style
-from altres.funcions import dataframe_accions
+from altres.imports import *
+
 
 st.set_page_config(layout="wide")
 
 
+
+
 # Conectarse a la base de datos
-conn = sqlitecloud.connect(cami_db)
-cursor = conn.cursor()
+inici()
 
-conn.commit()
-#_______________________________________________________________
-
-rellotge()
-st.header("Accions")
-base64_image, cropped_image = cropping()
-banner(base64_image)
 
 #___________________________________________________________________________________
 
 
 
 #_________________________________________________________________________________________
-
+conn = connexio()
 
 #__________________________________________________________
 lletra_variable()
@@ -106,4 +78,4 @@ if st.button('**Resum**'):
     # Mostra el DataFrame estilitzat utilitzant Streamlit
     st.components.v1.html(taula, height=600, scrolling=True)
 
-conn.close()
+    conn.close()

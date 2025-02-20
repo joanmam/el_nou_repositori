@@ -1,18 +1,4 @@
-import streamlit as st
-import streamlit.components.v1 as components
-from datetime import datetime
-from altres.funcions import obtenir_emoji
-from altres.funcions import agregar_estilos_css
-from altres.funcions import crear_tarjeta_html
-from altres.funcions import convert_blob_to_base64
-from altres.funcions import obtenir_ingredients
-from altres.funcions import rellotge
-from altres.funcions import banner
-from altres.funcions import lletra_variable
-from altres.variables import cami_db
-import emoji
-import sqlitecloud
-from altres.funcions import cropping
+from altres.imports import *
 
 
 st.set_page_config(layout="wide")

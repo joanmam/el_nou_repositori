@@ -1,20 +1,4 @@
-import sqlitecloud
-import streamlit as st
-import streamlit.components.v1 as components
-from datetime import datetime
-from io import BytesIO, StringIO
-from PIL import Image
-import pandas as pd
-import base64
-import io
-import requests
-from altres.funcions import rellotge
-from altres.funcions import banner
-from altres.variables import cami_db
-from altres.variables import img_url
-import emoji
-import sqlitecloud
-from altres.funcions import cropping
+from altres.imports import *
 
 st.set_page_config(layout="wide")
 

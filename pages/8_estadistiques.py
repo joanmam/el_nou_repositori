@@ -1,24 +1,4 @@
-import sqlitecloud
-import streamlit as st
-import streamlit.components.v1 as components
-from datetime import datetime
-from datetime import date
-from io import BytesIO, StringIO
-from PIL import Image
-import pandas as pd
-import base64
-import io
-import requests
-from streamlit import date_input
-from altres.funcions import agregar_estilos_css, crear_tarjeta_html_resumida
-from altres.funcions import agregar_estilos_css, crear_tarjeta_html_fet
-from altres.funcions import lletra_variable
-from altres.funcions import rellotge
-from altres.funcions import banner
-from altres.funcions import separador
-from altres.variables import cami_db
-import sqlitecloud
-from altres.funcions import cropping
+from altres.imports import *
 
 st.set_page_config(layout="wide")
 

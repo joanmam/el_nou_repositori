@@ -1,13 +1,4 @@
-import os
-import sys
-import base64
-import streamlit as st
-import streamlit.components.v1 as components
-from datetime import datetime
-from altres.funcions import estils_marc
-from altres.funcions import background_home
-from altres.variables import cami_db
-import sqlitecloud
+from altres.imports import *
 
 
 
