@@ -87,11 +87,12 @@ agregar_estilos_css()
 
 # Bucle a través dels resultats per crear targetes
 for resultado in resultados:
+    observacions_procesadas = process_observacions(resultado[3])
     data = {
         'ID_Recepte': resultado[0],
         'Data_formatejada': resultado[1],
         'Titol': resultado[2],
-        'Observacions': resultado[3],
+        'Observacions': observacions_procesadas,
         'Categoria': resultado[4],
         'Preparacio': resultado[5],
         'Etiquetes': resultado[8],

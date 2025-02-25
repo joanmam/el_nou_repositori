@@ -2,6 +2,7 @@ import base64
 import html
 import io
 import os
+import re
 import sys
 from datetime import date, datetime
 from io import BytesIO, StringIO
@@ -27,8 +28,8 @@ from altres.funcions import (agregar_estilos_css, background_home, banner,
                              crear_taula_passos_sense_encapcalat,
                              create_thumbnail, create_thumbnail2, cropping,
                              dataframe_accions, dataframe_pagina,
-                             dataframe_passos, estils_marc, inici,
+                             dataframe_passos, estils_marc, find_url, inici,
                              lletra_variable, obtenir_emoji,
-                             obtenir_ingredients, rellotge, row_style,
-                             separador)
+                             obtenir_ingredients, process_observacions,
+                             rellotge, row_style, separador)
 from altres.variables import cami_db, img_url

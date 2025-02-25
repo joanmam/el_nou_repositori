@@ -729,3 +729,15 @@ def inici():
 def connexio():
     conn = sqlitecloud.connect(cami_db)
     return conn
+
+
+def process_observacions(observacions):
+    url = find_url(observacions)
+    if url:
+        return observacions.replace(url, f'<a href="{url}">{url}</a>')
+    return observacions
+
+def find_url(text):
+    url_pattern = re.compile(r'(https?://\S+)')
+    url = url_pattern.search(text)
+    return url.group(0) if url else ''
