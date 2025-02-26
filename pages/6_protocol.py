@@ -25,19 +25,7 @@ if st.button("Seleccionar"):
     df = pd.read_sql(query, conn, params=[receptes_seleccionades])
 
 
-    # Aplica l'estil de les files i les columnes
-    styled_df = df.style.apply(row_style, axis=1)
 
-
-    # Genera l'HTML estilitzat
-    html = styled_df.hide(axis='index').to_html()
-    html = html.replace('<style type="text/css">', '<style type="text/css">.row0 {background-color: #f0f0f0;} .row1 {background-color: #ffffff;}')
-
-    # Crida la funció per mostrar el dataframe passant l'HTML com a paràmetre
-    taula = dataframe_pagina(html)
-
-    # Mostra el DataFrame estilitzat utilitzant Streamlit
-    st.components.v1.html(taula, height=100, scrolling=True)
 
 
 # pels passos
