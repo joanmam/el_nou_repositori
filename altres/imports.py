@@ -33,4 +33,6 @@ from altres.funcions import (agregar_estilos_css, background_home, banner,
                              obtenir_ingredients, process_observacions,
                              rellotge, row_style, separador)
 from altres.variables import cami_db, img_url
+from altres.funcions import dataframe_actualitzar
+import uuid
 

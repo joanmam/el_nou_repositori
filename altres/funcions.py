@@ -787,3 +787,54 @@ def dataframe_estadistiques(html):
     <div class="dataframe-container">{html}</div>
     """
     return taula
+
+def dataframe_actualitzar(html):
+    taula = f"""
+    <style>
+    .dataframe-container {{
+        width: 100%;
+        overflow-x: auto;
+        margin: 0;  /* Elimina márgenes innecesarios */
+        padding: 0;  /* Elimina espacios innecesarios */
+    }}
+    .dataframe-container table {{
+        width: 100%;
+        border-collapse: collapse;
+        border: 1px solid #ddd;
+    }}
+    .dataframe-container th, .dataframe-container td {{
+        padding: 8px;
+        text-align: left;
+        vertical-align: top;
+        border-bottom: 1px solid #ddd;
+        # border-left: 1px solid #000;
+        font-family: Arial, sans-serif;  /* Canviar el tipus de lletra aquí */
+        font-size: 14px;  /* Canviar la mida de la lletra aquí */
+    }}
+    .dataframe-container th.col0, .dataframe-container td.col0 {{
+        width: 10%;  /* Amplada de la primera columna */
+    }}
+    .dataframe-container th.col1, .dataframe-container td.col1 {{
+        width: 55%;  /* Amplada de la segona columna */
+    }}
+    .dataframe-container th.col2, .dataframe-container td.col2 {{
+        width: 15%;  /* Amplada de la tercera columna */
+    }}
+    .dataframe-container th.col2, .dataframe-container td.col3 {{
+        width: 5%;  /* Amplada de la tercera columna */
+    }}
+    .dataframe-container th.col2, .dataframe-container td.col4 {{
+        width: 5%;  /* Amplada de la tercera columna */
+    }}
+    .dataframe-container th.col2, .dataframe-container td.col5{{
+        width: 5%;  /* Amplada de la tercera columna */
+    }}
+    .dataframe-container th.col2, .dataframe-container td.col6{{
+        width: 5%;  /* Amplada de la tercera columna */
+    }}
+    </style>
+    <div class="dataframe-container">{html}</div>
+    """
+    return taula
+
+
