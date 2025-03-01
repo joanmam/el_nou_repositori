@@ -837,4 +837,86 @@ def dataframe_actualitzar(html):
     """
     return taula
 
+# Función para agregar el enlace a la biblioteca de iconos de Google
+def agregar_iconos_google():
+    st.markdown(
+        '<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">',
+        unsafe_allow_html=True)
+
+
+def procesar_fila(row):
+    # Simular la conversión del blob de imagen a base64
+    img_base64 = convert_blob_to_base64(row['blob'])
+
+    # Procesar componentes (por ejemplo, concatenar ingredientes con cantidades)
+    components = row['components']  # Ya viene procesado si usaste GROUP_CONCAT en la consulta
+
+    # Crear una estructura de datos final con todos los campos requeridos
+    return {
+        'ID_Recepte': row['ID_Recepte'],
+        'Data_formatejada': row['Data_formatejada'],
+        'Titol': row['Titol'],
+        'Observacions': row['Observacions'],
+        'Categoria': row['Categoria'],
+        'Preparacio': row['Preparacio'],
+        'img_base64': img_base64,
+        'Temps': row['Temps'],
+        'components': components,
+        'Etiquetes': row['Etiquetes']  # Si necesitas convertirlo, usa ', '.join(row['Etiquetes'])
+    }
+
+
+def convert_blob_to_base64_2(blob, width=100, max_height=150):
+    """
+    Convierte un blob de imagen de la base de datos a una imagen redimensionada en base64.
+
+    Args:
+    - blob: Datos binarios de la imagen.
+    - width: Ancho deseado para la imagen redimensionada.
+    - height: Altura deseada. Si no se proporciona, se calcula manteniendo la proporción.
+
+    Returns:
+    - str: Imagen en base64 lista para usar en HTML.
+    """
+    try:
+        # Convertir el blob en un objeto de imagen usando Pillow
+        image = Image.open(io.BytesIO(blob))
+
+        # Redimensionar la imagen
+        if height > max_height:
+            aspect_ratio = image.height / image.width
+            height = int(width * aspect_ratio)
+        resized_image = image.resize((width, height), Image.ANTIALIAS)
+
+        # Convertir la imagen redimensionada a base64
+        buffered = io.BytesIO()
+        resized_image.save(buffered, format="PNG")
+        return base64.b64encode(buffered.getvalue()).decode('utf-8')
+    except Exception as e:
+        print(f"Error al procesar el blob de imagen: {e}")
+        return None
+
+def agregar_espaciado_css():
+    """
+    Agrega estilos CSS globales para separar las tarjetas con espaciado uniforme.
+    """
+    css = """
+    <style>
+    .card-container {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr); /* Dos columnas */
+        gap: 20px; /* Espaciado entre tarjetas */
+        padding: 20px;
+    }
+    .card {
+        border: 1px solid #ccc;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+        background-color: #fff;
+    }
+    </style>
+    """
+
+
 
