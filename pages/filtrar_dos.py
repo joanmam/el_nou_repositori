@@ -3,6 +3,11 @@ from altres.imports import *
 
 st.set_page_config(layout="wide")
 agregar_iconos_google()
+
+
+
+# Carregar Font Awesome
+font_awesome()
 # Usar un icono de Google
 st.markdown(
     '<i class="material-icons">outdoor_grill</i> ¡Icono de Google!',
@@ -127,7 +132,7 @@ with col2:
         col = columns[i % num_columns]  # Seleccionar columna
         with col:
             # Generar la targeta amb la funció actualitzada
-            targeta_html = generar_targeta(
+            targeta_html = generar_html_fontawesome(
                 titol=row['Titol'],
                 data_formatejada=row['Data_formatejada'],  # Data formatejada
                 imatge_base64=convert_blob_to_base64(row['blob']),  # Imatge
@@ -141,14 +146,6 @@ with col2:
             # Mostrar la targeta a Streamlit
             st.markdown(targeta_html, unsafe_allow_html=True)
 
-
-st.markdown("""
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
-    <p style="display: flex; align-items: center; gap: 5px;">
-        <span class="material-symbols-outlined" style="font-size: 18px;">grocery</span>
-        Exemple d'Ingredients
-    </p>
-""", unsafe_allow_html=True)
 
 
 

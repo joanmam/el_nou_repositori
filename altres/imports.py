@@ -38,3 +38,5 @@ from altres.funcions import procesar_fila
 from altres.funcions import convert_blob_to_base64_2
 from altres.funcions import agregar_espaciado_css
 from altres.funcions import generar_targeta
+from altres.funcions import generar_html_fontawesome
+from altres.funcions import font_awesome

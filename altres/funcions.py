@@ -918,25 +918,25 @@ def agregar_espaciado_css():
     </style>
     """
 
-def generar_targeta(titol, data, imatge_base64, ingredients, temps_preparacio, temps_total, observacions, etiquetes):
+def generar_targeta(titol, data_formatejada, imatge_base64, ingredients, temps_preparacio, temps_total, observacions, etiquetes):
     return f"""
     <div style="display: grid; grid-template-columns: 1fr; grid-template-rows: auto auto auto auto; gap: 10px; border: 1px solid #ccc; border-radius: 10px; padding: 10px; background-color: #f9f9f9;">
-        <!-- Primera fila: Imatge i Títol -->
+        <!-- Primera fila: Imatge i Títol (títol justificat a dalt) -->
         <div style="display: flex; align-items: flex-start; grid-column: 1 / span 1;">
             <img src="data:image/jpeg;base64,{imatge_base64}" alt="Imatge" style="width: 100px; height: 100px; object-fit: cover; border-radius: 10px; margin-right: 10px;">
             <div>
                 <h3 style="margin: 0;">{titol}</h3>
-                <small style="color: #888;">{data}</small>
+                <small style="color: #888;">{data_formatejada}</small>
             </div>
         </div>
-        <!-- Segona fila: Ingredients amb icona local, Temps de Preparació i Temps Total -->
+        <!-- Segona fila: Ingredients amb icona "grocery", Temps de Preparació amb icona "timer" i Temps Total -->
         <div style="grid-column: 1 / span 1; display: flex; justify-content: space-between; gap: 20px; align-items: center;">
             <p style="display: flex; align-items: center; gap: 5px;">
-                <img src="icons/grocery.svg" alt="Grocery Icon" style="width: 18px; height: 18px; vertical-align: middle;">
+                <span class="material-symbols-outlined" style="font-size: 18px; vertical-align: middle;">grocery</span>
                 {ingredients}
             </p>
             <p style="display: flex; align-items: center; gap: 5px;">
-                <img src="icons/timer.svg" alt="Timer Icon" style="width: 18px; height: 18px; vertical-align: middle;">
+                <span class="material-symbols-outlined" style="font-size: 18px; vertical-align: middle;">timer</span>
                 {temps_preparacio} min
             </p>
             <p><strong>Temps Total:</strong> {temps_total} min</p>
@@ -951,3 +951,45 @@ def generar_targeta(titol, data, imatge_base64, ingredients, temps_preparacio, t
         </div>
     </div>
     """
+
+
+def generar_html_fontawesome(titol, data_formatejada, imatge_base64, ingredients, temps_preparacio, temps_total, observacions, etiquetes):
+    return f"""
+    <div style="display: grid; grid-template-columns: 1fr; grid-template-rows: auto auto auto auto; gap: 10px; border: 1px solid #ccc; border-radius: 10px; padding: 10px; background-color: #f9f9f9;">
+        <!-- Primera fila: Imatge i Títol -->
+        <div style="display: flex; align-items: flex-start; grid-column: 1 / span 1;">
+            <img src="data:image/jpeg;base64,{imatge_base64}" alt="Imatge" style="width: 100px; height: 100px; object-fit: cover; border-radius: 10px; margin-right: 10px;">
+            <div>
+                <h3 style="margin: 0;">{titol}</h3>
+                <small style="color: #888;">{data_formatejada}</small>
+            </div>
+        </div>
+        <!-- Segona fila: Ingredients amb icona Font Awesome, Temps de Preparació i Temps Total -->
+        <div style="grid-column: 1 / span 1; display: flex; justify-content: space-between; gap: 20px; align-items: center;">
+            <p style="display: flex; align-items: center; gap: 5px;">
+                <i class="fas fa-shopping-cart" style="font-size: 18px; vertical-align: middle;"></i>
+                {ingredients}
+            </p>
+            <p style="display: flex; align-items: center; gap: 5px;">
+                <i class="fas fa-clock" style="font-size: 18px; vertical-align: middle;"></i>
+                {temps_preparacio} min
+            </p>
+            <p style="display: flex; align-items: center; gap: 5px;">
+                <i class="fas fa-hourglass" style="font-size: 18px; vertical-align: middle;"></i>
+                {temps_total} min
+        </div>
+        <!-- Tercera fila: Etiquetes -->
+        <div style="grid-column: 1 / span 1; text-align: center; color: #555;">
+            <p><strong>Etiquetes:</strong> {etiquetes}</p>
+        </div>
+        <!-- Quarta fila: Observacions -->
+        <div style="grid-column: 1 / span 1; text-align: center; font-style: italic;">
+            <p><strong>Observacions:</strong> {observacions}</p>
+        </div>
+    </div>
+    """
+
+def font_awesome():
+    st.markdown("""
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+""", unsafe_allow_html=True)
