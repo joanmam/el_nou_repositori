@@ -142,6 +142,13 @@ with col2:
             st.markdown(targeta_html, unsafe_allow_html=True)
 
 
+st.markdown("""
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
+    <p style="display: flex; align-items: center; gap: 5px;">
+        <span class="material-symbols-outlined" style="font-size: 18px;">grocery</span>
+        Exemple d'Ingredients
+    </p>
+""", unsafe_allow_html=True)
 
 
 

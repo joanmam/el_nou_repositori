@@ -918,25 +918,25 @@ def agregar_espaciado_css():
     </style>
     """
 
-def generar_targeta(titol, data_formatejada, imatge_base64, ingredients, temps_preparacio, temps_total, observacions, etiquetes):
+def generar_targetes(titol, data, imatge_base64, ingredients, temps_preparacio, temps_total, observacions, etiquetes):
     return f"""
     <div style="display: grid; grid-template-columns: 1fr; grid-template-rows: auto auto auto auto; gap: 10px; border: 1px solid #ccc; border-radius: 10px; padding: 10px; background-color: #f9f9f9;">
-        <!-- Primera fila: Imatge i Títol (títol justificat a dalt) -->
+        <!-- Primera fila: Imatge i Títol -->
         <div style="display: flex; align-items: flex-start; grid-column: 1 / span 1;">
             <img src="data:image/jpeg;base64,{imatge_base64}" alt="Imatge" style="width: 100px; height: 100px; object-fit: cover; border-radius: 10px; margin-right: 10px;">
             <div>
                 <h3 style="margin: 0;">{titol}</h3>
-                <small style="color: #888;">{data_formatejada}</small>
+                <small style="color: #888;">{data}</small>
             </div>
         </div>
-        <!-- Segona fila: Ingredients amb icona "grocery", Temps de Preparació amb icona "timer" i Temps Total -->
+        <!-- Segona fila: Ingredients amb icona local, Temps de Preparació i Temps Total -->
         <div style="grid-column: 1 / span 1; display: flex; justify-content: space-between; gap: 20px; align-items: center;">
             <p style="display: flex; align-items: center; gap: 5px;">
-                <span class="material-symbols-outlined" style="font-size: 18px; vertical-align: middle;">grocery</span>
+                <img src="icons/grocery.svg" alt="Grocery Icon" style="width: 18px; height: 18px; vertical-align: middle;">
                 {ingredients}
             </p>
             <p style="display: flex; align-items: center; gap: 5px;">
-                <span class="material-symbols-outlined" style="font-size: 18px; vertical-align: middle;">timer</span>
+                <img src="icons/timer.svg" alt="Timer Icon" style="width: 18px; height: 18px; vertical-align: middle;">
                 {temps_preparacio} min
             </p>
             <p><strong>Temps Total:</strong> {temps_total} min</p>
