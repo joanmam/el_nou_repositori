@@ -119,32 +119,31 @@ df = pd.read_sql(query, conn, params=params)
 
 df["components"] = df["components"].apply(lambda x: ', '.join(obtenir_emoji(x)))
 with col2:
+    # Mostrar els registres com a targetes
     num_columns = 3
     columns = st.columns(num_columns)
 
-    # Mostrar los datos como tarjetas
     for i, row in df.iterrows():
         col = columns[i % num_columns]  # Seleccionar columna
         with col:
-            # Convertir blob a imagen base64 para mostrar
-            if row["blob"]:  # Verificar que no sea None
-                img_base64 = convert_blob_to_base64(row["blob"])
-                # Aplicar la funció a la columna components
+            # Generar la targeta amb la funció actualitzada
+            targeta_html = generar_targeta(
+                titol=row['Titol'],
+                data_formatejada=row['Data_formatejada'],  # Data formatejada
+                imatge_base64=convert_blob_to_base64(row['blob']),  # Imatge
+                ingredients=row['components'],  # Ingredients
+                temps_preparacio=row['Preparacio'],  # Temps de preparació
+                temps_total=row['Temps'],  # Temps total
+                observacions=row['Observacions'],  # Observacions
+                etiquetes=row['Etiquetes']  # Etiquetes
+            )
+
+            # Mostrar la targeta a Streamlit
+            st.markdown(targeta_html, unsafe_allow_html=True)
 
 
-                st.markdown(
-                    f"""
-                    <div style="border: 1px solid #ccc; border-radius: 10px; padding: 10px; text-align: center; background-color: #f9f9f9;">
-                        <img src="data:image/jpeg;base64,{img_base64}" alt="Foto" style="width:150px; height:150px; object-fit:cover; border-radius:10px;" />
-                        <h3>{row['Titol']}</h3>
-                        <p><strong>Categoría:</strong> {row['Categoria']}</p>
-                        <p><strong>Observaciones:</strong> {row['Observacions']}</p>
-                        <p><strong>Ingredientes:</strong> {row['components']}</p>
-                        <p><strong>Tiempo de preparación:</strong> {row['Preparacio']} min</p>
-                    </div>
-                    """,
-                    unsafe_allow_html=True
-                )
+
+
 
 # Tancar la connexió a la base de dades
 conn.close()
