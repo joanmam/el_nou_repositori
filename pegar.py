@@ -1,39 +1,43 @@
-from PIL import Image
-import io
-import base64
+import pandas as pd
 
+# Suposem que tens un DataFrame amb una columna 'components'
+data = {
+    "ID_Recepte": [1, 2],
+    "components": [
+        "Tomàquet (2), Ceba (1), Sal (1)",
+        "Patata (3), All (2)"
+    ]
+}
+df = pd.DataFrame(data)
 
-def convert_blob_to_base64_2(blob, width=300, height=None):
-    """
-    Convierte un blob de imagen de la base de datos a una imagen redimensionada en base64.
+# Diccionari d'emojis per als ingredients
+emojis = {
+    "tomàquet": "🍅",
+    "ceba": "🧅",
+    "sal": "🧂",
+    "patata": "🥔",
+    "all": "🧄"
+}
+emoji_per_defecte = "❓"
 
-    Args:
-    - blob: Datos binarios de la imagen.
-    - width: Ancho deseado para la imagen redimensionada.
-    - height: Altura deseada. Si no se proporciona, se calcula manteniendo la proporción.
+# Funció que transforma components amb emojis
+def obtenir_emoji(components):
+    if components is None:
+        return [emoji_per_defecte]
+    emoji_noms = re.findall(r'(\w+)\s*\(([^)]+)\)', components)
+    resultat_emoji = []
 
-    Returns:
-    - str: Imagen en base64 lista para usar en HTML.
-    """
-    try:
-        # Convertir el blob en un objeto de imagen usando Pillow
-        image = Image.open(io.BytesIO(blob))
+    for nom, quantitat in emoji_noms:
+        emoji_nom = emojis.get(nom.lower(), emoji_per_defecte)
+        resultat_emoji.append(f"{emoji_nom} {nom} ({quantitat})")
 
-        # Redimensionar la imagen
-        if height is None:
-            aspect_ratio = image.height / image.width
-            height = int(width * aspect_ratio)
-        resized_image = image.resize((width, height), Image.ANTIALIAS)
+    return resultat_emoji
 
-        # Convertir la imagen redimensionada a base64
-        buffered = io.BytesIO()
-        resized_image.save(buffered, format="PNG")
-        return base64.b64encode(buffered.getvalue()).decode('utf-8')
-    except Exception as e:
-        print(f"Error al procesar el blob de imagen: {e}")
-        return None
+# Aplicar la funció a la columna components
+df["components_emoji"] = df["components"].apply(lambda x: ', '.join(obtenir_emoji(x)))
 
-
+# Mostrar el DataFrame resultat
+st.write("DataFrame actualitzat amb emojis:", df)
 
 
 

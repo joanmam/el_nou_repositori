@@ -21,7 +21,7 @@ llista_ingredients = sorted(llista_ingredients_sense_ordenar)
 st.text("")
 st.text("")
 
-col1, col2, col3 = st.columns([1, 3, 3])
+col1, col2 = st.columns([1, 4])
 
 with col1:
 
@@ -84,40 +84,67 @@ query += " GROUP BY Receptes.ID_Recepte"
 
 df = pd.read_sql(query, conn, params=params)
 # Convertir los blobs a base64
-df['img_base64'] = df['blob'].apply(lambda blob: convert_blob_to_base64_2(blob))
-
-
-# Procesar todas las filas
-registros = [procesar_fila(row) for _, row in df.iterrows()]
-
-# Dividir en pares e impares
-pares = [registro for i, registro in enumerate(registros) if i % 2 == 0]
-impares = [registro for i, registro in enumerate(registros) if i % 2 == 1]
-
-# Generar tarjetas para los registros pares
-html_pares = ""
-for data in pares:
-    html_pares += crear_tarjeta_html(data)
-
-# Generar tarjetas para los registros impares
-html_impares = ""
-for data in impares:
-    html_impares += crear_tarjeta_html(data)
+# df['img_base64'] = df['blob'].apply(lambda blob: convert_blob_to_base64_2(blob))
+#
+#
+# # Procesar todas las filas
+# registros = [procesar_fila(row) for _, row in df.iterrows()]
+#
+# # Dividir en pares e impares
+# pares = [registro for i, registro in enumerate(registros) if i % 2 == 0]
+# impares = [registro for i, registro in enumerate(registros) if i % 2 == 1]
+#
+# # Generar tarjetas para los registros pares
+# html_pares = ""
+# for data in pares:
+#     html_pares += crear_tarjeta_html(data)
+#
+# # Generar tarjetas para los registros impares
+# html_impares = ""
+# for data in impares:
+#     html_impares += crear_tarjeta_html(data)
 
 #____________________________________________________________________
+# with col2:
+#     agregar_estilos_css()
+#     agregar_espaciado_css()
+#     # Mostrar tarjetas para pares
+#     st.markdown(html_pares, unsafe_allow_html=True)
+#
+# with col3:
+#     agregar_estilos_css()
+#     agregar_espaciado_css()
+#     # Mostrar tarjetas para impares
+#     st.markdown(html_impares, unsafe_allow_html=True)
+
+df["components"] = df["components"].apply(lambda x: ', '.join(obtenir_emoji(x)))
 with col2:
-    agregar_estilos_css()
-    agregar_espaciado_css()
-    # Mostrar tarjetas para pares
-    st.markdown(html_pares, unsafe_allow_html=True)
+    num_columns = 3
+    columns = st.columns(num_columns)
 
-with col3:
-    agregar_estilos_css()
-    agregar_espaciado_css()
-    # Mostrar tarjetas para impares
-    st.markdown(html_impares, unsafe_allow_html=True)
+    # Mostrar los datos como tarjetas
+    for i, row in df.iterrows():
+        col = columns[i % num_columns]  # Seleccionar columna
+        with col:
+            # Convertir blob a imagen base64 para mostrar
+            if row["blob"]:  # Verificar que no sea None
+                img_base64 = convert_blob_to_base64(row["blob"])
+                # Aplicar la funció a la columna components
 
 
+                st.markdown(
+                    f"""
+                    <div style="border: 1px solid #ccc; border-radius: 10px; padding: 10px; text-align: center; background-color: #f9f9f9;">
+                        <img src="data:image/jpeg;base64,{img_base64}" alt="Foto" style="width:150px; height:150px; object-fit:cover; border-radius:10px;" />
+                        <h3>{row['Titol']}</h3>
+                        <p><strong>Categoría:</strong> {row['Categoria']}</p>
+                        <p><strong>Observaciones:</strong> {row['Observacions']}</p>
+                        <p><strong>Ingredientes:</strong> {row['components']}</p>
+                        <p><strong>Tiempo de preparación:</strong> {row['Preparacio']} min</p>
+                    </div>
+                    """,
+                    unsafe_allow_html=True
+                )
 
 # Tancar la connexió a la base de dades
 conn.close()

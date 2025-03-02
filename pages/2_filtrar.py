@@ -81,9 +81,9 @@ query += " GROUP BY Receptes.ID_Recepte"
 
 cursor.execute(query, params)
 resultados = cursor.fetchall()
-
-#____________________________________________________________________
-agregar_estilos_css()
+#
+# #____________________________________________________________________
+# agregar_estilos_css()
 
 # Bucle a través dels resultats per crear targetes
 for resultado in resultados:
