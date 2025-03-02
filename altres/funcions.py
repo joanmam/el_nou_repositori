@@ -918,7 +918,7 @@ def agregar_espaciado_css():
     </style>
     """
 
-def generar_targetes(titol, data, imatge_base64, ingredients, temps_preparacio, temps_total, observacions, etiquetes):
+def generar_targeta(titol, data, imatge_base64, ingredients, temps_preparacio, temps_total, observacions, etiquetes):
     return f"""
     <div style="display: grid; grid-template-columns: 1fr; grid-template-rows: auto auto auto auto; gap: 10px; border: 1px solid #ccc; border-radius: 10px; padding: 10px; background-color: #f9f9f9;">
         <!-- Primera fila: Imatge i Títol -->
