@@ -953,43 +953,80 @@ def generar_targeta(titol, data_formatejada, imatge_base64, ingredients, temps_p
     """
 
 
-def generar_html_fontawesome(titol, data_formatejada, imatge_base64, ingredients, temps_preparacio, temps_total, observacions, etiquetes):
+def generar_html_fontawesome(ID_Recepte, titol, data_formatejada, imatge_base64, ingredients, temps_preparacio, temps_total):
     return f"""
-    <div style="display: grid; grid-template-columns: 1fr; grid-template-rows: auto auto auto auto; gap: 10px; border: 1px solid #ccc; border-radius: 10px; padding: 10px; background-color: #f9f9f9;">
-        <!-- Primera fila: Imatge i Títol -->
-        <div style="display: flex; align-items: flex-start; grid-column: 1 / span 1;">
-            <img src="data:image/jpeg;base64,{imatge_base64}" alt="Imatge" style="width: 100px; height: 100px; object-fit: cover; border-radius: 10px; margin-right: 10px;">
-            <div>
-                <h3 style="margin: 0;">{titol}</h3>
-                <small style="color: #888;">{data_formatejada}</small>
+    <div style="margin-bottom: 10px">
+        <div style="display: grid; grid-template-columns: 1fr; grid-template-rows: auto auto auto auto; gap: 10px; border: 1px solid #ff3333; border-radius: 10px; padding: 0px; background-color: #ffd1b3;">
+            <!-- Primera fila: Imatge i Títol -->
+            <div style="display: flex; align-items: flex-start; grid-column: 1 / span 1;">
+                <img src="data:image/jpeg;base64,{imatge_base64}" alt="Imatge" style="width: 100px; height: 100px; object-fit: cover; border-radius: 10px; margin-right: 10px;">
+                <div>
+                    <h4 style="margin: 0;">{titol}</h4>
+                    <div style="display: flex; gap: 1px;">
+                        <h6 style="color: #000099; margin: 0;">{ID_Recepte}</h6>
+                        <h6 style="color: #ff0000;">{data_formatejada}</h6>
+                    </div>
+                </div>
             </div>
-        </div>
-        <!-- Segona fila: Ingredients amb icona Font Awesome, Temps de Preparació i Temps Total -->
-        <div style="grid-column: 1 / span 1; display: flex; justify-content: space-between; gap: 20px; align-items: center;">
-            <p style="display: flex; align-items: center; gap: 5px;">
+            <!-- Segona fila: Ingredients amb icona Font Awesome, Temps de Preparació i Temps Total -->
+            <div style="grid-column: 1 / span 1; display: flex; justify-content: flex-start; gap: 20px; align-items: center; padding-left: 5px">
+                <p style="display: flex; align-items: center; gap: 5px;">
+                    <i class="fas fa-clock" style="font-size: 18px; vertical-align: middle;"></i>
+                    {temps_preparacio} min
+                </p>
+                <p style="display: flex; align-items: center; gap: 5px;">
+                    <i class="fas fa-hourglass" style="font-size: 18px; vertical-align: middle;"></i>
+                    {temps_total} min
+                </p>
+            </div>
+            <div style="display: flex; align-items: center; gap: 5px; padding-left: 5px">
                 <i class="fas fa-shopping-cart" style="font-size: 18px; vertical-align: middle;"></i>
                 {ingredients}
-            </p>
-            <p style="display: flex; align-items: center; gap: 5px;">
-                <i class="fas fa-clock" style="font-size: 18px; vertical-align: middle;"></i>
-                {temps_preparacio} min
-            </p>
-            <p style="display: flex; align-items: center; gap: 5px;">
-                <i class="fas fa-hourglass" style="font-size: 18px; vertical-align: middle;"></i>
-                {temps_total} min
+            </div>
         </div>
-        <!-- Tercera fila: Etiquetes -->
-        <div style="grid-column: 1 / span 1; text-align: center; color: #555;">
-            <p><strong>Etiquetes:</strong> {etiquetes}</p>
-        </div>
-        <!-- Quarta fila: Observacions -->
-        <div style="grid-column: 1 / span 1; text-align: center; font-style: italic;">
-            <p><strong>Observacions:</strong> {observacions}</p>
-        </div>
-    </div>
+    </div>  
     """
 
 def font_awesome():
     st.markdown("""
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
 """, unsafe_allow_html=True)
+
+
+def crear_filtres(titols_elements):
+    """
+    Crea un contenidor estilitzat amb els filtres de Streamlit.
+
+    :param titols_elements: Llista de tuples on cada tupla conté:
+        - títol (str): El títol del filtre.
+        - element (callable): El component Streamlit a mostrar (multiselect, slider, etc.).
+    """
+    # Injectar el CSS personalitzat
+    st.markdown("""
+        <style>
+            .custom-container {
+                border: 1px solid red;
+                border-radius: 10px;
+                padding: 20px;
+                background-color: #f9f9f9;
+                margin-bottom: 20px;
+            }
+            .custom-title {
+                font-size: 16px;
+                color: #333;
+                font-weight: bold;
+                margin-bottom: 10px;
+            }
+        </style>
+    """, unsafe_allow_html=True)
+
+    # Crear el contenidor
+    with st.container():
+        st.markdown('<div class="custom-container">', unsafe_allow_html=True)
+
+        # Afegir els filtres
+        for titol, element_callable in titols_elements:
+            st.markdown(f'<p class="custom-title">{titol}</p>', unsafe_allow_html=True)
+            element_callable()  # Executa el component Streamlit interactiu
+
+        st.markdown('</div>', unsafe_allow_html=True)

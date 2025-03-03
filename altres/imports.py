@@ -40,3 +40,4 @@ from altres.funcions import agregar_espaciado_css
 from altres.funcions import generar_targeta
 from altres.funcions import generar_html_fontawesome
 from altres.funcions import font_awesome
+from altres.funcions import crear_filtres

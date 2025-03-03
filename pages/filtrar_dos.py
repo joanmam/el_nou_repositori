@@ -26,37 +26,72 @@ llista_ingredients = sorted(llista_ingredients_sense_ordenar)
 st.text("")
 st.text("")
 
-col1, col2 = st.columns([1, 4])
+col1, col2 = st.columns([1, 5])
 
+# Col·loquem tots els elements dins del contenidor de col1
 with col1:
+    # Injectar CSS personalitzat per als elements individuals
+    st.markdown("""
+        <style>
+            .custom-element {
+                border: 1px solid red; /* Contorn vermell */
+                border-radius: 10px; /* Cantonades arrodonides */
+                padding: 10px; /* Espai intern */
+                margin-bottom: 20px; /* Espai entre elements */
+                background-color: #f9f9f9; /* Fons gris clar */
+            }
+            .custom-title {
+                font-size: 16px;
+                font-weight: bold;
+                color: #333;
+                margin-bottom: 5px;
+            }
+        </style>
+    """, unsafe_allow_html=True)
 
+    # Crear elements amb contorns individuals
+    # Primer element
+    st.markdown('<div class="custom-element">', unsafe_allow_html=True)
+    st.markdown('<p class="custom-title">Selecciona la primera categoria:</p>', unsafe_allow_html=True)
+    categoria = st.multiselect('', ['Tots', 'Cat1', 'Cat2', 'Cat3'], default=['Tots'])
+    st.markdown('</div>', unsafe_allow_html=True)
 
-    #_______________________________________________________
+    # Segon element
+    st.markdown('<div class="custom-element">', unsafe_allow_html=True)
+    st.markdown('<p class="custom-title">Selecciona la segona categoria:</p>', unsafe_allow_html=True)
+    ingredients_seleccionats = st.multiselect('', llista_ingredients)
+    st.markdown('</div>', unsafe_allow_html=True)
+
+    # Tercer element
+    st.markdown('<div class="custom-element">', unsafe_allow_html=True)
+    st.markdown('<p class="custom-title">Selecciona un valor:</p>', unsafe_allow_html=True)
+    temps_prep = st.slider('', 0, 240, (0, 240), step=1)
+    st.markdown('</div>', unsafe_allow_html=True)
 
     # CSS per canviar la mida de la lletra del nom de la variable
-    lletra_variable()
+    # lletra_variable()
 
     #____________________________________________________________
 
     # Utilitza HTML per aplicar la classe CSS al títol
-    st.markdown('<div class="custom-element"><p class="custom-title">Selecciona una categoria:</p>', unsafe_allow_html=True)
-    categoria = st.multiselect('', ['Tots', 'Cat1', 'Cat2', 'Cat3'], default=['Tots'])
-    st.markdown('</div>', unsafe_allow_html=True)
-    st.markdown('<div class="separator"></div>', unsafe_allow_html=True)
-    st.markdown('<div class="custom-element"><p class="custom-title">Selecciona un valor:</p>', unsafe_allow_html=True)
-    temps_prep = st.slider('', 0, 240, (0, 240), step=1)
-    st.markdown('</div>', unsafe_allow_html=True)
-    st.markdown('<div class="separator"></div>', unsafe_allow_html=True)
-    st.markdown('<div class="custom-element"><p class="custom-title">Selecciona una categoria:</p>', unsafe_allow_html=True)
-    ingredients_seleccionats = st.multiselect('',llista_ingredients)
-    st.markdown('</div>', unsafe_allow_html=True)
-    st.markdown('<div class="separator"></div>', unsafe_allow_html=True)
+    # st.markdown('<div class="custom-element"><p class="custom-title">Selecciona una categoria:</p>', unsafe_allow_html=True)
+    # categoria = st.multiselect('', ['Tots', 'Cat1', 'Cat2', 'Cat3'], default=['Tots'])
+    # st.markdown('</div>', unsafe_allow_html=True)
+    # st.markdown('<div class="separator"></div>', unsafe_allow_html=True)
+    # st.markdown('<div class="custom-element"><p class="custom-title">Selecciona un valor:</p>', unsafe_allow_html=True)
+    # temps_prep = st.slider('', 0, 240, (0, 240), step=1)
+    # st.markdown('</div>', unsafe_allow_html=True)
+    # st.markdown('<div class="separator"></div>', unsafe_allow_html=True)
+    # st.markdown('<div class="custom-element"><p class="custom-title">Selecciona una categoria:</p>', unsafe_allow_html=True)
+    # ingredients_seleccionats = st.multiselect('',llista_ingredients)
+    # st.markdown('</div>', unsafe_allow_html=True)
+    # st.markdown('<div class="separator"></div>', unsafe_allow_html=True)
 
 #___________________________________________________________
 
 # Definir la consulta SQL amb els paràmetres necessaris
 query = '''
-    SELECT Receptes.ID_Recepte, Receptes.Data_formatejada, Receptes.Titol, Receptes.Observacions, Receptes.Categoria, Receptes.Preparacio, Receptes.blob, Receptes.Temps, Receptes.Etiquetes,
+    SELECT Receptes.ID_Recepte, Receptes.Data_formatejada, Receptes.Titol, Receptes.Categoria, Receptes.Preparacio, Receptes.blob, Receptes.Temps,
     GROUP_CONCAT(Ingredients.nom || ' (' || Ingredients.quantitat || ')', ', ') AS components
     FROM Receptes
     LEFT JOIN ingredients
@@ -88,44 +123,13 @@ if conditions:
 query += " GROUP BY Receptes.ID_Recepte"
 
 df = pd.read_sql(query, conn, params=params)
-# Convertir los blobs a base64
-# df['img_base64'] = df['blob'].apply(lambda blob: convert_blob_to_base64_2(blob))
-#
-#
-# # Procesar todas las filas
-# registros = [procesar_fila(row) for _, row in df.iterrows()]
-#
-# # Dividir en pares e impares
-# pares = [registro for i, registro in enumerate(registros) if i % 2 == 0]
-# impares = [registro for i, registro in enumerate(registros) if i % 2 == 1]
-#
-# # Generar tarjetas para los registros pares
-# html_pares = ""
-# for data in pares:
-#     html_pares += crear_tarjeta_html(data)
-#
-# # Generar tarjetas para los registros impares
-# html_impares = ""
-# for data in impares:
-#     html_impares += crear_tarjeta_html(data)
 
-#____________________________________________________________________
-# with col2:
-#     agregar_estilos_css()
-#     agregar_espaciado_css()
-#     # Mostrar tarjetas para pares
-#     st.markdown(html_pares, unsafe_allow_html=True)
-#
-# with col3:
-#     agregar_estilos_css()
-#     agregar_espaciado_css()
-#     # Mostrar tarjetas para impares
-#     st.markdown(html_impares, unsafe_allow_html=True)
 
 df["components"] = df["components"].apply(lambda x: ', '.join(obtenir_emoji(x)))
 with col2:
     # Mostrar els registres com a targetes
     num_columns = 3
+
     columns = st.columns(num_columns)
 
     for i, row in df.iterrows():
@@ -133,14 +137,13 @@ with col2:
         with col:
             # Generar la targeta amb la funció actualitzada
             targeta_html = generar_html_fontawesome(
+                ID_Recepte=row['ID_Recepte'],
                 titol=row['Titol'],
                 data_formatejada=row['Data_formatejada'],  # Data formatejada
                 imatge_base64=convert_blob_to_base64(row['blob']),  # Imatge
                 ingredients=row['components'],  # Ingredients
                 temps_preparacio=row['Preparacio'],  # Temps de preparació
                 temps_total=row['Temps'],  # Temps total
-                observacions=row['Observacions'],  # Observacions
-                etiquetes=row['Etiquetes']  # Etiquetes
             )
 
             # Mostrar la targeta a Streamlit
