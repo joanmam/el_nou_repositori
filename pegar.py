@@ -1,39 +1,55 @@
-# HTML complet amb tots els elements dins d'un únic contenidor
-st.markdown("""
-    <div style="border: 1px solid red; border-radius: 10px; padding: 20px; background-color: #f9f9f9;">
+import pandas as pd
+import sqlitecloud
+import streamlit as st
 
-        <!-- Primer multiselect -->
-        <div style="margin-bottom: 20px;">
-            <p style="font-size: 16px; color: #333; margin-bottom: 5px; font-weight: bold;">Selecciona la primera categoria:</p>
-        </div>
+# Connexió a la base de dades
+conn = sqlitecloud.connect("cami_a_la_base_de_dades")
 
-        <!-- Espai reservat per al primer multiselect -->
-        <div id="multiselect-1"></div>
+# Carregar tota la taula
+col1, col2 = st.columns(2)
 
-        <!-- Segon multiselect -->
-        <div style="margin-bottom: 20px;">
-            <p style="font-size: 16px; color: #333; margin-bottom: 5px; font-weight: bold;">Selecciona la segona categoria:</p>
-        </div>
+# Carregar el CSS de Font Awesome
+st.markdown(
+    """
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    """,
+    unsafe_allow_html=True
+)
 
-        <!-- Espai reservat per al segon multiselect -->
-        <div id="multiselect-2"></div>
+with col1:
+    query = "SELECT * FROM Receptes"
+    df = pd.read_sql(query, conn)
+    count_total = df.shape[0]
 
-        <!-- Slider -->
-        <div style="margin-bottom: 20px;">
-            <p style="font-size: 16px; color: #333; margin-bottom: 5px; font-weight: bold;">Selecciona un valor:</p>
-        </div>
+    # Mostrar recompte total amb icona
+    st.markdown(
+        f'<i class="fas fa-bell"></i> {count_total}', unsafe_allow_html=True
+    )
 
-        <!-- Espai reservat per al slider -->
-        <div id="slider"></div>
+df = pd.read_sql("SELECT Temps FROM Receptes", conn)
 
-    </div>
-""", unsafe_allow_html=True)
+# Crear intervals amb pandas
+intervals = [0, 10, 60, float("inf")]
+etiquetes = ["Menor de 10", "Entre 10 y 60", "Superior a 60"]
 
-# Afegir el primer multiselect
-categoria1 = st.multiselect('', ['Tots', 'Cat1', 'Cat2', 'Cat3'], default=['Tots'])
+df["intervals"] = pd.cut(df["Temps"], bins=intervals, labels=etiquetes, right=True)
 
-# Afegir el segon multiselect
-categoria2 = st.multiselect('', ['Opció1', 'Opció2', 'Opció3', 'Opció4'], default=[])
+# Comptar registres per interval
+resultat = df["intervals"].value_counts(sort=False)
+resultat_df = resultat.reset_index()
+resultat_df.columns = ["Etiqueta", "Nombre de registres"]
 
-# Afegir el slider
-temps_prep = st.slider('', 0, 240, (0, 240), step=1)
+# Definir una llista d'icones per a cada etiqueta
+icones = {
+    "Menor de 10": '<i class="fa-solid fa-star" style="color: #24c270;"></i>',
+    "Entre 10 y 60": '<i class="fa-solid fa-star" style="color: #f07c0f;"></i>',
+    "Superior a 60": '<i class="fa-solid fa-star" style="color: #ff0000;"></i>'
+}
+
+with col2:
+    num_columns = 3
+    columns = st.columns(num_columns)
+
+    for idx, row in resultat_df.iterrows():
+        col
+

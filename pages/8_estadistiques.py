@@ -35,25 +35,7 @@ conn.commit()
 
 #______________________________________________________________
 
-# query = f'SELECT ID_Recepte, Titol FROM Receptes;'
-#
-# cursor.execute(query)
-# registres = cursor.fetchall()
-#
-# # Obtenir els tres últims registres utilitzant slicing
-# ultims_registres = registres[-3:]
-#
-# separador()
-#
-# st.subheader("Aquestes son les ultimes 3")
-#
-# for i, registre in enumerate(ultims_registres, start=1):
-#     data = {
-#         'ID_Recepte': registre[0],
-#         'Titol': registre[1],
-#     }
-#     card_html = crear_tarjeta_html_resumida(data)
-#     st.markdown(card_html, unsafe_allow_html=True)
+
 separador()
 query = 'SELECT ID_Recepte, Titol, Data_formatejada, Observacions, Preparacio, Temps FROM Receptes ORDER BY ID_Recepte DESC LIMIT 3'
 df = pd.read_sql(query, conn)
