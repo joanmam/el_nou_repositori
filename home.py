@@ -41,4 +41,41 @@ conn.commit()
 background_home()
 estils_marc()
 # _________________________________________________________________________
+st.markdown(
+    """
+    <style>
+    .absolute-button {
+        position: absolute;
+        top: -100px; /* Posició vertical fixa */
+        left: 125%; /* Centrat horitzontalment */
+        transform: translate(-50%, 0%); /* Centrat completament horitzontalment */
+        background-color: red;
+        color: white !important; /* Text blanc, prioritat amb !important */
+        font-size: 18px; /* Mida del text */
+        font-weight: bold;
+        border: none;
+        border-radius: 8px; /* Cantonades arrodonides */
+        padding: 10px 20px; /* Espai dins del botó */
+        width: 200px; /* Definició d'una amplada fixa si cal */
+        cursor: pointer;
+        text-align: center; /* Centrar el text dins del botó */
+        text-decoration: none !important; /* Eliminar subratllat */
+    }
+    .absolute-button:hover {
+        background-color: #ff7700; /* Color més intens en passar el cursor */
+    }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
+
+# HTML per al botó
+st.markdown(
+    """
+    <a href="/crear" class="absolute-button">
+        Afegir recepta
+    </a>
+    """,
+    unsafe_allow_html=True
+)
 

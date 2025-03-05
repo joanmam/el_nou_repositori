@@ -96,7 +96,6 @@ conn.close()
 
 
 
-import streamlit as st
 
 # CSS personalitzat per estilitzar el botó i assegurar que el text sigui blanc
 st.markdown(
