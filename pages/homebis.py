@@ -3,7 +3,11 @@ from altres.imports import *
 
 st.set_page_config(layout="wide")
 
-
+st.markdown(
+    """
+    <link href="https://fonts.googleapis.com/css2?family=Vibur&display=swap" rel="stylesheet">
+    """,
+    unsafe_allow_html=True)
 
 
 # Carregar Font Awesome
@@ -19,9 +23,22 @@ conn = sqlitecloud.connect(cami_db)
 
 # Carregar tota la taula
 # Mostrar resultats en diverses columnes
-col1, col2 = st.columns([1, 4])
+col1, col2, col3 = st.columns([2, 1, 3])
 
 with col1:
+
+
+    # Mostrar la imatge com a enllaç clicable
+    # Mostrar el div estilitzat amb text
+    st.markdown(
+        f"""
+        <div style="border: 1px solid red; background-color: red; border-radius: 18px; padding: 5px; font-family: 'Roboto', sans-serif; font-weight: 600; font-style: italic; font-size: 18px; color: white;">
+            Les Receptes de Mamen
+        </div>
+        """,
+        unsafe_allow_html=True)
+
+with col2:
     query = "SELECT * FROM Receptes"
     df = pd.read_sql(query, conn)
     count_total = df.shape[0]
@@ -59,7 +76,7 @@ dificultat = {
     "Superior a 60": "Llarg"
 
 }
-with col2:
+with col3:
     num_columns = 3
     columns = st.columns(num_columns)
 
@@ -78,3 +95,43 @@ with col2:
 conn.close()
 
 
+
+import streamlit as st
+
+# CSS personalitzat per estilitzar el botó i assegurar que el text sigui blanc
+st.markdown(
+    """
+    <style>
+    .absolute-button {
+        position: absolute;
+        top: 50px; /* Posició vertical fixa */
+        left: 50%; /* Centrat horitzontalment */
+        transform: translate(-50%, 0); /* Centrat completament horitzontalment */
+        background-color: orange; /* Color carbassa */
+        color: white !important; /* Text blanc, prioritat amb !important */
+        font-size: 18px; /* Mida del text */
+        font-weight: bold;
+        border: none;
+        border-radius: 8px; /* Cantonades arrodonides */
+        padding: 10px 20px; /* Espai dins del botó */
+        cursor: pointer;
+        text-align: center; /* Centrar el text dins del botó */
+        text-decoration: none !important; /* Eliminar subratllat */
+    }
+    .absolute-button:hover {
+        background-color: #ff7700; /* Color més intens en passar el cursor */
+    }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
+
+# HTML per al botó
+st.markdown(
+    """
+    <a href="/crear" class="absolute-button">
+        Afegir recepta
+    </a>
+    """,
+    unsafe_allow_html=True
+)
