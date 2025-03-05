@@ -79,3 +79,13 @@ st.markdown(
     unsafe_allow_html=True
 )
 
+
+# Refresc automàtic després del botó
+st.markdown(
+    """
+    <script>
+        window.location.reload();
+    </script>
+    """,
+    unsafe_allow_html=True
+)
