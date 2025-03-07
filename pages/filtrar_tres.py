@@ -40,8 +40,8 @@ with col2:
 # Mostrar recompte total amb icona
 df = pd.read_sql("SELECT Temps FROM Receptes", conn)
 # Crear intervals amb pandas
-intervals = [0, 60, 120, float("inf")]
-etiquetes = ["Menor de 60", "Entre 60 y 120", "Superior a 120"]
+intervals = [0, 10, 60, float("inf")]
+etiquetes = ["Menor de 10", "Entre 10 y 60", "Superior a 60"]
 df["intervals"] = pd.cut(df["Temps"], bins=intervals, labels=etiquetes, right=True)
 # Comptar registres per interval
 resultat = df["intervals"].value_counts(sort=False)
@@ -49,54 +49,43 @@ resultat_df = resultat.reset_index()
 resultat_df.columns = ["Etiqueta", "Nombre de registres"]
 # Definir una llista d'icones per a cada etiqueta
 emojis = {
-    "Menor de 60": "🟢",
-    "Entre 60 y 120": "🟠",
-    "Superior a 120": "🔴"}
+    "Menor de 10": "🟢",
+    "Entre 10 y 50": "🟠",
+    "Superior a 60": "🔴"}
 dificultat = {
-    "Menor de 60": "Curt",
-    "Entre 60 y 120": "Mitjà",
-    "Superior a 120": "Llarg"
+    "Menor de 10": "Curt",
+    "Entre 10 y 60": "Mitjà",
+    "Superior a 60": "Llarg"
 
 }
 query_params = st.query_params
 dificultat_text = query_params.get('dificultat', ['Sense dades'])[0]
 
-# Definir intervals basats en `dificultat_text`
-interval_mapping = {
-    "Curt": (0, 60),
-    "Mitjà": (60, 120),
-    "Llarg": (120, 240)
-}
-slider_range = interval_mapping.get(dificultat_text, (0, 240))  # Valor per defecte
+# Definir una llista d'icones per a cada etiqueta
+emojis = {
+    "Menor de 10": "🟢",
+    "Entre 10 y 60": "🟠",
+    "Superior a 60": "🔴"}
+dificultat = {
+    "Menor de 10": "Curt",
+    "Entre 10 y 60": "Mitjà",
+    "Superior a 60": "Llarg"
 
+}
 with col3:
     num_columns = 3
     columns = st.columns(num_columns)
 
-    emojis = {
-        "Curt": "🟢",
-        "Mitjà": "🟠",
-        "Llarg": "🔴"
-    }
-
-    dificultats = ["Curt", "Mitjà", "Llarg"]
-    for idx, dificultat in enumerate(dificultats):
+    for idx, row in resultat_df.iterrows():
         col = columns[idx % num_columns]
-        emoji = emojis.get(dificultat, "✅")
+        emoji = emojis.get(row['Etiqueta'], "✅")  # Definir un emoji de fall back
+        dificultat_text = dificultat.get(row['Etiqueta'], "Desconeguda")  # Definir un emoji de fall back
         with col:
             st.markdown(f"""
-            <a href="?dificultat={dificultat}" target="_self" style="text-decoration: none;">
-                <div style="
-                    border: 1px solid red;
-                    padding: 5px;
-                    border-radius: 10px;
-                    text-align: center;
-                    background-color: #f9f9f9;
-                    font-weight: bold;">
-                    {emoji} {dificultat}
-                </div>
-            </a>
-            """, unsafe_allow_html=True)
+        <div style="border: 1px solid red; padding: 5px; border-radius: 20px;">
+        {emoji} {row['Nombre de registres']} {dificultat_text}
+        </div>
+        """, unsafe_allow_html=True)
 
 
 with col4:
@@ -164,7 +153,7 @@ with col2:
     # Tercer element
 with col3:
     st.write("Selecciona el Temps Total:")  # Text que estarà dins del contorn
-    temps_prep = st.slider('', 0, 240, value=slider_range, step=1)
+    temps_total = st.slider('', 0, 240, value=(0, 240), step=1)
     st.markdown('</div>', unsafe_allow_html=True)
 #Acaben els filtres
 # ________________________________________________
@@ -186,9 +175,9 @@ if 'Tots' not in categoria:
     conditions.append("Receptes.Categoria IN ({})".format(', '.join('?' * len(categoria))))
     params.extend(categoria)
 
-if temps_prep != (0, 240):
-    conditions.append("Receptes.Preparacio BETWEEN ? AND ?")
-    params.extend(slider_range)
+if temps_total != (0, 240):
+    conditions.append("Receptes.Temps BETWEEN ? AND ?")
+    params.extend([temps_total[0], temps_total[1]])
 
 if ingredients_seleccionats:
     ingredient_conditions = []
