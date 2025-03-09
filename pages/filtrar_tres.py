@@ -1,5 +1,5 @@
 from altres.imports import *
-
+from pages.filtrar_dos import ingredients_seleccionats
 
 st.set_page_config(layout="wide")
 
@@ -58,35 +58,61 @@ dificultat = {
     "Superior a 60": "Llarg"
 
 }
-query_params = st.query_params
-dificultat_text = query_params.get('dificultat', ['Sense dades'])[0]
+
 
 # Definir una llista d'icones per a cada etiqueta
 emojis = {
     "Menor de 10": "🟢",
     "Entre 10 y 60": "🟠",
     "Superior a 60": "🔴"}
-dificultat = {
-    "Menor de 10": "Curt",
-    "Entre 10 y 60": "Mitjà",
-    "Superior a 60": "Llarg"
+dificultats = {
+    "Menor de 10":  (0, 10),
+    "Entre 10 y 60": (10, 60),
+    "Superior a 60": (60, 240)
 
 }
+
+# Definir les tres variables inicialment
+temps_1 = (0, 10)
+temps_2 = (10, 60)
+temps_3 = (60, 240)
+
+query_params = st.query_params
+temps_seleccionat = query_params.get("temps", [None])[0]
+
+# Assignar la variable temps segons el paràmetre seleccionat
+if temps_seleccionat == "1":
+    temps = temps_1
+elif temps_seleccionat == "2":
+    temps = temps_2
+elif temps_seleccionat == "3":
+    temps = temps_3
+else:
+    temps = (0, 240)  # Valor predeterminat si no hi ha selecció
+
+
+
+
+
 with col3:
     num_columns = 3
     columns = st.columns(num_columns)
 
     for idx, row in resultat_df.iterrows():
         col = columns[idx % num_columns]
-        emoji = emojis.get(row['Etiqueta'], "✅")  # Definir un emoji de fall back
-        dificultat_text = dificultat.get(row['Etiqueta'], "Desconeguda")  # Definir un emoji de fall back
+        emoji = emojis.get(row['Etiqueta'], "✅")
+        dificultat_text = row['Etiqueta']
+
         with col:
             st.markdown(f"""
-        <div style="border: 1px solid red; padding: 5px; border-radius: 20px;">
-        {emoji} {row['Nombre de registres']} {dificultat_text}
-        </div>
-        """, unsafe_allow_html=True)
-
+            <a href="?temps={idx + 1}" style="text-decoration: none;">
+                <div style="border: 1px solid red; border-radius: 20px; padding: 5px;
+                            background-color: #f9f9f9; color: black; font-weight: bold;
+                            text-align: center; cursor: pointer;">
+                    {emoji} {row['Nombre de registres']} {dificultat_text}
+                </div>
+            </a>
+            """, unsafe_allow_html=True)
 
 with col4:
     st.markdown(
@@ -98,6 +124,8 @@ with col4:
     </a>   
     """,
     unsafe_allow_html=True)
+
+
 
 
 
@@ -137,8 +165,8 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-# Crear elements amb contorns individuals
-# Primer element
+#Crear elements amb contorns individuals
+#Primer element
 with col1:
     st.markdown("Selecciona:", unsafe_allow_html=True)
     categoria = st.multiselect('', ['Tots', 'Cat1', 'Cat2', 'Cat3'], default=['Tots'])
@@ -151,12 +179,16 @@ with col2:
     st.markdown('</div>', unsafe_allow_html=True)
 
     # Tercer element
-with col3:
-    st.write("Selecciona el Temps Total:")  # Text que estarà dins del contorn
-    temps_total = st.slider('', 0, 240, value=(0, 240), step=1)
-    st.markdown('</div>', unsafe_allow_html=True)
+# with col3:
+#     st.write("Selecciona el Temps Total:")  # Text que estarà dins del contorn
+#     temps = st.slider('', 0, 240, value=temps_actual, step=1)
+#     st.markdown('</div>', unsafe_allow_html=True)
 #Acaben els filtres
 # ________________________________________________
+ # Captura del paràmetre URL
+query_params = st.query_params
+temps_seleccionat = query_params.get("temps", [None])[0]
+
 
 #Definir la consulta SQL amb els paràmetres necessaris
 query = '''
@@ -175,16 +207,17 @@ if 'Tots' not in categoria:
     conditions.append("Receptes.Categoria IN ({})".format(', '.join('?' * len(categoria))))
     params.extend(categoria)
 
-if temps_total != (0, 240):
+# Afegir condició SQL segons el temps seleccionat
+if temps != (0, 240):  # Només si el rang no és per defecte
     conditions.append("Receptes.Temps BETWEEN ? AND ?")
-    params.extend([temps_total[0], temps_total[1]])
+    params.extend([temps[0], temps[1]])
 
 if ingredients_seleccionats:
     ingredient_conditions = []
     for ing in ingredients_seleccionats:
         ingredient_conditions.append("ingredients.nom LIKE ?")
         params.append(f'%{ing}%')
-    conditions.append("(" + " OR ".join(ingredient_conditions) + ")")
+        conditions.append("(" + " OR ".join(ingredient_conditions) + ")")
 
 if conditions:
     query += " WHERE " + " AND ".join(conditions)
@@ -203,6 +236,8 @@ columns = st.columns(num_columns)
 
 for i, row in df.iterrows():
     col = columns[i % num_columns]  # Seleccionar columna
+
+
     with col:
         # Generar la targeta amb la funció actualitzada
         targeta_html = generar_html_fontawesome(
@@ -212,7 +247,7 @@ for i, row in df.iterrows():
             imatge_base64=convert_blob_to_base64(row['blob']),  # Imatge
             ingredients=row['components'],  # Ingredients
             temps_preparacio=row['Preparacio'],  # Temps de preparació
-            temps_total=row['Temps'],  # Temps total
+            temps=row["Temps"], # Temps total
         )
 
         # Mostrar la targeta a Streamlit
