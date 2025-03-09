@@ -229,7 +229,7 @@ def background_home():
     # Aplica el CSS utilitzant st.markdown
     st.markdown(background_css, unsafe_allow_html=True)
     # Afegir text personalitzat a l'extrem inferior dret
-    st.markdown('<div class="custom-text">Mamen i les seves receptes</div>', unsafe_allow_html=True)
+    st.markdown('<div class="custom-text">Mamen: Les seves receptes</div>', unsafe_allow_html=True)
 
 #________________________________________________________________________
 #Rellotge
@@ -954,7 +954,7 @@ def generar_targeta(titol, data_formatejada, imatge_base64, ingredients, temps_p
     """
 
 
-def generar_html_fontawesome(ID_Recepte, titol, data_formatejada, imatge_base64, ingredients, temps_preparacio, temps):
+def generar_html_fontawesome(ID_Recepte, titol, data_formatejada, imatge_base64, ingredients, temps_preparacio, temps_act):
     return f"""
     <div style="margin-bottom: 10px">
         <div style="display: grid; grid-template-columns: 1fr; grid-template-rows: auto auto auto auto; gap: 10px; border: 1px solid #ff3333; border-radius: 10px; padding: 0px; background-color: #ffd1b3;">
@@ -977,7 +977,7 @@ def generar_html_fontawesome(ID_Recepte, titol, data_formatejada, imatge_base64,
                 </p>
                 <p style="display: flex; align-items: center; gap: 5px;">
                     <i class="fas fa-hourglass" style="font-size: 18px; vertical-align: middle;"></i>
-                    {temps} min
+                    {temps_act} min
                 </p>
             </div>
             <div style="display: flex; align-items: center; gap: 5px; padding-left: 5px">
