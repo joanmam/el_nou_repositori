@@ -2,23 +2,70 @@ from altres.imports import *
 
 st.set_page_config(layout="wide")
 
-rellotge()
-#___________________________________________________________________________________
-st.header('Actualitzacio')
-#______________________________________________________________________________________
-base64_image, cropped_image = cropping()
-banner(base64_image)
+# Carregar Font Awesome
+font_awesome()
+
+#Comença la capçalera
+# Connexió a la base de dades
+conn = sqlitecloud.connect(cami_db)
+
+
+# Mostrar resultats en diverses columnes
+col1, col2, col3 = st.columns([5, 1, 1])
+with col1:
+    # Mostrar la imatge com a enllaç clicable
+    # Mostrar el div estilitzat amb text
+    st.markdown(
+        f"""
+        <a href="/crear" style="text-decoration: none;">
+            <div style="border: 1px solid red; background-color: red; background: linear-gradient(90deg, red, yellow);
+ border-radius: 18px; padding: 5px; font-family: 'Roboto', sans-serif; font-weight: 600; font-style: italic; font-size: 18px; color: white; text-align: left;">
+                Les Receptes de Mamen
+            </div>
+        </a>
+        """,
+        unsafe_allow_html=True
+    )
+
+with col2:
+    query = "SELECT * FROM Receptes"
+    df = pd.read_sql(query, conn)
+    count_total = df.shape[0]
+    st.markdown(
+        f'<div style="border: 1px solid red; border-radius: 20px; padding: 5px;"><i class="fas fa-bell"></i> {count_total}</div>',
+        unsafe_allow_html=True)
+
+
+with col3:
+    st.markdown(
+        f"""
+    <a href="/crear" style="text-decoration: none;">
+        <div style="border: 1px solid red; background-color: orange; border-radius: 18px; padding: 5px; font-family: 'Roboto', sans-serif; font-weight: 600; font-style: italic; font-size: 18px; color: white;">
+        + Recepte
+        </div>
+    </a>   
+    """,
+    unsafe_allow_html=True)
+
+
+
+separador()
+st.text("")
+#Acaba la capçalera
 #_____________________________________________________________________________
 #connexio a la base de dades
 conn = sqlitecloud.connect(cami_db)
 cursor = conn.cursor()
+
+llista_ingredients_sense_ordenar = list(set(obtenir_ingredients()))
+llista_ingredients = sorted(llista_ingredients_sense_ordenar)
 
 # Obtenir els IDs dels registres a actualitzar
 st.write("")
 st.write("")
 lletra_variable()
 st.markdown('<div class="custom-element"><p class="custom-title">Registre per actualitzar:</p>', unsafe_allow_html=True)
-id_to_update = st.number_input("", min_value=3, step=1)
+id_to_update = st.number_input("", min_value=4, step=1)
 
 
 # Mostrar informació dels registres seleccionats
@@ -52,14 +99,14 @@ separador()
 
 st.subheader("Nous valors")
 
-
-nou_Titol = st.text_input("Nou Titol:")
+valors_fila = df.loc[df["ID_Recepte"] == id_to_update]
+nou_Titol = st.text_input("Nou Titol:", value=valors_fila.iloc[0]["Titol"])
 nova_Observacions = st.text_input("Nova Observacions:")
 nova_Observacions = process_observacions(nova_Observacions)
-nova_Etiquetes = st.text_input("Nova Etiquetes:")
-nova_Categoria = st.text_input("Noves Categoria")
-nova_Preparacio = st.text_input("Nova Preparacio")
-nou_Temps = st.text_input("Nou Temps")
+nova_Etiquetes = st.text_input("Nova Etiquetes:", value=valors_fila.iloc[0]["Etiquetes"])
+nova_Categoria = st.text_input("Noves Categoria", value=valors_fila.iloc[0]["Categoria"])
+nova_Preparacio = st.text_input("Nova Preparacio", value=valors_fila.iloc[0]["Preparacio"])
+nou_Temps = st.text_input("Nou Temps", value=valors_fila.iloc[0]["Temps"])
 
 # Botó per actualitzar
 if st.button("Actualitzar"):
