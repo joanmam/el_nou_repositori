@@ -3,7 +3,7 @@ from altres.imports import *
 
 st.set_page_config(layout="wide")
 
-
+agregar_iconos_google()
 
 
 # Carregar Font Awesome
@@ -255,3 +255,68 @@ for i, row in df.iterrows():
 
 # Tancar la connexió a la base de dades
 conn.close()
+
+
+
+# HTML con estilo personalizado
+
+
+
+
+# # CSS personalizado
+#
+# # CSS para que el enlace rodee solo el texto
+# st.markdown(
+#     """
+#     <style>
+#     .center-link {
+#         display: inline-block; /* Solo ocupe el tamaño del contenido */
+#         border: 2px solid #007BFF; /* Borde azul */
+#         padding: 10px 20px;
+#         border-radius: 5px;
+#         text-decoration: none;
+#         color: #007BFF;
+#         font-size: 18px;
+#         transition: all 0.3s ease;
+#         text-align: center; /* Alinea texto dentro del botón si es necesario */
+#         margin: auto; /* Ayuda a centrarlo */
+#         border-radius: 10px;
+#         background-color: orange
+#     }
+#     .center-container {
+#         display: flex;
+#         justify-content: center;
+#         align-items: center;
+#         height: 100vh; /* Centro total en la página */
+#     }
+#     </style>
+#     <div class="center-container">
+#         <a href="https://www.streamlit.io" class="center-link">¡Ir a Streamlit!</a>
+#     </div>
+#     """,
+#     unsafe_allow_html=True
+# )
+#
+# # Enlace personalizado con la clase definida
+# st.markdown(
+#     '<a href="pages/3_editar.py" class="center-link">¡Ir a Streamlit!</a>',
+#     unsafe_allow_html=True
+# )
+
+col1, col2, col3, col4, col5 = st.columns(5)
+with col3:
+
+
+    # HTML i CSS per centrar el botó
+    st.markdown(
+        """
+        <div style="justify-content: center; align-items: center; height: 100vh;">
+            <a href="/editar" style="text-decoration: none;">
+                <div style="border: 1px solid red; background-color: green; border-radius: 18px; padding: 10px 20px; font-family: 'Roboto', sans-serif; font-weight: 600; font-style: italic; font-size: 18px; color: white; text-align: center;">
+                    Editar
+                </div>
+            </a>
+        </div>
+        """,
+        unsafe_allow_html=True
+    )

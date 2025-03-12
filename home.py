@@ -10,6 +10,8 @@ from altres.imports import *
 
 
 
+
+
 conn = sqlitecloud.connect(cami_db)
 
 
