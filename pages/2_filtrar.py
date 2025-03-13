@@ -320,3 +320,17 @@ with col3:
         """,
         unsafe_allow_html=True
     )
+
+    # HTML i CSS per centrar el botó
+    st.markdown(
+        """
+        <div style="justify-content: center; align-items: center; height: 100vh;">
+            <a href="/editar" style="text-decoration: none;">
+                <div style="border: 1px solid red; background-color: green; border-radius: 18px; padding: 10px 20px; font-family: 'Roboto', sans-serif; font-weight: 600; font-style: italic; font-size: 18px; color: white; text-align: center;">
+                    Editar
+                </div>
+            </a>
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
