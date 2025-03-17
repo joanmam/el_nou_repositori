@@ -74,7 +74,7 @@ st.markdown(
 # HTML per al botó
 st.markdown(
     """
-    <a href="/crear" class="absolute-button">
+    <a href="/pages/1_crear.py" class="absolute-button">
         Afegir recepta
     </a>
     """,
