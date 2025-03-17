@@ -4,12 +4,58 @@ from altres.imports import *
 st.set_page_config(layout="wide")
 
 
-rellotge()
-#___________________________________________________________________________________
-st.header('Passos')
-#______________________________________________________________________________________
-base64_image, cropped_image = cropping()
-banner(base64_image)
+# Carregar Font Awesome
+font_awesome()
+
+#Comença la capçalera
+# Connexió a la base de dades
+conn = sqlitecloud.connect(cami_db)
+
+
+# Mostrar resultats en diverses columnes
+col1, col2, col3 = st.columns([5, 1, 1])
+with col1:
+    # Mostrar la imatge com a enllaç clicable
+    # Mostrar el div estilitzat amb text
+    st.markdown(
+        f"""
+        <a href="/crear" style="text-decoration: none;">
+            <div style="border: 1px solid red; background-color: red; background: linear-gradient(90deg, red, yellow);
+ border-radius: 18px; padding: 5px; font-family: 'Roboto', sans-serif; font-weight: 600; font-style: italic; font-size: 18px; color: white; text-align: left;">
+                Les Receptes de Mamen
+            </div>
+        </a>
+        """,
+        unsafe_allow_html=True
+    )
+
+with col2:
+    query = "SELECT * FROM Receptes"
+    df = pd.read_sql(query, conn)
+    count_total = df.shape[0]
+    st.markdown(
+        f'<div style="border: 1px solid red; border-radius: 20px; padding: 5px;"><i class="fas fa-bell"></i> {count_total}</div>',
+        unsafe_allow_html=True)
+
+
+with col3:
+    st.markdown(
+        f"""
+    <a href="/crear" style="text-decoration: none;">
+        <div style="border: 1px solid red; background-color: orange; border-radius: 18px; padding: 5px; font-family: 'Roboto', sans-serif; font-weight: 600; font-style: italic; font-size: 18px; color: white;">
+        + Recepte
+        </div>
+    </a>   
+    """,
+    unsafe_allow_html=True)
+
+llista_ingredients_sense_ordenar = list(set(obtenir_ingredients()))
+llista_ingredients = sorted(llista_ingredients_sense_ordenar)
+
+separador()
+st.text("")
+#Acaba la capçalera
+
 
 
 max_passos = 10
