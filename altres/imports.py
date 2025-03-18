@@ -40,3 +40,11 @@ from altres.funcions import agregar_espaciado_css
 from altres.funcions import generar_targeta
 from altres.funcions import generar_html_fontawesome
 from altres.funcions import font_awesome
+from bs4 import BeautifulSoup
+from selenium import webdriver
+import streamlit as st
+from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.common.by import By
+from webdriver_manager.chrome import ChromeDriverManager
+from bs4 import BeautifulSoup
+from selenium.webdriver.chrome.options import Options
