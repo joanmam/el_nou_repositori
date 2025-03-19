@@ -48,3 +48,4 @@ from selenium.webdriver.common.by import By
 from webdriver_manager.chrome import ChromeDriverManager
 from bs4 import BeautifulSoup
 from selenium.webdriver.chrome.options import Options
+from altres.funcions import create_thumbnail2

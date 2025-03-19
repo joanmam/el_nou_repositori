@@ -97,6 +97,12 @@ if st.button("Enviar"):
                 image_url = image_tag["src"]
                 st.image(image_url, caption="Imagen extraída")
                 st.write(image_url)
+                response = requests.get(image_url)
+                image = Image.open(BytesIO(response.content))
+                size = (100, 100)
+                image.thumbnail(size)
+                st.image(image)
+
             else:
                 st.warning("No se encontró ninguna imagen con el atributo 'alt' proporcionado o no tiene 'src'.")
 
@@ -106,5 +112,7 @@ if st.button("Enviar"):
         except Exception as e:
             # Manejo de errores
             st.error(f"Error: {e}")
+
+
 
 

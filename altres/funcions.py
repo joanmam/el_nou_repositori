@@ -440,6 +440,24 @@ def create_thumbnail(image, size=(100, 100)):
         st.error(f"Error creant la miniatura: {e}")
         return None
 
+
+
+
+# Funció per crear una miniatura
+def create_thumbnail2(image_url, size=(100, 100)):
+    # Descarregar la imatge des de la URL
+    response = requests.get(image_url)
+    response.raise_for_status()  # Llança un error si la descàrrega falla
+
+    # Obrir la imatge amb Pillow
+    img = Image.open(BytesIO(response.content))
+
+    # Crear la miniatura
+    img.thumbnail(size)  # Modifica la imatge in-place per fer-la més petita
+    return img
+
+
+
 def convert_image_to_base64(image):
     try:
         buffered = io.BytesIO()
