@@ -73,19 +73,27 @@ df["Vincle"] = df["Link"].apply(lambda link: shortener.tinyurl.short(link))
 df["Vincle"] = df['Vincle'].apply(process_observacions)
 df = df[["ID_Externs", "Miniatura", "Titol", "Vincle", "Logo"]]
 
-# Aplica l'estil de les files i les columnes
-styled_df = df.style.apply(row_style, axis=1)
+rows = df.shape[0]
+columns = 3
+col_index = 0
 
 
-# Generar HTML des del DataFrame
 
-# Genera l'HTML estilitzat
-html = styled_df.hide(axis='index').to_html()
-html = html.replace('<style type="text/css">', '<style type="text/css">.row0 {background-color: #f0f0f0;} .row1 {background-color: #ffffff;}')
 
-# Crida la funció per mostrar el dataframe passant l'HTML com a paràmetre
-taula = dataframe_externs(html)
+for i, row in df.iterrows():
+    if col_index % columns == 0:  # Iniciar una nova fila cada 4 columnes
+        cols = st.columns(columns)
 
-# Mostra el DataFrame estilitzat utilitzant Streamlit
-st.components.v1.html(taula, height=600, scrolling=True)
-
+    with cols[col_index % columns]:
+        # Fons blaucel amb HTML + CSS
+        with cols[col_index % columns]:
+            # Fons blaucel amb HTML + CSS i menys espai entre títol i vincle
+            st.markdown(f"""
+               <div style='background-color: #ADD8E6; padding: 10px; border-radius: 5px; margin-bottom: 10px;'>
+                   <p style='margin-bottom: 5px;'><b>Miniatura:</b> {row['Miniatura']}</p>
+                   <p style='margin-bottom: 5px;'><b>Títol:</b> {row['Titol']}</p>
+                   <p style='margin-bottom: 5px;'><b>Vincle:</b> {row['Vincle']}</p>
+                   <p style='margin-bottom: 10px;'><b>Logo:</b> {row['Logo']}</p>
+               </div>
+               """, unsafe_allow_html=True)  # Activar HTML
+    col_index += 1
