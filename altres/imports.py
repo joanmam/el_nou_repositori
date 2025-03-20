@@ -51,4 +51,4 @@ from selenium.webdriver.chrome.options import Options
 from altres.funcions import create_thumbnail2
 from altres.funcions import convertir_a_blob
 from altres.funcions import dataframe_externs
-import pyshorteners4
+import pyshorteners
