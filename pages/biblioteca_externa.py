@@ -1,5 +1,3 @@
-from streamlit import dataframe
-
 from altres.imports import *
 
 
