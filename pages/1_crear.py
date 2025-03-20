@@ -13,7 +13,7 @@ font_awesome()
 #Comença la capçalera
 # Connexió a la base de dades
 conn = sqlitecloud.connect(cami_db)
-
+cursor = conn.cursor()
 
 # Mostrar resultats en diverses columnes
 col1, col2, col3 = st.columns([5, 1, 1])

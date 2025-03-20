@@ -56,63 +56,70 @@ with col3:
 separador()
 
 
+font = st.text_input("Font")
 pasted_text = st.text_input("URL")
 
 # Botón para confirmar la entrada
 if st.button("Enviar"):
 
 
-# Si hay contenido pegado
-    if pasted_text:
-        try:
-            # Configurar opciones para Selenium en modo headless (sin abrir el navegador)
-            chrome_options = Options()
-            chrome_options.add_argument("--headless")  # Ejecutar en segundo plano
-            chrome_options.add_argument("--disable-gpu")
-            chrome_options.add_argument("--no-sandbox")
-            chrome_options.add_argument("--disable-dev-shm-usage")
-            # Configurar el navegador con WebDriver Manager para instalar Chromedriver automáticamente
-            driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()),             options=chrome_options
-            )
-            # Cargar la página desde la URL pegada
-            driver.get(pasted_text)
+    # Configurar opciones para Selenium en modo headless (sin abrir el navegador)
+    chrome_options = Options()
+    chrome_options.add_argument("--headless")  # Ejecutar en segundo plano
+    chrome_options.add_argument("--disable-gpu")
+    chrome_options.add_argument("--no-sandbox")
+    chrome_options.add_argument("--disable-dev-shm-usage")
+    # Configurar el navegador con WebDriver Manager para instalar Chromedriver automáticamente
+    driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()),             options=chrome_options
+    )
+    # Cargar la página desde la URL pegada
+    driver.get(pasted_text)
 
-            # Obtener el contenido después de ejecutar JavaScript
-            html = driver.page_source
-            soup = BeautifulSoup(html, "html.parser")
+    # Obtener el contenido después de ejecutar JavaScript
+    html = driver.page_source
+    soup = BeautifulSoup(html, "html.parser")
 
-          # Extraer el título
-            title = soup.title.string if soup.title else "No se encontró un título"
-            title2 = title.replace("Recipe", "")
-            title2 = title2.strip()
+  # Extraer el título
+    title = soup.title.string if soup.title else "No se encontró un título"
+    title2 = title.replace("Recipe", "")
+    title2 = title2.strip()
 
 
 
-            # Mostrar el título en la app de Streamlit
-            st.success(f"{title2}")
-            # Buscar la imagen
+    # Mostrar el título en la app de Streamlit
+    st.success(f"{title2}")
+    # Buscar la imagen
 
-            image_tag = soup.find("img", alt=title2)
-            if image_tag and "src" in image_tag.attrs:
-                image_url = image_tag["src"]
-                st.image(image_url, caption="Imagen extraída")
-                st.write(image_url)
-                response = requests.get(image_url)
-                image = Image.open(BytesIO(response.content))
-                size = (100, 100)
-                image.thumbnail(size)
-                st.image(image)
+    image_tag = soup.find("img", alt=title2)
 
-            else:
-                st.warning("No se encontró ninguna imagen con el atributo 'alt' proporcionado o no tiene 'src'.")
+    image_url = image_tag["src"]
+    st.image(image_url, caption="Imagen extraída")
+    st.write(image_url)
+    response = requests.get(image_url)
+    image = Image.open(BytesIO(response.content))
+    size = (100, 100)
+    mini = image.thumbnail(size)
+    st.image(image)
+    buffer = BytesIO()
+    image.save(buffer, format="JPEG")
+    blob = buffer.getvalue()  # Obté el binari de la miniatura
 
-            # Cerrar navegador
-            driver.quit()
+    df_insert = pd.DataFrame({
+        "Titol": [title2],  # El títol de la recepta
+        "Link": [pasted_text],  # L'enllaç de la recepta
+        "Foto": [blob],
+        "Logo": [font]
+    })
 
-        except Exception as e:
-            # Manejo de errores
-            st.error(f"Error: {e}")
+    # Convertir el DataFrame a una llista de tuples
+    records = df_insert.to_records(index=False).tolist()
 
+    # Inserir els registres directament a la taula Accions utilitzant SQL
+    query_insert = "INSERT INTO Externs (Titol, Link, Foto, Logo) VALUES (?, ?, ?, ?)"
+    conn.executemany(query_insert, records)
+    conn.commit()
+
+    st.success("Guardat")
 
 
 

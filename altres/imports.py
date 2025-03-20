@@ -49,3 +49,5 @@ from webdriver_manager.chrome import ChromeDriverManager
 from bs4 import BeautifulSoup
 from selenium.webdriver.chrome.options import Options
 from altres.funcions import create_thumbnail2
+from altres.funcions import convertir_a_blob
+from altres.funcions import dataframe_externs
