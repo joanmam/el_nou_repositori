@@ -57,6 +57,7 @@ separador()
 
 
 font = st.text_input("Font")
+meal = st.text_input("Meal")
 pasted_text = st.text_input("URL")
 
 # Botón para confirmar la entrada
@@ -93,7 +94,6 @@ if st.button("Enviar"):
     image_tag = soup.find("img")
     if image_tag and "src" in image_tag.attrs:
         image_url = image_tag["src"]
-        st.image(image_url, caption="Imagen extraída")
         st.write(image_url)
         response = requests.get(image_url)
         image = Image.open(BytesIO(response.content))
@@ -108,14 +108,15 @@ if st.button("Enviar"):
             "Titol": [title2],  # El títol de la recepta
             "Link": [pasted_text],  # L'enllaç de la recepta
             "Foto": [blob],
-            "Logo": [font]
+            "Logo": [font],
+            "Meal": [meal]
         })
 
         # Convertir el DataFrame a una llista de tuples
         records = df_insert.to_records(index=False).tolist()
 
         # Inserir els registres directament a la taula Accions utilitzant SQL
-        query_insert = "INSERT INTO Externs (Titol, Link, Foto, Logo) VALUES (?, ?, ?, ?)"
+        query_insert = "INSERT INTO Externs (Titol, Link, Foto, Logo, Meal) VALUES (?, ?, ?, ?, ?)"
         conn.executemany(query_insert, records)
         conn.commit()
 

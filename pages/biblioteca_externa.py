@@ -71,7 +71,7 @@ df['Miniatura'] = df['Foto'].apply(create_thumbnail2)
 
 df["Vincle"] = df["Link"].apply(lambda link: shortener.tinyurl.short(link))
 df["Vincle"] = df['Vincle'].apply(process_observacions)
-df = df[["ID_Externs", "Miniatura", "Titol", "Vincle", "Logo"]]
+df = df[["ID_Externs", "Miniatura", "Titol", "Vincle", "Logo", "Meal"]]
 
 rows = df.shape[0]
 columns = 3
@@ -93,7 +93,8 @@ for i, row in df.iterrows():
                    <p style='margin-bottom: 5px;'><b>Miniatura:</b> {row['Miniatura']}</p>
                    <p style='margin-bottom: 5px;'><b>Títol:</b> {row['Titol']}</p>
                    <p style='margin-bottom: 5px;'><b>Vincle:</b> {row['Vincle']}</p>
-                   <p style='margin-bottom: 10px;'><b>Logo:</b> {row['Logo']}</p>
+                   <p style='margin-bottom: 5px;'><b>Logo:</b> {row['Logo']}</p>
+                   <p style='margin-bottom: 10px;'><b>Meal:</b> {row['Meal']}</p>
                </div>
                """, unsafe_allow_html=True)  # Activar HTML
     col_index += 1
