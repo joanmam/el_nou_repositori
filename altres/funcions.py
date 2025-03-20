@@ -1048,12 +1048,12 @@ def dataframe_externs(html):
         width: 10%;  /* Amplada de la segona columna */
     }}
     .dataframe-container th.col2, .dataframe-container td.col2 {{
-        width: 40%;  /* Amplada de la tercera columna */
+        width: 60%;  /* Amplada de la tercera columna */
     }}
     .dataframe-container th.col3, .dataframe-container td.col3 {{
-        width: 40%;  /* Amplada de la quarta columna */
+        width: 20%;  /* Amplada de la quarta columna */
     }}
-    .dataframe-container th.col4, .dataframe-container td.col2 {{
+    .dataframe-container th.col4, .dataframe-container td.col3 {{
         width: 5%;  /* Amplada de la cinquena columna */
     </style>
     <div class="dataframe-container">{html}</div>

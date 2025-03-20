@@ -1,3 +1,5 @@
+from streamlit import dataframe
+
 from altres.imports import *
 
 
@@ -54,7 +56,8 @@ with col3:
 
 separador()
 
-
+# Inicialitzar l'escurçador
+shortener = pyshorteners.Shortener()
 
 conn = sqlitecloud.connect(cami_db)
 
@@ -65,13 +68,16 @@ query2 = "SELECT * FROM Externs"
 df = pd.read_sql(query2, conn)
 
 df['Miniatura'] = df['Foto'].apply(create_thumbnail2)
-df["Vincle"] = df['Link'].apply(process_observacions)
+
+df["Vincle"] = df["Link"].apply(lambda link: shortener.tinyurl.short(link))
+df["Vincle"] = df['Vincle'].apply(process_observacions)
 df = df[["ID_Externs", "Miniatura", "Titol", "Vincle", "Logo"]]
 
 # Aplica l'estil de les files i les columnes
 styled_df = df.style.apply(row_style, axis=1)
 
 
+# Generar HTML des del DataFrame
 
 # Genera l'HTML estilitzat
 html = styled_df.hide(axis='index').to_html()

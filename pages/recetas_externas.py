@@ -90,36 +90,36 @@ if st.button("Enviar"):
     st.success(f"{title2}")
     # Buscar la imagen
 
-    image_tag = soup.find("img", alt=title2)
+    image_tag = soup.find("img")
+    if image_tag and "src" in image_tag.attrs:
+        image_url = image_tag["src"]
+        st.image(image_url, caption="Imagen extraída")
+        st.write(image_url)
+        response = requests.get(image_url)
+        image = Image.open(BytesIO(response.content))
+        size = (100, 100)
+        mini = image.thumbnail(size)
+        st.image(image)
+        buffer = BytesIO()
+        image.save(buffer, format="JPEG")
+        blob = buffer.getvalue()  # Obté el binari de la miniatura
 
-    image_url = image_tag["src"]
-    st.image(image_url, caption="Imagen extraída")
-    st.write(image_url)
-    response = requests.get(image_url)
-    image = Image.open(BytesIO(response.content))
-    size = (100, 100)
-    mini = image.thumbnail(size)
-    st.image(image)
-    buffer = BytesIO()
-    image.save(buffer, format="JPEG")
-    blob = buffer.getvalue()  # Obté el binari de la miniatura
+        df_insert = pd.DataFrame({
+            "Titol": [title2],  # El títol de la recepta
+            "Link": [pasted_text],  # L'enllaç de la recepta
+            "Foto": [blob],
+            "Logo": [font]
+        })
 
-    df_insert = pd.DataFrame({
-        "Titol": [title2],  # El títol de la recepta
-        "Link": [pasted_text],  # L'enllaç de la recepta
-        "Foto": [blob],
-        "Logo": [font]
-    })
+        # Convertir el DataFrame a una llista de tuples
+        records = df_insert.to_records(index=False).tolist()
 
-    # Convertir el DataFrame a una llista de tuples
-    records = df_insert.to_records(index=False).tolist()
+        # Inserir els registres directament a la taula Accions utilitzant SQL
+        query_insert = "INSERT INTO Externs (Titol, Link, Foto, Logo) VALUES (?, ?, ?, ?)"
+        conn.executemany(query_insert, records)
+        conn.commit()
 
-    # Inserir els registres directament a la taula Accions utilitzant SQL
-    query_insert = "INSERT INTO Externs (Titol, Link, Foto, Logo) VALUES (?, ?, ?, ?)"
-    conn.executemany(query_insert, records)
-    conn.commit()
-
-    st.success("Guardat")
+        st.success("Guardat")
 
 
 
