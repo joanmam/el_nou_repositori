@@ -71,8 +71,11 @@ if st.button("Enviar"):
     chrome_options.add_argument("--no-sandbox")
     chrome_options.add_argument("--disable-dev-shm-usage")
     # Configurar el navegador con WebDriver Manager para instalar Chromedriver automáticamente
-    driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()),             options=chrome_options
+    driver = webdriver.Chrome(
+        service=Service(ChromeDriverManager(version="120.0.6099.224").install()),
+        options=chrome_options
     )
+
     # Cargar la página desde la URL pegada
     driver.get(pasted_text)
 
