@@ -51,7 +51,7 @@ with col3:
     """,
     unsafe_allow_html=True)
 
-
+#final capçalera
 separador()
 
 # Inicialitzar l'escurçador
@@ -61,9 +61,22 @@ conn = sqlitecloud.connect(cami_db)
 
 
 
+
+
 #consulta taula externs
 query2 = "SELECT * FROM Externs"
 df = pd.read_sql(query2, conn)
+
+col1, col2 = st.columns(2)
+# Obtenir els valors únics de la columna Meal
+with col1:
+    apats_unics = df["Meal"].unique().tolist()
+    selection1 = st.pills("Apat", apats_unics, selection_mode="multi")
+
+with col2:
+    font_unics = df["Logo"].unique().tolist()
+    selection2 = st.pills("Font", font_unics, selection_mode="multi")
+
 
 df['Miniatura'] = df['Foto'].apply(create_thumbnail2)
 
@@ -76,23 +89,27 @@ columns = 3
 col_index = 0
 
 
+# Aplicar el filtre al DataFrame
+if selection1 or selection2:  # Si hi ha valors seleccionats
+    df_filtrat = df[(df["Meal"].isin(selection1)) | (df["Logo"].isin(selection2))]
 
+    for i, row in df_filtrat.iterrows():
+        if col_index % columns == 0:  # Iniciar una nova fila cada 4 columnes
+            cols = st.columns(columns)
 
-for i, row in df.iterrows():
-    if col_index % columns == 0:  # Iniciar una nova fila cada 4 columnes
-        cols = st.columns(columns)
-
-    with cols[col_index % columns]:
-        # Fons blaucel amb HTML + CSS
         with cols[col_index % columns]:
-            # Fons blaucel amb HTML + CSS i menys espai entre títol i vincle
-            st.markdown(f"""
-               <div style='background-color: #ADD8E6; padding: 10px; border-radius: 5px; margin-bottom: 10px;'>
-                   <p style='margin-bottom: 5px;'><b>Miniatura:</b> {row['Miniatura']}</p>
-                   <p style='margin-bottom: 5px;'><b>Títol:</b> {row['Titol']}</p>
-                   <p style='margin-bottom: 5px;'><b>Vincle:</b> {row['Vincle']}</p>
-                   <p style='margin-bottom: 5px;'><b>Logo:</b> {row['Logo']}</p>
-                   <p style='margin-bottom: 10px;'><b>Meal:</b> {row['Meal']}</p>
-               </div>
-               """, unsafe_allow_html=True)  # Activar HTML
-    col_index += 1
+            # Fons blaucel amb HTML + CSS
+            with cols[col_index % columns]:
+                # Fons blaucel amb HTML + CSS i menys espai entre títol i vincle
+                st.markdown(f"""
+                   <div style='background-color: #ADD8E6; padding: 10px; border-radius: 5px; margin-bottom: 10px;'>
+                       <p style='margin-bottom: 5px;'><b>Miniatura:</b> {row['Miniatura']}</p>
+                       <p style='margin-bottom: 5px;'><b>Títol:</b> {row['Titol']}</p>
+                       <p style='margin-bottom: 5px;'><b>Vincle:</b> {row['Vincle']}</p>
+                       <p style='margin-bottom: 5px;'><b>Logo:</b> {row['Logo']}</p>
+                       <p style='margin-bottom: 10px;'><b>Meal:</b> {row['Meal']}</p>
+                   </div>
+                   """, unsafe_allow_html=True)  # Activar HTML
+        col_index += 1
+else:
+    df_filtrat = df  # Si no hi ha selecció, mostrar tot el DataFrame
