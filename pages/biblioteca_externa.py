@@ -84,32 +84,35 @@ df["Vincle"] = df["Link"].apply(lambda link: shortener.tinyurl.short(link))
 df["Vincle"] = df['Vincle'].apply(process_observacions)
 df = df[["ID_Externs", "Miniatura", "Titol", "Vincle", "Logo", "Meal"]]
 
+# Control inicial: Mostra totes les receptes si no hi ha selecció
+if not selection1 and not selection2:
+    df_filtrat = df  # Si no hi ha selecció, mostrar tot el DataFrame
+else:
+    df_filtrat = df[(df["Meal"].isin(selection1)) | (df["Logo"].isin(selection2))]
+
 rows = df.shape[0]
 columns = 3
 col_index = 0
 
 
 # Aplicar el filtre al DataFrame
-if selection1 or selection2:  # Si hi ha valors seleccionats
-    df_filtrat = df[(df["Meal"].isin(selection1)) | (df["Logo"].isin(selection2))]
 
-    for i, row in df_filtrat.iterrows():
-        if col_index % columns == 0:  # Iniciar una nova fila cada 4 columnes
-            cols = st.columns(columns)
 
+for i, row in df_filtrat.iterrows():
+    if col_index % columns == 0:  # Iniciar una nova fila cada 4 columnes
+        cols = st.columns(columns)
+
+    with cols[col_index % columns]:
+        # Fons blaucel amb HTML + CSS
         with cols[col_index % columns]:
-            # Fons blaucel amb HTML + CSS
-            with cols[col_index % columns]:
-                # Fons blaucel amb HTML + CSS i menys espai entre títol i vincle
-                st.markdown(f"""
-                   <div style='background-color: #ADD8E6; padding: 10px; border-radius: 5px; margin-bottom: 10px;'>
-                       <p style='margin-bottom: 5px;'><b>Miniatura:</b> {row['Miniatura']}</p>
-                       <p style='margin-bottom: 5px;'><b>Títol:</b> {row['Titol']}</p>
-                       <p style='margin-bottom: 5px;'><b>Vincle:</b> {row['Vincle']}</p>
-                       <p style='margin-bottom: 5px;'><b>Logo:</b> {row['Logo']}</p>
-                       <p style='margin-bottom: 10px;'><b>Meal:</b> {row['Meal']}</p>
-                   </div>
-                   """, unsafe_allow_html=True)  # Activar HTML
-        col_index += 1
-else:
-    df_filtrat = df  # Si no hi ha selecció, mostrar tot el DataFrame
+            # Fons blaucel amb HTML + CSS i menys espai entre títol i vincle
+            st.markdown(f"""
+               <div style='background-color: #ADD8E6; padding: 10px; border-radius: 5px; margin-bottom: 10px;'>
+                   <p style='margin-bottom: 5px;'><b>Miniatura:</b> {row['Miniatura']}</p>
+                   <p style='margin-bottom: 5px;'><b>Títol:</b> {row['Titol']}</p>
+                   <p style='margin-bottom: 5px;'><b>Vincle:</b> {row['Vincle']}</p>
+                   <p style='margin-bottom: 5px;'><b>Logo:</b> {row['Logo']}</p>
+                   <p style='margin-bottom: 10px;'><b>Meal:</b> {row['Meal']}</p>
+               </div>
+               """, unsafe_allow_html=True)  # Activar HTML
+    col_index += 1
