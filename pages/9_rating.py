@@ -5,6 +5,12 @@ st.set_page_config(layout="wide")
 # Carregar Font Awesome
 font_awesome()
 
+
+st.logo(
+    "imagenes/designer.png",
+    link="https://elnourepositori.streamlit.app/",
+    size="large"
+)
 #Comença la capçalera
 # Connexió a la base de dades
 conn = sqlitecloud.connect(cami_db)

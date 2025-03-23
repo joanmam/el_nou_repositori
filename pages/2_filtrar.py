@@ -5,7 +5,11 @@ st.set_page_config(layout="wide")
 
 agregar_iconos_google()
 
-
+st.logo(
+    "imagenes/designer.png",
+    link="https://elnourepositori.streamlit.app/",
+    size="large"
+)
 # Carregar Font Awesome
 font_awesome()
 

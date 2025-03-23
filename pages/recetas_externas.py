@@ -5,7 +5,11 @@ from altres.imports import *
 st.set_page_config(layout="wide")
 
 
-
+st.logo(
+    "imagenes/designer.png",
+    link="https://elnourepositori.streamlit.app/",
+    size="large"
+)
 
 # Carregar Font Awesome
 font_awesome()
@@ -66,13 +70,7 @@ conn = sqlitecloud.connect(cami_db)
 
 # Configuració de la base de dades
 
-import streamlit as st
-from bs4 import BeautifulSoup
-import requests
-from PIL import Image
-from io import BytesIO
-import pandas as pd
-import sqlite3
+
 
 # Configuració de la base de dades
 conn = sqlitecloud.connect(cami_db)
@@ -139,3 +137,7 @@ if st.button("Enviar"):
             st.success("Guardat!")
         else:
             st.error(f"No s'ha pogut carregar la URL. Codi d'error: {response.status_code}")
+
+
+
+
