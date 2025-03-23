@@ -27,14 +27,7 @@ cursor.execute(query)
 result = cursor.fetchone()
 
 #_______________________________________________________
-# Afegir text dins d'un marc amb l'estil definit
-text_personalitzat = "Receptes"
 
-st.markdown(f'''
-<div class="marco">
-        <div class="text-personalitzat">{text_personalitzat}</div>
-        <div class="resultat">{num_registres}</div>
-</div>''', unsafe_allow_html=True)
 
 conn.commit()
 

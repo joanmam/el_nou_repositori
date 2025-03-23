@@ -218,7 +218,7 @@ def background_home():
     right: 200px;
     font-size: 100px; /* Augmenta la mida de la font */
     font-weight: bold;
-    color: #e6b800; /* Pots canviar el color segons les teves necessitats */
+    color: blue; /* Pots canviar el color segons les teves necessitats */
     background-color: transparent;
     padding: 10px;
     border: 2px solid #003366;
@@ -230,7 +230,7 @@ def background_home():
     # Aplica el CSS utilitzant st.markdown
     st.markdown(background_css, unsafe_allow_html=True)
     # Afegir text personalitzat a l'extrem inferior dret
-    st.markdown('<div class="custom-text">Mamen: Les seves receptes</div>', unsafe_allow_html=True)
+    st.markdown('<div class="custom-text">Mamen: Les meves receptes</div>', unsafe_allow_html=True)
 
 #________________________________________________________________________
 #Rellotge

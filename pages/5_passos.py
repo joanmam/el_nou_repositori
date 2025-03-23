@@ -54,11 +54,35 @@ with col3:
     """,
     unsafe_allow_html=True)
 
+#Les ultimes receptes
+query = 'SELECT ID_Recepte, Titol, Data_formatejada, Observacions, Preparacio, Temps FROM Receptes ORDER BY ID_Recepte DESC LIMIT 10'
+df = pd.read_sql(query, conn)
+df['Observacions'] = df['Observacions'].apply(process_observacions)
+
+st.subheader("Aquestes son les 10 ultimes")
+
+# Aplica l'estil de les files i les columnes
+styled_df = df.style.apply(row_style, axis=1)
+
+# Genera l'HTML estilitzat
+html = styled_df.hide(axis='index').to_html()
+html = html.replace('<style type="text/css">',
+                    '<style type="text/css">.row0 {background-color: #f0f0f0;} .row1 {background-color: #ffffff;}')
+
+# Crida la funció per mostrar el dataframe passant l'HTML com a paràmetre
+taula = dataframe_estadistiques(html)
+
+# Mostra el DataFrame estilitzat utilitzant Streamlit
+st.components.v1.html(taula, height=400, scrolling=True)
+
+separador()
+
+#final de les ultimes receptes
+
 llista_ingredients_sense_ordenar = list(set(obtenir_ingredients()))
 llista_ingredients = sorted(llista_ingredients_sense_ordenar)
 
-separador()
-st.text("")
+
 #Acaba la capçalera
 
 

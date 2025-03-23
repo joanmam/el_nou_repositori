@@ -233,7 +233,7 @@ df = pd.read_sql(query, conn, params=params)
 df["components"] = df["components"].apply(lambda x: ', '.join(obtenir_emoji(x)))
 
 # Mostrar els registres com a targetes
-num_columns = 4
+num_columns = 3
 columns = st.columns(num_columns)
 
 for i, row in df.iterrows():

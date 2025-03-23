@@ -1,4 +1,3 @@
-from altres.funcions import dataframe_estadistiques
 from altres.imports import *
 
 st.set_page_config(layout="wide")
@@ -84,11 +83,11 @@ conn.commit()
 
 
 separador()
-query = 'SELECT ID_Recepte, Titol, Data_formatejada, Observacions, Preparacio, Temps FROM Receptes ORDER BY ID_Recepte DESC LIMIT 3'
+query = 'SELECT ID_Recepte, Titol, Data_formatejada, Observacions, Preparacio, Temps FROM Receptes ORDER BY ID_Recepte DESC LIMIT 10'
 df = pd.read_sql(query, conn)
 df['Observacions'] = df['Observacions'].apply(process_observacions)
 
-st.subheader("Aquestes son les 3 ultimes")
+st.subheader("Aquestes son les 10 ultimes")
 
 # Aplica l'estil de les files i les columnes
 styled_df = df.style.apply(row_style, axis=1)

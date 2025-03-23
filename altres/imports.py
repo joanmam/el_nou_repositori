@@ -52,3 +52,4 @@ from altres.funcions import create_thumbnail2
 from altres.funcions import convertir_a_blob
 from altres.funcions import dataframe_externs
 import pyshorteners
+from altres.funcions import dataframe_estadistiques

@@ -86,7 +86,7 @@ with st.form(key="Form"):
 
     col3, col4 = st.columns(2)
     with col3:
-        Categoria = st.selectbox("Selecciona", ["Cat1","Cat2", "Cat3"])
+        Categoria = st.selectbox("Selecciona", ["Plato unico","Acompañamiento", "Primero", "Segundo"])
         st.markdown("---")  # Separador
 
     with col4:
