@@ -186,7 +186,7 @@ def background_home():
 <style>
 .stApp {{
     background: url("{background_image_url}") no-repeat center center;
-    background-size: 70%;
+    background-size: 40%;
     height: 100vh;
     display: flex;
     justify-content: flex-end;
@@ -1094,3 +1094,43 @@ def generar_html_externs(ID_Recepte, titol, data_formatejada, imatge_base64, ing
         </div>
     </div>  
     """
+
+
+def barra():
+    pages_dir = Path("pages/")
+    archivos_filtrados1 = [
+        archivo.stem.split("_", 1)[-1]
+        for archivo in pages_dir.iterdir()
+        if archivo.name != "__pycache__"
+           and "ext" not in archivo.name
+    ]
+    archivos_filtrados2 = [
+        archivo.stem.split("_", 1)[-1]
+        for archivo in pages_dir.iterdir()
+        if archivo.name != "__pycache__"
+           and "ext" in archivo.name
+    ]
+    # Agregar una opción neutral al inicio del menú
+    opciones1 = ["Selecciona una opción"] + archivos_filtrados1
+    opciones2 = ["Selecciona una opción"] + archivos_filtrados2
+    # Crear el radio con la opción neutral
+    selection1 = st.sidebar.radio("Menu1", opciones1, index=0)
+    selection2 = st.sidebar.radio("Menu2", opciones2, index=0)
+    # Manejar el caso en el que no se ha seleccionado ninguna opción significativa
+    if selection1 == "crear":
+        st.switch_page("pages/1_crear.py")
+    elif selection1 == "filtrar":
+        st.switch_page("pages/2_filtrar.py")
+    elif selection1 == "editar":
+        st.switch_page("pages/3_editar.py")
+    elif selection1 == "borrar":
+        st.switch_page("pages/4_borrar.py")
+    else:
+        st.write("")
+    # Manejar el caso en el que no se ha seleccionado ninguna opción significativa
+    if selection2 == "recetas_externas":
+        st.switch_page("pages/7_recetas_externas.py")
+    elif selection2 == "biblioteca_externa":
+        st.switch_page("pages/8_biblioteca_externa.py")
+    else:
+        st.write("")

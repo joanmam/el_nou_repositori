@@ -2,11 +2,6 @@ from altres.imports import *
 
 st.set_page_config(layout="wide")
 
-st.logo(
-    "imagenes/designer.png",
-    link="https://elnourepositori.streamlit.app/",
-    size="large"
-)
 
 # Conectarse a la base de datos
 conn = sqlitecloud.connect(cami_db)

@@ -4,11 +4,9 @@ from altres.imports import *
 
 st.set_page_config(layout="wide")
 
-st.logo(
-    "imagenes/designer.png",
-    link="https://elnourepositori.streamlit.app/",
-    size="large"
-)
+
+
+
 
 
 # Carregar Font Awesome
