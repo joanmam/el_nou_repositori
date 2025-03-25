@@ -91,8 +91,7 @@ conn.commit()
 
 
 
-
-
+#barra lateral
 pages_dir = Path("pages/")
 archivos_filtrados1 = [
     archivo.stem.split("_", 1)[-1]
@@ -131,7 +130,7 @@ elif selection2 == "biblioteca_externa":
 else:
     st.write("")
 
-#_____________________________
+#_fi barra lateral____________________________
 
 background_home()
 estils_marc()

@@ -53,5 +53,5 @@ from altres.funcions import convertir_a_blob
 from altres.funcions import dataframe_externs
 import pyshorteners
 from altres.funcions import dataframe_estadistiques
-from pathlib2 import Path
+from pathlib import Path
 from altres.funcions import barra
