@@ -129,70 +129,77 @@ if 'ultimo_id' not in st.session_state:
 
 st.subheader("Recepte")
 
+# Configuració de les credencials de Google Drive
+SCOPES = ['https://www.googleapis.com/auth/drive']
+creds = Credentials.from_service_account_file("receptes-447415-1148c3f201fb.json", scopes=SCOPES)  # Ruta al fitxer JSON
+service = build('drive', 'v3', credentials=creds)
+
 with st.form(key="Form"):
     col1, col2 = st.columns(2)
 
     with col1:
-        Data = st.date_input("Seleccionar data")
+        data = st.date_input("Seleccionar data")
 
     with col2:
         Titol = st.text_input("Titol")
 
     st.markdown("---")  # Separador
-
-    foto = st.file_uploader("Elige",type=["jpg","png"])
-    st.markdown("---")  # Separador
+    # Subida d'imatges amb Streamlit
+    uploaded_file = st.file_uploader("Puja una imatge", type=["jpg", "png", "jpeg"])
 
     col3, col4 = st.columns(2)
     with col3:
-        Categoria = st.selectbox("Selecciona", ["Plato unico","Acompañamiento", "Primero", "Segundo"])
-        st.markdown("---")  # Separador
-
+        categoria = st.selectbox("Selecciona categoria", ["Plato único", "Acompañamiento", "Primero", "Segundo"])
     with col4:
-        tags = st.text_input("Etiquetes")
-        st.markdown("---")  # Separador
+        tags = st.text_input("Etiquetes (separades per comes)")
+    st.markdown("---")  # Separador
 
-    Observacions = st.text_area("Observacions")
+    observacions = st.text_area("Observacions")
     st.markdown("---")  # Separador
 
     col5, col6 = st.columns(2)
     with col5:
-        st.write("Temps de preparacio")
-        Hores_prep = st.number_input("Hores", step=1, key="hores_preparacio")
-        Minuts_prep = st.number_input("Minuts", step=1, key="minuts_preparacio")
-
+        st.write("Temps de preparació")
+        hores_prep = st.number_input("Hores", step=1, key="hores_preparacio")
+        minuts_prep = st.number_input("Minuts", step=1, key="minuts_preparacio")
     with col6:
         st.write("Temps total")
-        Hores = st.number_input("Hores", step=1, key="hores_totals")
-        Minuts = st.number_input("Minuts", step=1, key="minuts_totals")
+        hores = st.number_input("Hores", step=1, key="hores_totals")
+        minuts = st.number_input("Minuts", step=1, key="minuts_totals")
 
-    enviar = st.form_submit_button()
-    if enviar:
-        if foto is not None:
-            foto_bytes = foto.read()
-            img = Image.open(BytesIO(foto_bytes))
-            st.image(img)
-            buffer = BytesIO()
-            if img.mode == 'RGBA':
-                img = img.convert('RGB')
-            img.save(buffer, format="JPEG")
-            blob = buffer.getvalue()
-            Etiquetes = ', '.join([tag.strip() for tag in tags.split(',')])
-            Data_formatejada = Data.strftime("%d-%m-%Y")
+    enviar = st.form_submit_button("Enviar")
 
-            Temps = Hores * 60 + Minuts
-            Preparacio = Hores_prep * 60 + Minuts_prep
+# Quan l'usuari envia el formulari
+if enviar:
+    if uploaded_file is not None:
+        # Pujar la imatge a Google Drive
+        file_data = io.BytesIO(uploaded_file.read())
+        file_metadata = {
+            "name": uploaded_file.name,
+            "parents": ["1BXja0Vbbij6vYOcaJmdesk9woFRXdRGR"]  # Substitueix amb l'ID de la carpeta a Google Drive
+        }
+        media = MediaIoBaseUpload(file_data, mimetype="image/jpeg")
+        uploaded_image = service.files().create(
+            body=file_metadata, media_body=media, fields="id"
+        ).execute()
+        file_id = uploaded_image.get("id")
+        file_url = f"https://drive.google.com/uc?id={file_id}"
 
+        # Processar dades del formulari
+        data_formatejada = data.strftime("%d-%m-%Y")
+        etiquetes = ', '.join([tag.strip() for tag in tags.split(',')])
+        temps_total = int(hores * 60 + minuts)
+        temps_preparacio = int(hores_prep * 60 + minuts_prep)
 
-            sql = ("INSERT INTO Receptes (Data_formatejada, Titol, Observacions, Etiquetes, blob, Temps, Preparacio, Categoria)"
+        sql = ("INSERT INTO Receptes (Data_formatejada, Titol, Observacions, Etiquetes, URL_Imatge, Temps, Preparacio, Categoria)"
                    "VALUES (?, ?, ?, ?, ?, ?, ?, ?)")
-            datos = Data_formatejada, Titol, Observacions, Etiquetes, blob, Temps, Preparacio, Categoria
-            cursor.execute(sql, datos)
-            conn.commit()
+        datos = data_formatejada, Titol, observacions, etiquetes, file_url, temps_total, temps_preparacio, categoria
+        cursor.execute(sql, datos)
+        conn.commit()
 
-            cursor.execute('''SELECT last_insert_rowid()''')
-            st.session_state.ultimo_id = cursor.fetchone()[0]
-            st.write(f'El último ID asignado en la tabla Receptes es: {st.session_state.ultimo_id}')
+        cursor.execute('''SELECT last_insert_rowid()''')
+        st.session_state.ultimo_id = cursor.fetchone()[0]
+        st.write(f'El último ID asignado en la tabla Receptes es: {st.session_state.ultimo_id}')
 
 
 # Crear un formulario para los ingredientes
