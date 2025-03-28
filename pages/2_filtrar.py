@@ -248,7 +248,7 @@ temps_seleccionat = query_params.get("temps", [None])[0]
 
 #Definir la consulta SQL amb els paràmetres necessaris
 query = '''
-    SELECT Receptes.ID_Recepte, Receptes.Data_formatejada, Receptes.Titol, Receptes.Categoria, Receptes.Preparacio, Receptes.blob, Receptes.Temps,
+    SELECT Receptes.ID_Recepte, Receptes.Data_formatejada, Receptes.Titol, Receptes.Categoria, Receptes.Preparacio, Receptes.URL_Imatge, Receptes.Temps,
     GROUP_CONCAT(Ingredients.nom || ' (' || Ingredients.quantitat || ')', ', ') AS components
     FROM Receptes
     LEFT JOIN ingredients
@@ -286,20 +286,23 @@ df = pd.read_sql(query, conn, params=params)
 
 df["components"] = df["components"].apply(lambda x: ', '.join(obtenir_emoji(x)))
 
+
 # Mostrar els registres com a targetes
 num_columns = 3
 columns = st.columns(num_columns)
+
+
 
 for i, row in df.iterrows():
     col = columns[i % num_columns]  # Seleccionar columna
 
     with col:
         # Generar la targeta amb la funció actualitzada
-        targeta_html = generar_html_fontawesome(
+        targeta_html = generar_html_fontawesome2(
             ID_Recepte=row['ID_Recepte'],
             titol=row['Titol'],
             data_formatejada=row['Data_formatejada'],  # Data formatejada
-            imatge_base64=convert_blob_to_base64(row['blob']),  # Imatge
+            imatge_url=row['URL_Imatge'],
             ingredients=row['components'],  # Ingredients
             temps_preparacio=row['Preparacio'],  # Temps de preparació
             temps_act=row["Temps"], # Temps total

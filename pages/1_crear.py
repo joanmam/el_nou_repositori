@@ -63,13 +63,6 @@ else:
 
 #_fi barra lateral____________________________
 
-
-#_fi barra lateral____________________________
-
-
-
-
-
 # Carregar Font Awesome
 font_awesome()
 
@@ -129,10 +122,6 @@ if 'ultimo_id' not in st.session_state:
 
 st.subheader("Recepte")
 
-# Configuració de les credencials de Google Drive
-SCOPES = ['https://www.googleapis.com/auth/drive']
-creds = Credentials.from_service_account_file("receptes-447415-1148c3f201fb.json", scopes=SCOPES)  # Ruta al fitxer JSON
-service = build('drive', 'v3', credentials=creds)
 
 with st.form(key="Form"):
     col1, col2 = st.columns(2)
@@ -145,7 +134,7 @@ with st.form(key="Form"):
 
     st.markdown("---")  # Separador
     # Subida d'imatges amb Streamlit
-    uploaded_file = st.file_uploader("Puja una imatge", type=["jpg", "png", "jpeg"])
+    uploaded_url = st.text_input("Puja una URL imatge",)
 
     col3, col4 = st.columns(2)
     with col3:
@@ -168,22 +157,7 @@ with st.form(key="Form"):
         minuts = st.number_input("Minuts", step=1, key="minuts_totals")
 
     enviar = st.form_submit_button("Enviar")
-
-# Quan l'usuari envia el formulari
-if enviar:
-    if uploaded_file is not None:
-        # Pujar la imatge a Google Drive
-        file_data = io.BytesIO(uploaded_file.read())
-        file_metadata = {
-            "name": uploaded_file.name,
-            "parents": ["1BXja0Vbbij6vYOcaJmdesk9woFRXdRGR"]  # Substitueix amb l'ID de la carpeta a Google Drive
-        }
-        media = MediaIoBaseUpload(file_data, mimetype="image/jpeg")
-        uploaded_image = service.files().create(
-            body=file_metadata, media_body=media, fields="id"
-        ).execute()
-        file_id = uploaded_image.get("id")
-        file_url = f"https://drive.google.com/uc?id={file_id}"
+    if enviar:
 
         # Processar dades del formulari
         data_formatejada = data.strftime("%d-%m-%Y")
@@ -193,7 +167,7 @@ if enviar:
 
         sql = ("INSERT INTO Receptes (Data_formatejada, Titol, Observacions, Etiquetes, URL_Imatge, Temps, Preparacio, Categoria)"
                    "VALUES (?, ?, ?, ?, ?, ?, ?, ?)")
-        datos = data_formatejada, Titol, observacions, etiquetes, file_url, temps_total, temps_preparacio, categoria
+        datos = data_formatejada, Titol, observacions, etiquetes, uploaded_url, temps_total, temps_preparacio, categoria
         cursor.execute(sql, datos)
         conn.commit()
 

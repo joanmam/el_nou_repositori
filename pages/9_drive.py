@@ -45,3 +45,26 @@ st.success("URL guardat a SQLiteCloud!")
 
 
 
+#
+# # # Quan l'usuari envia el formulari
+# if enviar:
+#     if uploaded_file is not None:
+#         # Pujar la imatge a Google Drive
+#         file_data = io.BytesIO(uploaded_file.read())
+#         file_metadata = {
+#             "name": uploaded_file.name,
+#             "parents": ["1BXja0Vbbij6vYOcaJmdesk9woFRXdRGR"]  # Substitueix amb l'ID de la carpeta a Google Drive
+#         }
+#         media = MediaIoBaseUpload(file_data, mimetype="image/jpeg")
+#         uploaded_image = service.files().create(
+#             body=file_metadata, media_body=media, fields="id"
+#         ).execute()
+#         file_id = uploaded_image.get("id")
+#         imatge_url = f"https://drive.google.com/uc?id={file_id}"
+
+
+# # Configuració de les credencials de Google Drive
+# SCOPES = ['https://www.googleapis.com/auth/drive']
+# creds = Credentials.from_service_account_file("receptes-447415-1148c3f201fb.json", scopes=SCOPES)  # Ruta al fitxer JSON
+# service = build('drive', 'v3', credentials=creds)
+#
