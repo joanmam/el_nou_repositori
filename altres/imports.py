@@ -55,9 +55,5 @@ import pyshorteners
 from altres.funcions import dataframe_estadistiques
 from pathlib import Path
 from altres.funcions import barra
-from googleapiclient.discovery import build
-from googleapiclient.http import MediaIoBaseDownload
-from google.oauth2.service_account import Credentials
-from googleapiclient.http import MediaIoBaseUpload
 from altres.funcions import generar_html_fontawesome2
 
