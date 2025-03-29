@@ -3,6 +3,17 @@ from altres.imports import *
 
 st.set_page_config(layout="wide")
 
+
+
+# # Carrega les credencials
+# credentials = service_account.Credentials.from_service_account_file(
+#     "innate-infusion-455114-q8-188c2e64f111.json",
+#     scopes=["https://www.googleapis.com/auth/photoslibrary.readonly"]
+# )
+#
+# # Inicialitza el servei
+# service = build('photoslibrary', 'v1', credentials=credentials)
+
 #barra lateral
 pages_dir = Path("pages/")
 archivos_filtrados1 = [
@@ -297,15 +308,15 @@ for i, row in df.iterrows():
     col = columns[i % num_columns]  # Seleccionar columna
 
     with col:
-        # Generar la targeta amb la funció actualitzada
+        # Generem la targeta HTML
         targeta_html = generar_html_fontawesome2(
             ID_Recepte=row['ID_Recepte'],
             titol=row['Titol'],
             data_formatejada=row['Data_formatejada'],  # Data formatejada
-            imatge_url=row['URL_Imatge'],
+            imatge_url=row['URL_Imatge'],  # URL de la imatge
             ingredients=row['components'],  # Ingredients
             temps_preparacio=row['Preparacio'],  # Temps de preparació
-            temps_act=row["Temps"], # Temps total
+            temps_act=row["Temps"]  # Temps total
         )
 
         # Mostrar la targeta a Streamlit

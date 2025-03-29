@@ -60,3 +60,4 @@ from googleapiclient.http import MediaIoBaseDownload
 from google.oauth2.service_account import Credentials
 from googleapiclient.http import MediaIoBaseUpload
 from altres.funcions import generar_html_fontawesome2
+

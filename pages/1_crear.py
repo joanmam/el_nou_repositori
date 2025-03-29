@@ -136,6 +136,8 @@ with st.form(key="Form"):
     # Subida d'imatges amb Streamlit
     uploaded_url = st.text_input("Puja una URL imatge",)
 
+
+
     col3, col4 = st.columns(2)
     with col3:
         categoria = st.selectbox("Selecciona categoria", ["Plato único", "Acompañamiento", "Primero", "Segundo"])

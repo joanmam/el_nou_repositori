@@ -1141,7 +1141,7 @@ def generar_html_fontawesome2(ID_Recepte, titol, data_formatejada, imatge_url, i
         <div style="display: grid; grid-template-columns: 1fr; grid-template-rows: auto auto auto auto; gap: 10px; border: 1px solid #ff3333; border-radius: 10px; padding: 0px; background-color: #ffd1b3;">
             <!-- Primera fila: Imatge i Títol -->
             <div style="display: flex; align-items: flex-start; grid-column: 1 / span 1;">
-                <img src="{imatge_url}" alt="Imatge" style="width: 100px; height: 100px; object-fit: cover; border-radius: 10px; margin-right: 10px;">
+               <img src="{imatge_url}" alt="Imatge de la recepta" style="width: 150px; height: auto; border-radius: 8px; margin-bottom: 16px;">
                 <div>
                     <h4 style="margin: 0;">{titol}</h4>
                     <div style="display: flex; gap: 1px;">
