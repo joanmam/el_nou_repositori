@@ -5,14 +5,6 @@ st.set_page_config(layout="wide")
 
 
 
-# # Carrega les credencials
-# credentials = service_account.Credentials.from_service_account_file(
-#     "innate-infusion-455114-q8-188c2e64f111.json",
-#     scopes=["https://www.googleapis.com/auth/photoslibrary.readonly"]
-# )
-#
-# # Inicialitza el servei
-# service = build('photoslibrary', 'v1', credentials=credentials)
 
 #barra lateral
 pages_dir = Path("pages/")
