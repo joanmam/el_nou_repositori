@@ -1,34 +1,34 @@
-
-
-# 1. Descarregar la imatge des de Google Fotos
-google_photos_url = "URL_DE_GOOGLE_FOTOS"  # Substitueix aquest URL pel de Google Fotos
-response = requests.get(google_photos_url)
-
-if response.status_code == 200:  # Comprova que la imatge s'ha descarregat correctament
-    image_data = response.content
-else:
-    st.write("No s'ha pogut descarregar la imatge de Google Fotos")
-    exit()
-
-# 2. Carregar la imatge a Postimages
-postimages_api_url = "https://api.postimages.org/1/upload"
-payload = {
-    "key": "71ee969c2c37eaf3b2a57211fa8f789a",  # Has de registrar-te a Postimages per obtenir una API key
-    "expiration": "0",  # 0 significa que l'enllaç no caducarà
-}
-files = {
-    "file": ("imatge.jpg", image_data, "image/jpeg")
-}
-
-post_response = requests.post(postimages_api_url, data=payload, files=files)
-
-if post_response.status_code == 200:
-    post_result = post_response.json()
-    post_url = post_result.get("data", {}).get("url")
-else:
-    st.write("No s'ha pogut carregar la imatge a Postimages")
-
-
-
-
-
+def generar_html_fontawesome2(ID_Recepte, titol, data_formatejada, imatge_url, ingredients, temps_preparacio, temps_act):
+    return f"""
+    <div style="margin-bottom: 10px;">
+        <div style="display: grid; grid-template-columns: 1fr; grid-template-rows: auto auto auto auto; gap: 10px; border: 1px solid #ff3333; border-radius: 10px; padding: 0px; background-color: #ffd1b3;">
+            <!-- Primera fila: Imatge i Títol -->
+            <div style="display: flex; align-items: flex-start; grid-column: 1 / span 1;">
+               <img src="{imatge_url}" alt="Imatge de la recepta" style="width: 150px; height: auto; border-radius: 8px; margin-bottom: 16px;">
+                <div style="text-align: left; padding-left: 10px;">
+                    <h4 style="margin: 0; padding-bottom: 5px;">{titol}</h4>
+                    <div style="display: flex; flex-direction: column; align-items: flex-start; gap: 5px;">
+                        <h6 style="color: #000099; margin: 0;">{ID_Recepte}</h6>
+                        <h6 style="color: #ff0000; margin: 0; display: block;">{data_formatejada}</h6>
+                    </div>
+                </div>
+            </div>
+            <!-- Segona fila: Ingredients amb icona Font Awesome, Temps de Preparació i Temps Total -->
+            <div style="grid-column: 1 / span 1; display: flex; justify-content: flex-start; gap: 20px; align-items: center; padding-left: 10px;">
+                <p style="display: flex; align-items: center; gap: 5px;">
+                    <i class="fas fa-clock" style="font-size: 18px; vertical-align: middle;"></i>
+                    {temps_preparacio} min
+                </p>
+                <p style="display: flex; align-items: center; gap: 5px;">
+                    <i class="fas fa-hourglass" style="font-size: 18px; vertical-align: middle;"></i>
+                    {temps_act} min
+                </p>
+            </div>
+            <!-- Ingredients -->
+            <div style="display: flex; align-items: center; gap: 5px; padding-left: 10px;">
+                <i class="fas fa-shopping-cart" style="font-size: 18px; vertical-align: middle;"></i>
+                {ingredients}
+            </div>
+        </div>
+    </div>
+    """
