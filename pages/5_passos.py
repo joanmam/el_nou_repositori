@@ -178,7 +178,7 @@ for i in range(st.session_state.num_passos):
     with col1:
         lletra_variable()
         st.markdown('<div class="custom-element2"><p class="custom-title2">Imatge:</p>', unsafe_allow_html=True)
-        image = st.file_uploader(f"", type=["jpg", "png"], key=f"image_{i}")
+        image = st.text_input("Puja una URL imatge", )
 
         if image is not None:
             st.session_state.imatges[i] = image
@@ -201,19 +201,10 @@ separador()
 if st.button("Guardar", key="save_data"):
     current_date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
-    for i in range(st.session_state.num_passos):
-        image = st.session_state.imatges[i]
-        pas = st.session_state.passos[i]
 
-        if image and pas:
-            img = Image.open(image)
-            buf = io.BytesIO()
-            img.save(buf, format="png")
-            imatge = buf.getvalue()
-
-            cursor.execute('''
-                INSERT INTO Passos (ID_Recepte, Numero, Data_passos, Imatge_passos, Pas) VALUES (?, ?, ?, ?, ?)
-            ''', (recepte_seleccionada, i+1, current_date, imatge, pas))
+    cursor.execute('''
+        INSERT INTO Passos (ID_Recepte, Numero, Data_passos, Pas, URL_passos) VALUES (?, ?, ?, ?, ?)
+    ''', (recepte_seleccionada, i+1, current_date, pas, image))
 
     conn.commit()
     st.success("Guardado")

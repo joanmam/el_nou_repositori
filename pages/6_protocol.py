@@ -128,13 +128,13 @@ if st.button("Seleccionar"):
 
 
 # pels passos
-    query2 = "SELECT Numero, Imatge_passos, Pas FROM Passos WHERE ID_Recepte = ?"
+    query2 = "SELECT Numero, URL_passos, Pas FROM Passos WHERE ID_Recepte = ?"
     df = pd.read_sql(query2, conn, params=[receptes_seleccionades])
     # Converteix cada blob a una imatge i crea una nova columna amb les imatges
-    df['Miniatura'] = df['Imatge_passos'].apply(create_thumbnail2)
 
-    # Oculta la columna del blob
-    df = df[['Numero', 'Miniatura', 'Pas']]
+    # Transformar la columna 'URL_passos' per mostrar imatges
+    df['URL_passos'] = '<img src="' + df['URL_passos'] + '" style="width:150px; height:auto;">'
+    df.columns = ['Núm.', 'Imatge', 'Descripció del Pas']
 
     # Aplica l'estil de les files i les columnes
     styled_df = df.style.apply(row_style, axis=1)
@@ -150,3 +150,5 @@ if st.button("Seleccionar"):
 
     # Mostra el DataFrame estilitzat utilitzant Streamlit
     st.components.v1.html(taula, height=600, scrolling=True)
+
+
