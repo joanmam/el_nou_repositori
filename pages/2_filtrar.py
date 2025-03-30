@@ -291,7 +291,7 @@ df["components"] = df["components"].apply(lambda x: ', '.join(obtenir_emoji(x)))
 
 
 # Mostrar els registres com a targetes
-num_columns = 3
+num_columns = 2
 columns = st.columns(num_columns)
 
 
