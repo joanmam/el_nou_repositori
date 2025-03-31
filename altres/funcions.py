@@ -835,13 +835,13 @@ def dataframe_actualitzar(html):
         width: 10%;  /* Amplada de la primera columna */
     }}
     .dataframe-container th.col1, .dataframe-container td.col1 {{
-        width: 55%;  /* Amplada de la segona columna */
+        width: 10%;  /* Amplada de la segona columna */
     }}
     .dataframe-container th.col2, .dataframe-container td.col2 {{
-        width: 15%;  /* Amplada de la tercera columna */
+        width: 45%;  /* Amplada de la tercera columna */
     }}
     .dataframe-container th.col2, .dataframe-container td.col3 {{
-        width: 5%;  /* Amplada de la tercera columna */
+        width: 15%;  /* Amplada de la tercera columna */
     }}
     .dataframe-container th.col2, .dataframe-container td.col4 {{
         width: 5%;  /* Amplada de la tercera columna */
@@ -852,6 +852,8 @@ def dataframe_actualitzar(html):
     .dataframe-container th.col2, .dataframe-container td.col6{{
         width: 5%;  /* Amplada de la tercera columna */
     }}
+    .dataframe-container th.col2, .dataframe-container td.col7{{
+        width: 5%;  /* Amplada de la tercera columna */
     </style>
     <div class="dataframe-container">{html}</div>
     """
