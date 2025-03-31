@@ -44,6 +44,8 @@ elif selection1 == "editar":
     st.switch_page("pages/3_editar.py")
 elif selection1 == "borrar":
     st.switch_page("pages/4_borrar.py")
+elif selection1 == "arreglar_passos":
+    st.switch_page("pages/9_arreglar_passos.py")
 else:
     st.write("")
 # Manejar el caso en el que no se ha seleccionado ninguna opción significativa
@@ -134,17 +136,24 @@ st.write(f"El registre seleccionat per actualitzar és: {id_to_update}")
 
 
 
-query = "SELECT ID_Recepte, URL_Imatge, Titol, Observacions, Etiquetes, Categoria, Preparacio, Temps FROM Receptes WHERE ID_Recepte = ?"
+query = "SELECT ID_Recepte, Imatge, Titol, Observacions, Etiquetes, Categoria, Preparacio, Temps FROM Receptes WHERE ID_Recepte = ?"
 
 df = pd.read_sql(query, conn, params=[id_to_update])
 
 df['Observacions'] = df['Observacions'].apply(lambda x: process_observacions(x))
+# Afegeix una nova columna amb el codi HTML de la imatge
 
+def render_image(url):
+    return f'<img src="{url}" width="150">'
+df['Imatge'] = df['Imatge'].apply(render_image)
 # Mostra les dades existents
 st.subheader('Dades actuals dels registres')
 # Aplica l'estil de les files i les columnes
 styled_df = df.style.apply(row_style, axis=1)
-df.columns = ['ID_Recepte', 'Imatge', 'Titol', 'Observacions', 'Etiquetes', 'Categoria','Preparacio', 'Temps']
+
+
+
+
 
 # Genera l'HTML estilitzat
 html = styled_df.hide(axis='index').to_html()
@@ -158,6 +167,8 @@ taula = dataframe_actualitzar(html)
 st.components.v1.html(taula, height=200, scrolling=True)
 separador()
 
+
+#Actualitzacions
 st.subheader("Nous valors")
 
 valors_fila = df.loc[df["ID_Recepte"] == id_to_update]
@@ -178,7 +189,7 @@ if st.button("Actualitzar"):
         id_to_update = int(id_to_update)
 
         # Llegeix les dades existents a la taula "Receptes"
-        df = pd.read_sql_query("SELECT * FROM Receptes", conn)
+        df = pd.read_sql_query(""" SELECT ID_Recepte, Imatge, Titol, Observacions, Etiquetes, Categoria, Preparacio, Temps FROM Receptes WHERE ID_Recepte = ? """, conn, params=[id_to_update])
 
         # Comprova que l'ID existeix a la taula
         if id_to_update in df['ID_Recepte'].values:
@@ -196,41 +207,31 @@ if st.button("Actualitzar"):
             if nou_Temps:
                 df.loc[df['ID_Recepte'] == id_to_update, 'Temps'] = nou_Temps
             if nova_Imatge:
-                df.loc[df['ID_Recepte'] == id_to_update, 'URL_Imatge'] = nova_Imatge
-                df['URL_Imatge'] = '<img src="' + df['URL_Imatge'] + '" style="width:150px; height:auto;">'
-            # Genera un nom únic per a la taula temporal
-            temp_table_name = f"Receptes_temp_{uuid.uuid4().hex}"
+                df.loc[df['ID_Recepte'] == id_to_update, 'Imatge'] = nova_Imatge
+                df['Imatge'] = df['Imatge'].apply(render_image)
 
-            # Guarda només les dades actualitzades a la taula temporal
-            df_actualitzat = df[df['ID_Recepte'] == id_to_update]
-            df_actualitzat.to_sql(temp_table_name, conn, if_exists='replace', index=False)
+
 
             # Actualitza la taula original
-            conn.execute(f"DELETE FROM Receptes WHERE ID_Recepte = ?", (id_to_update,))
+            conn.execute("""
+                UPDATE Receptes
+                SET Imatge = ?, Titol = ?, Observacions = ?, Etiquetes = ?, Categoria = ?, Preparacio = ?, Temps = ?
+                WHERE ID_Recepte = ?
+            """, (nova_Imatge, nou_Titol, nova_Observacions, nova_Etiquetes, nova_Categoria, nova_Preparacio, nou_Temps, id_to_update))
             conn.commit()
 
-            conn.execute(f"INSERT INTO Receptes SELECT * FROM {temp_table_name}")
-            conn.commit()
 
-            # Esborra la taula temporal
-            conn.execute(f"DROP TABLE {temp_table_name}")
-            conn.commit()
 
             # Comprova i mostra els canvis
-            df_mostrat = pd.read_sql_query("SELECT ID_Recepte, URL_Imatge, Titol, Observacions, Etiquetes, Categoria, Preparacio, Temps FROM Receptes WHERE ID_Recepte = ?", conn, params=[id_to_update])
+            df_mostrat = pd.read_sql_query("SELECT ID_Recepte, Imatge, Titol, Observacions, Etiquetes, Categoria, Preparacio, Temps FROM Receptes", conn)
+            df_mostrat['Imatge'] = df_mostrat['Imatge'].apply(render_image)
             st.subheader("Dades actualitzades:")
-
-            df_mostrat.columns = ['ID_Recepte', 'Imatge', 'Titol', 'Observacions', 'Etiquetes', 'Categoria', 'Preparacio', 'Temps']
-
 
             styled_df = df_mostrat.style.apply(row_style, axis=1)
 
 
             # Genera l'HTML estilitzat
             html = styled_df.hide(axis='index').to_html()
-
-            # html = html.replace('<style type="text/css">','')
-
 
             # Crida la funció per mostrar el dataframe passant l'HTML com a paràmetre
             taula = dataframe_actualitzar(html)

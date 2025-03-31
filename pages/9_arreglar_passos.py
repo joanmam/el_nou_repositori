@@ -44,6 +44,8 @@ elif selection1 == "editar":
     st.switch_page("pages/3_editar.py")
 elif selection1 == "borrar":
     st.switch_page("pages/4_borrar.py")
+elif selection1 == "arreglar_passos":
+    st.switch_page("pages/9_arreglar_passos.py")
 else:
     st.write("")
 # Manejar el caso en el que no se ha seleccionado ninguna opción significativa
@@ -158,17 +160,17 @@ taula = dataframe_actualitzar(html)
 st.components.v1.html(taula, height=200, scrolling=True)
 separador()
 
-st.subheader("Nous valors")
+st.subheader("Nous valors passos")
 
-valors_fila = df.loc[df["ID_Recepte"] == id_to_update]
-nou_Titol = st.text_input("Nou Titol:", value=valors_fila.iloc[0]["Titol"])
-nova_Observacions = st.text_input("Nova Observacions:")
-nova_Observacions = process_observacions(nova_Observacions)
-nova_Etiquetes = st.text_input("Nova Etiquetes:", value=valors_fila.iloc[0]["Etiquetes"])
-nova_Categoria = st.text_input("Noves Categoria", value=valors_fila.iloc[0]["Categoria"])
-nova_Preparacio = st.text_input("Nova Preparacio", value=valors_fila.iloc[0]["Preparacio"])
-nou_Temps = st.text_input("Nou Temps", value=valors_fila.iloc[0]["Temps"])
-nova_Imatge = st.text_input("Nova Imatge", value=valors_fila.iloc[0]["Imatge"])
+query2 = "SELECT ID_Recepte, URL_passos, Pas FROM Passos WHERE ID_Recepte = ?"
+df2 = pd.read_sql(query2, conn, params=[id_to_update])
+df2.columns = ["ID_Recepte", "Imatge_passos", "Pas"]
+df2['Imatge_passos'] = '<img src="' + df2['Imatge_passos'] + '" style="width:150px; height:auto;">'
+
+valors_fila = df2.loc[df2["ID_Recepte"] == id_to_update]
+
+nou_Pas = st.text_input("Nou Pas", value=valors_fila.iloc[0]["Pas"])
+nova_Imatge = st.text_input("Nova Imatge", value=valors_fila.iloc[0]["Imatge_passos"])
 
 # Botó per actualitzar
 if st.button("Actualitzar"):
@@ -178,38 +180,29 @@ if st.button("Actualitzar"):
         id_to_update = int(id_to_update)
 
         # Llegeix les dades existents a la taula "Receptes"
-        df = pd.read_sql_query("SELECT * FROM Receptes", conn)
-
+        df = pd.read_sql_query("SELECT * FROM Passos", conn)
+        df.columns = ["ID_Receptes", "Imatge_passos", "Pas"]
         # Comprova que l'ID existeix a la taula
         if id_to_update in df['ID_Recepte'].values:
             # Actualitza les columnes proporcionades
-            if nou_Titol:
-                df.loc[df['ID_Recepte'] == id_to_update, 'Titol'] = nou_Titol
-            if nova_Observacions:
-                df.loc[df['ID_Recepte'] == id_to_update, 'Observacions'] = nova_Observacions
-            if nova_Etiquetes:
-                df.loc[df['ID_Recepte'] == id_to_update, 'Etiquetes'] = nova_Etiquetes
-            if nova_Categoria:
-                df.loc[df['ID_Recepte'] == id_to_update, 'Categoria'] = nova_Categoria
-            if nova_Preparacio:
-                df.loc[df['ID_Recepte'] == id_to_update, 'Preparacio'] = nova_Preparacio
-            if nou_Temps:
-                df.loc[df['ID_Recepte'] == id_to_update, 'Temps'] = nou_Temps
+
+            if nou_Pas:
+                df.loc[df['ID_Recepte'] == id_to_update, 'Pas'] = nou_Pas
             if nova_Imatge:
-                df.loc[df['ID_Recepte'] == id_to_update, 'URL_Imatge'] = nova_Imatge
-                df['URL_Imatge'] = '<img src="' + df['URL_Imatge'] + '" style="width:150px; height:auto;">'
+                df.loc[df['ID_Recepte'] == id_to_update, 'Imatge_passos'] = nova_Imatge
+                df['Imatge_passos'] = '<img src="' + df['Imatge_passos'] + '" style="width:150px; height:auto;">'
             # Genera un nom únic per a la taula temporal
-            temp_table_name = f"Receptes_temp_{uuid.uuid4().hex}"
+            temp_table_name = f"Passos_temp_{uuid.uuid4().hex}"
 
             # Guarda només les dades actualitzades a la taula temporal
             df_actualitzat = df[df['ID_Recepte'] == id_to_update]
             df_actualitzat.to_sql(temp_table_name, conn, if_exists='replace', index=False)
 
             # Actualitza la taula original
-            conn.execute(f"DELETE FROM Receptes WHERE ID_Recepte = ?", (id_to_update,))
+            conn.execute(f"DELETE FROM Passos WHERE ID_Recepte = ?", (id_to_update,))
             conn.commit()
 
-            conn.execute(f"INSERT INTO Receptes SELECT * FROM {temp_table_name}")
+            conn.execute(f"INSERT INTO Passos SELECT * FROM {temp_table_name}")
             conn.commit()
 
             # Esborra la taula temporal
@@ -217,10 +210,10 @@ if st.button("Actualitzar"):
             conn.commit()
 
             # Comprova i mostra els canvis
-            df_mostrat = pd.read_sql_query("SELECT ID_Recepte, URL_Imatge, Titol, Observacions, Etiquetes, Categoria, Preparacio, Temps FROM Receptes WHERE ID_Recepte = ?", conn, params=[id_to_update])
+            df_mostrat = pd.read_sql_query("SELECT ID_Recepte, URL_passos, Pas FROM Passos WHERE ID_Recepte = ?", conn, params=[id_to_update])
             st.subheader("Dades actualitzades:")
 
-            df_mostrat.columns = ['ID_Recepte', 'Imatge', 'Titol', 'Observacions', 'Etiquetes', 'Categoria', 'Preparacio', 'Temps']
+            df_mostrat.columns = ['ID_Recepte', 'Imatge', 'Pas']
 
 
             styled_df = df_mostrat.style.apply(row_style, axis=1)
@@ -244,4 +237,6 @@ if st.button("Actualitzar"):
         st.write("Si us plau, introdueix l'ID de la recepta.")
 
 conn.close()
+
+
 

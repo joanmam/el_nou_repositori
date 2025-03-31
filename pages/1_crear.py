@@ -44,6 +44,8 @@ elif selection1 == "editar":
     st.switch_page("pages/3_editar.py")
 elif selection1 == "borrar":
     st.switch_page("pages/4_borrar.py")
+elif selection1 == "arreglar_passos":
+    st.switch_page("pages/9_arreglar_passos.py")
 else:
     st.write("")
 # Manejar el caso en el que no se ha seleccionado ninguna opción significativa
@@ -167,7 +169,7 @@ with st.form(key="Form"):
         temps_total = int(hores * 60 + minuts)
         temps_preparacio = int(hores_prep * 60 + minuts_prep)
 
-        sql = ("INSERT INTO Receptes (Data_formatejada, Titol, Observacions, Etiquetes, URL_Imatge, Temps, Preparacio, Categoria)"
+        sql = ("INSERT INTO Receptes (Data_formatejada, Titol, Observacions, Etiquetes, Imatge, Temps, Preparacio, Categoria)"
                    "VALUES (?, ?, ?, ?, ?, ?, ?, ?)")
         datos = data_formatejada, Titol, observacions, etiquetes, uploaded_url, temps_total, temps_preparacio, categoria
         cursor.execute(sql, datos)

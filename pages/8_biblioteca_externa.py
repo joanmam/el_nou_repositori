@@ -43,6 +43,8 @@ elif selection1 == "editar":
     st.switch_page("pages/3_editar.py")
 elif selection1 == "borrar":
     st.switch_page("pages/4_borrar.py")
+elif selection1 == "arreglar_passos":
+    st.switch_page("pages/9_arreglar_passos.py")
 else:
     st.write("")
 # Manejar el caso en el que no se ha seleccionado ninguna opción significativa

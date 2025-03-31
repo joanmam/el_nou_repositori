@@ -45,6 +45,8 @@ elif selection1 == "editar":
     st.switch_page("pages/3_editar.py")
 elif selection1 == "borrar":
     st.switch_page("pages/4_borrar.py")
+elif selection1 == "arreglar_passos":
+    st.switch_page("pages/9_arreglar_passos.py")
 else:
     st.write("")
 # Manejar el caso en el que no se ha seleccionado ninguna opción significativa
@@ -251,7 +253,7 @@ temps_seleccionat = query_params.get("temps", [None])[0]
 
 #Definir la consulta SQL amb els paràmetres necessaris
 query = '''
-    SELECT Receptes.ID_Recepte, Receptes.Data_formatejada, Receptes.Titol, Receptes.Categoria, Receptes.Preparacio, Receptes.URL_Imatge, Receptes.Temps,
+    SELECT Receptes.ID_Recepte, Receptes.Data_formatejada, Receptes.Titol, Receptes.Categoria, Receptes.Preparacio, Receptes.Imatge, Receptes.Temps,
     GROUP_CONCAT(Ingredients.nom || ' (' || Ingredients.quantitat || ')', ', ') AS components
     FROM Receptes
     LEFT JOIN ingredients
@@ -305,7 +307,7 @@ for i, row in df.iterrows():
             ID_Recepte=row['ID_Recepte'],
             titol=row['Titol'],
             data_formatejada=row['Data_formatejada'],  # Data formatejada
-            imatge_url=row['URL_Imatge'],  # URL de la imatge
+            imatge_url=row['Imatge'],  # URL de la imatge
             ingredients=row['components'],  # Ingredients
             temps_preparacio=row['Preparacio'],  # Temps de preparació
             temps_act=row["Temps"]  # Temps total
