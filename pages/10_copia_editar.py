@@ -126,76 +126,60 @@ st.text("")
 conn = sqlitecloud.connect(cami_db)
 cursor = conn.cursor()
 
-llista_ingredients_sense_ordenar = list(set(obtenir_ingredients()))
-llista_ingredients = sorted(llista_ingredients_sense_ordenar)
-
-# Obtenir els IDs dels registres a actualitzar
-st.write("")
-st.write("")
-lletra_variable()
-st.markdown('<div class="custom-element"><p class="custom-title">Registre per actualitzar:</p>', unsafe_allow_html=True)
-id_to_update = st.number_input("", min_value=43, step=1)
-
-
-# Mostrar informació dels registres seleccionats
-registre = (id_to_update,)
-st.write(f"El registre seleccionat per actualitzar és: {id_to_update}")
-
-# def render_image(Imatge):
-#     return f'<img src="{Imatge}" width="150">'
-#
-# query = "SELECT ID_Recepte, Imatge, Titol, Observacions, Etiquetes, Categoria, Preparacio, Temps FROM Receptes"
-#
-# df = pd.read_sql(query, conn)
-#
-# df['Observacions'] = df['Observacions'].apply(lambda x: process_observacions(x))
-# df['Imatge'] = df['Imatge'].apply(render_image)
-#
-#
-#
-#
-# st.dataframe(
-#     df,
-#     column_config=column_configuration,
-#     use_container_width=True,
-#     hide_index=True
-#
-
-
 
 # Realizar consulta SQL para obtener registros
-query = "SELECT ID_Recepte, Imatge, Titol FROM Receptes"
+query = "SELECT * FROM Receptes"
 df = pd.read_sql(query, conn)
+
+df["Imatge_text"] = df["Imatge"]
+df_visible = df.drop(columns=["blob", "Preparacio", "Temps", "Data_formatejada"])  # Quita las columnas antes de mostra
+
+
+column_order = ["ID_Recepte", "Titol", "Imatge_text", "Imatge", "Observacions", "Etiquetes", "Categoria"]
+df_visible = df_visible[column_order]
+
 
 # Configurar columnas del DataFrame
 with st.container():
     edited_df = st.data_editor(
-        df,
+        df_visible,
         column_config={
             "ID_Recepte": st.column_config.NumberColumn(
-                label="Numero",
-                width= "small" # Tamaño más compacto
+                label="ID",
             ),
             "Titol": st.column_config.TextColumn(
-                label="Retitol",
-                width="large"  # Tamaño más compacto
-
+                label="Titol",
+            ),
+            "Imatge_text": st.column_config.TextColumn(
+                label="URL",
             ),
             "Imatge": st.column_config.ImageColumn(
                 label="Vista previa",
-                width="small",  # Tamaño más compacto
                 help="Imagenes"
-            )
+            ),
+            "Observacions": st.column_config.TextColumn(
+                label="Observacions",
+            ),
+            "Etiquetes": st.column_config.TextColumn(
+                label="Etiquetes",
+            ),
+            "Categoria": st.column_config.TextColumn(
+                label="Categoria",
+            ),
         },
         hide_index=True,
-        use_container_width=False)
+        use_container_width=True)
 
 # Botón para actualizar cambios en SQLiteCloud
-if st.button("Actualizar en SQLiteCloud"):
+if st.button("Actualitzar"):
     for index, row in edited_df.iterrows():
         query_update = f"""
         UPDATE Receptes 
-        SET Titol = '{row["Titol"]}', Imatge = '{row["Imatge"]}'
+        SET Titol = '{row["Titol"]}',
+            Imatge = '{row["Imatge_text"]}',
+            Observacions = '{row["Observacions"]}',
+            Etiquetes = '{row["Etiquetes"]}',
+            Categoria = '{row["Categoria"]}'
         WHERE ID_Recepte = {row["ID_Recepte"]}
         """
         conn.execute(query_update)  # Ejecutar el UPDATE en SQLiteCloud
@@ -203,31 +187,33 @@ if st.button("Actualizar en SQLiteCloud"):
     conn.commit()  # Guardar cambios
     st.success("¡Datos actualizados correctamente en SQLiteCloud! 🎉")
 
-query = "SELECT ID_Recepte, Imatge, Titol FROM Receptes"
-df = pd.read_sql(query, conn)
+    query = "SELECT ID_Recepte, Imatge, Titol, Observacions, Etiquetes, Categoria FROM Receptes"
+    update_df = pd.read_sql(query, conn)
 
-# Configurar columnas del DataFrame
-with st.container():
-    update_df = st.dataframe(
-        df,
-        column_config={
-            "ID_Recepte": st.column_config.NumberColumn(
-                label="Numero",
-                width= "small" # Tamaño más compacto
-            ),
-            "Titol": st.column_config.TextColumn(
-                label="Retitol",
-                width="large"  # Tamaño más compacto
-
-            ),
-            "Imatge": st.column_config.ImageColumn(
-                label="Vista previa",
-                width="small",  # Tamaño más compacto
-                help="Imagenes"
-            )
-        },
+    # Configurar columnas del DataFrame
+    with st.container():
+        update_df = st.dataframe(
+            update_df,
+            column_config={
+                "ID_Recepte": st.column_config.NumberColumn(
+                    label="ID",
+                ),
+                "Titol": st.column_config.TextColumn(
+                    label="Titol",
+                ),
+                "Imatge": st.column_config.ImageColumn(
+                    label="Vista previa",
+                    help="Imagenes"
+                ),
+                "Observacions": st.column_config.TextColumn(
+                    label="Observacions",
+                ),
+                "Etiquetes": st.column_config.TextColumn(
+                    label="Etiquetes",
+                ),
+                "Categoria": st.column_config.TextColumn(
+                    label="Categoria",
+                ),
+            },
         hide_index=True,
-        use_container_width=False)
-
-# Cerrar conexión
-
+        use_container_width=True)
