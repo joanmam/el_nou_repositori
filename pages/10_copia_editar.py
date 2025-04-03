@@ -169,7 +169,7 @@ df = pd.read_sql(query, conn)
 
 # Configurar columnas del DataFrame
 with st.container():
-    st.dataframe(
+    edited_df = st.data_editor(
         df,
         column_config={
             "ID_Recepte": st.column_config.NumberColumn(
@@ -189,4 +189,45 @@ with st.container():
         },
         hide_index=True,
         use_container_width=False)
+
+# Botón para actualizar cambios en SQLiteCloud
+if st.button("Actualizar en SQLiteCloud"):
+    for index, row in edited_df.iterrows():
+        query_update = f"""
+        UPDATE Receptes 
+        SET Titol = '{row["Titol"]}', Imatge = '{row["Imatge"]}'
+        WHERE ID_Recepte = {row["ID_Recepte"]}
+        """
+        conn.execute(query_update)  # Ejecutar el UPDATE en SQLiteCloud
+
+    conn.commit()  # Guardar cambios
+    st.success("¡Datos actualizados correctamente en SQLiteCloud! 🎉")
+
+query = "SELECT ID_Recepte, Imatge, Titol FROM Receptes"
+df = pd.read_sql(query, conn)
+
+# Configurar columnas del DataFrame
+with st.container():
+    update_df = st.dataframe(
+        df,
+        column_config={
+            "ID_Recepte": st.column_config.NumberColumn(
+                label="Numero",
+                width= "small" # Tamaño más compacto
+            ),
+            "Titol": st.column_config.TextColumn(
+                label="Retitol",
+                width="large"  # Tamaño más compacto
+
+            ),
+            "Imatge": st.column_config.ImageColumn(
+                label="Vista previa",
+                width="small",  # Tamaño más compacto
+                help="Imagenes"
+            )
+        },
+        hide_index=True,
+        use_container_width=False)
+
+# Cerrar conexión
 
