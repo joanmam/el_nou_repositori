@@ -47,6 +47,10 @@ elif selection1 == "borrar":
     st.switch_page("pages/4_borrar.py")
 elif selection1 == "arreglar_passos":
     st.switch_page("pages/9_arreglar_passos.py")
+elif selection1 == "copia_editar":
+    st.switch_page("pages/10_copia_editar.py")
+elif selection1 == "copia_arreglar_passos":
+    st.switch_page("pages/11_copia_arreglar_passos.py")
 else:
     st.write("")
 # Manejar el caso en el que no se ha seleccionado ninguna opción significativa
@@ -65,7 +69,6 @@ else:
     st.write("")
 
 #_fi barra lateral____________________________
-
 
 agregar_iconos_google()
 

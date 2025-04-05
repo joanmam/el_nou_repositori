@@ -143,8 +143,10 @@ query = "SELECT ID_Recepte, Imatge, Titol, Observacions, Etiquetes, Categoria, P
 
 df = pd.read_sql(query, conn, params=[id_to_update])
 
+df["Imatge_text"] = df["Imatge"]
 df['Observacions'] = df['Observacions'].apply(lambda x: process_observacions(x))
-
+column_order= ["ID_Recepte", "Titol", "Imatge_text", "Imatge", "Observacions", "Etiquetes", "Categoria"]
+df = df[column_order]
 
 # Configurar columnas del DataFrame
 with st.container():
@@ -178,10 +180,85 @@ with st.container():
         hide_index=True,
         use_container_width=True)
 
+separador()
+
+query = "SELECT * FROM Passos"
+df = pd.read_sql(query, conn)
+
+df["Imatge_pas"] = df["URL_passos"]
+df_visible = df.drop(columns=["ID_Passos", "Data_passos", "Imatge_passos"])  # Quita las columnas antes de mostra
 
 
+column_order = ["Imatge_pas", "URL_passos", "Numero", "Pas", "ID_Recepte"]
+df_visible = df_visible[column_order]
 
 
+with st.container():
+    edited_pas = st.data_editor(
+        df_visible,
+        column_config={
+            "Numero": st.column_config.NumberColumn(
+                label="Numero",
+            ),
+            "Pas": st.column_config.TextColumn(
+                label="Pas",
+            ),
+            "URL_passos": st.column_config.TextColumn(
+                label="URL",
+            ),
+            "Imatge_pas": st.column_config.ImageColumn(
+                label="Vista previa",
+                help="Imagenes"
+            ),
+            "ID_Recepte": st.column_config.NumberColumn(
+                label="ID_R",
+            ),
+
+        },
+        hide_index=True,
+        use_container_width=True)
+
+# Botón para actualizar cambios en SQLiteCloud
+if st.button("Actualitzar"):
+    for index, row in edited_pas.iterrows():
+        query_update = f"""
+        UPDATE Passos
+        SET Numero = '{row["Numero"]}',
+            URL_passos = '{row["URL_passos"]}',
+            Pas = '{row["Pas"]}'
+        WHERE ID_Recepte = {row["ID_Recepte"]}
+        """
+        conn.execute(query_update)  # Ejecutar el UPDATE en SQLiteCloud
+
+    conn.commit()  # Guardar cambios
+    st.success("¡Datos actualizados correctamente en SQLiteCloud! 🎉")
+
+    query = "SELECT ID_Recepte, URL_passos, Pas, Numero FROM Passos"
+    update_df = pd.read_sql(query, conn)
+    column_order = ["URL_passos", "Numero", "Pas", "ID_Recepte"]
+
+
+    with st.container():
+        st.dataframe(
+           update_df,
+            column_config={
+                "Numero": st.column_config.NumberColumn(
+                    label="Numero",
+                ),
+                "Pas": st.column_config.TextColumn(
+                    label="Pas",
+                ),
+                "URL_passos": st.column_config.ImageColumn(
+                    label="Vista previa",
+                    help="Imagenes"
+                ),
+                "ID_Recepte": st.column_config.NumberColumn(
+                    label="ID_R",
+                ),
+
+            },
+            hide_index=True,
+            use_container_width=True)
 
 # # Mostra les dades existents
 # st.subheader('Dades actuals dels registres')
