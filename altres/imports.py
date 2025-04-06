@@ -54,6 +54,10 @@ from altres.funcions import dataframe_externs
 import pyshorteners
 from altres.funcions import dataframe_estadistiques
 from pathlib import Path
-from altres.funcions import barra
+from altres.funcions import barra_lateral2
 from altres.funcions import generar_html_fontawesome2
+from reportlab.lib.pagesizes import A4
+from reportlab.platypus import SimpleDocTemplate, Table, TableStyle
+from reportlab.lib import colors
+from altres.funcions import generar_pdf
 
