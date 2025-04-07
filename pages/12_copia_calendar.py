@@ -50,14 +50,19 @@ st.text("")
 #Acaba la capçalera
 
 barra_lateral2()
+locale.setlocale(locale.LC_TIME, "ca_ES.UTF-8")
 
 
 # 🟢 Formulari d'entrada de dades
 st.title("Ingressar dades en SQLiteCloud")
+opcions_apats = ["Esmorzar", "Dinar", "Sopar"]
+
 data = st.date_input("Data")
 receptes_input = st.text_area("Receptes (separades per comes)")
-apats_input = st.text_area("Apats (separades per comes)")
+apats_input = st.selectbox("Selecciona un àpat", opcions_apats)  # Selectbox en
 urls_input = st.text_area("URLs (separades per comes)")
+
+separador()
 
 # Guardar dades
 if st.button("Guardar Dades"):
@@ -88,12 +93,53 @@ df_urls = pd.DataFrame(df["URL_Externs"].to_list(), columns=["URL 1", "URL 2", "
 df_urls.columns = [f"URL {i+1}" for i in range(df_urls.shape[1])]
 
 df_final = pd.concat([df.drop(columns=["URL_Externs"]), df_urls], axis=1)
+df_final["Data"] = pd.to_datetime(df_final["Data"]).dt.strftime("%d/%m/%y")
 
 
-st.subheader("Dades en la Base de Dades")
-st.dataframe(df_final, column_config={
-    col: st.column_config.LinkColumn() for col in df_urls.columns
-})
+
+# 🔵 Selecció de setmana
+data_seleccionada = st.date_input("Selecciona una data")
+dia_setmana = data_seleccionada.weekday()  # Troba el dia de la setmana (0=Dilluns)
+primer_dia = data_seleccionada - timedelta(days=dia_setmana)  # Trobar el dilluns corresponent
+ultim_dia = primer_dia + timedelta(days=6)  # Calcula diumenge
+
+primer_dia = pd.to_datetime(primer_dia)
+ultim_dia = pd.to_datetime(ultim_dia)
+
+# ✅ Convertir la columna "Data" a datetime abans de filtrar
+df_final["Data"] = pd.to_datetime(df_final["Data"], format="%d/%m/%y")
+
+# 🔎 Filtrar per la setmana correcta
+df_setmana = df_final[(df_final["Data"] >= primer_dia) & (df_final["Data"] <= ultim_dia)]
+df_setmana = df_setmana.drop(columns=["id"], errors="ignore")  # Treu 'id'
+
+# 🔹 Separar el DataFrame per dies
+df_per_dia = {dia: df_setmana[df_setmana["Data"] == dia] for dia in df_setmana["Data"].unique()}
+
+# 🔗 Mostrar cada dia per separat
+st.subheader(f"📅 Setmana del {primer_dia.strftime('%d/%m/%y')} al {ultim_dia.strftime('%d/%m/%y')}")
 
 
+if st.button("Visualitzar"):
+    df_setmana["Apat"] = df_setmana["Apat"].apply(
+        lambda x: ", ".join(map(str, x)) if isinstance(x, list) else str(x))  # ✅ Convertir llistes a cadenes
+
+    df_setmana = df_setmana.sort_values(["Data", "Apat"])  # ✅ Ordenar primer per Data i Apat
+
+    df_agrupat_per_data = df_setmana.groupby("Data")  # ✅ Agrupar primer per Data
+
+    for dia, df_dia in df_agrupat_per_data:
+        st.subheader(f"{pd.to_datetime(dia).strftime('%A, %d/%m/%y')}")  # 🔹 Dia en català
+
+        # 🔹 Agrupar per Apat dins de cada dia
+
+        df_agrupat_per_apats = df_dia.groupby("Apat")
+
+        for apat, df_apats in df_agrupat_per_apats:
+            st.subheader(f"🍽️ {apat}")  # 🔹 Mostrar nom de l'àpat
+            df_apats = df_apats.drop(columns=["Data", "Apat"], errors="ignore")  # ✅ Treure columnes innecessàries
+
+            st.dataframe(df_apats, hide_index=True, column_config={
+                col: st.column_config.LinkColumn() for col in df_urls.columns
+            }, use_container_width=True)
 

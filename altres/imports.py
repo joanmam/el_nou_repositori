@@ -5,7 +5,7 @@ import os
 import re
 import sys
 import uuid
-from datetime import date, datetime
+from datetime import date, datetime, timedelta
 from io import BytesIO, StringIO
 
 import emoji
@@ -57,5 +57,6 @@ from pathlib import Path
 from altres.funcions import barra_lateral2
 from altres.funcions import generar_html_fontawesome2
 import json
+import locale
 
 
