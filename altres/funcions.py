@@ -1167,7 +1167,8 @@ def barra_lateral2():
         st.switch_page("pages/10_editar.py")
     elif selection1 == "calendar":
         st.switch_page("pages/12_calendar.py")
-
+    elif selection1 == "copia_calendar":
+        st.switch_page("pages/12_copia_calendar.py")
     else:
         st.write("")
     # Manejar el caso en el que no se ha seleccionado ninguna opción significativa

@@ -52,40 +52,48 @@ st.text("")
 barra_lateral2()
 
 
-# Seleccionar data d'inici
-data_inici = st.date_input("Selecciona el primer dia de la setmana", pd.Timestamp.today())
-primer_dilluns_actual = data_inici - pd.offsets.Week(weekday=0)
+# 🟢 Formulari d'entrada de dades
+st.title("Ingressar dades en SQLiteCloud")
+data = st.date_input("Data")
+receptes_input = st.text_area("Receptes (separades per comes)")
+apats_input = st.text_area("Apats (separades per comes)")
+urls_input = st.text_area("URLs (separades per comes)")
 
-# Trobar el primer dilluns de la setmana següent
-primer_dilluns_seguent = primer_dilluns_actual + pd.DateOffset(weeks=1)
+# Guardar dades
+if st.button("Guardar Dades"):
+    if receptes_input:
+        # Convertir a JSON
+        receptes = json.dumps([x.strip() for x in receptes_input.split(",")])
+        urls = json.dumps([x.strip() for x in urls_input.split(",")])
+        apats = json.dumps([x.strip() for x in apats_input.split(",")])
+        # Inserir a SQLiteCloud
+        cursor.execute("INSERT INTO Calendari (Data, Apat, Recepte, URL_Externs) VALUES (?, ?, ?, ?)",
+                       (str(data), apats, receptes, urls))
+        conn.commit()
+        st.success("✅ Dades guardades correctament!")
 
-# Definir dies de la setmana
-dies_setmana = ["Dilluns", "Dimarts", "Dimecres", "Dijous", "Divendres", "Dissabte", "Diumenge"]
-apats = ["Esmorzar", "Dinar", "Sopar"]
+# 🟠 Mostrar les dades guardades
+df = pd.read_sql_query("SELECT * FROM Calendari", conn)
 
-# Generar les dates corresponents
-dates_setmana = pd.date_range(start=primer_dilluns_seguent, periods=7, freq="D").strftime("%d/%m/%Y")
+# Expandir JSON en columnes per veure millor
+df["Apat"] = df["Apat"].apply(json.loads)
+df["Recepte"] = df["Recepte"].apply(json.loads)
+df["URL_Externs"] = df["URL_Externs"].apply(json.loads)
 
-# Crear un diccionari de `DataFrames`, un per cada dia amb la seva data
-calendari = {
-    dia: pd.DataFrame(index=apats, columns=["Data", "Activitat", "Extern"])
-    for dia in dies_setmana
-}
-# Afegir la data correcta a cada dia
-for i, dia in enumerate(dies_setmana):
-    calendari[dia]["Data"] = dates_setmana[i]
+df["URL_Externs"] = df["URL_Externs"].apply(lambda x: x[:3] + [None] * (3 - len(x)))
 
 
+df_urls = pd.DataFrame(df["URL_Externs"].to_list(), columns=["URL 1", "URL 2", "URL 3"])
 
-# Mostrar cada `DataFrame` a Streamlit
-for dia, df in calendari.items():
-    st.subheader(f"📅 {dia} ({df['Data'][0]})")  # Mostra el dia amb la seva data
-    # Comprovar si "Extern" existeix abans d'aplicar process_observacions
-    if "Extern" in df.columns:
-        df["Extern"] = df["Extern"].fillna("").apply(process_observacions)
-    df_visible = df.drop(columns=["Data"])  # Quita las columnas antes de mostra
+df_urls.columns = [f"URL {i+1}" for i in range(df_urls.shape[1])]
 
-    edited_df = st.data_editor(df_visible, hide_index=False, key=f"editor_{dia}")  # Evita conflictes de Streamlit
-    calendari[dia] = edited_df
+df_final = pd.concat([df.drop(columns=["URL_Externs"]), df_urls], axis=1)
+
+
+st.subheader("Dades en la Base de Dades")
+st.dataframe(df_final, column_config={
+    col: st.column_config.LinkColumn() for col in df_urls.columns
+})
+
 
 
