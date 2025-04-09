@@ -58,5 +58,6 @@ from altres.funcions import barra_lateral2
 from altres.funcions import generar_html_fontawesome2
 import json
 import locale
+from urllib.parse import urlparse
 
 
