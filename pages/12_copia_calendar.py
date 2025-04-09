@@ -91,7 +91,7 @@ df["URL_Externs"] = df["URL_Externs"].apply(lambda x: x[:3] + [None] * (3 - len(
 df_urls = pd.DataFrame(df["URL_Externs"].to_list(), columns=["URL 1", "URL 2", "URL 3"])
 shortener = pyshorteners.Shortener()
 
-df_urls = df_urls.applymap(lambda url: shortener.tinyurl.short(url) if pd.notna(url) else None)
+df_urls = df_urls.applymap(lambda url: shortener.tinyurl.short(url) if isinstance(url, str) and pd.notna(url) else None)
 
 
 df_urls.columns = [f"URL {i+1}" for i in range(df_urls.shape[1])]
@@ -144,10 +144,15 @@ if st.button("Visualitzar"):
             df_apats = df_apats.drop(columns=["Data", "Apat"], errors="ignore")  # ✅ Treure columnes innecessàries
 
             columnes_df = {
-                **{col: st.column_config.LinkColumn(width="medium") for col in df_urls.columns},
-                # ✅ Aplicar "medium" a les URL
-                **{col: st.column_config.TextColumn(width="medium") for col in df_apats.columns if
-                   col not in df_urls.columns}  # ✅ Aplicar "medium" a les altres columnes
+                **{
+                    col: st.column_config.LinkColumn(width="medium")
+                    for col in df_urls.columns if isinstance(col, str)  # 🔹 Assegurar que `col` és un string
+                },
+                **{
+                    col: st.column_config.TextColumn(width="medium")
+                    for col in df_apats.columns if isinstance(col, str) and col not in df_urls.columns
+                    # 🔹 Comprovar tipus
+                }
             }
 
             st.dataframe(df_apats, hide_index=True, column_config=columnes_df, use_container_width=True)
