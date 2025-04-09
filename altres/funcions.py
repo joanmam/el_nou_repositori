@@ -16,6 +16,7 @@ from altres.variables import img_url
 from io import BytesIO, StringIO
 import pandas as pd
 from pathlib import Path  # Importar Path correctament
+from altres.diccionari import diccionari_imatges
 
 
 
@@ -1187,4 +1188,10 @@ def barra_lateral2():
 
 
 
-
+def assignar_imatge(url):
+    if url is None or not isinstance(url, str):
+        return None  # ✅ Evita errors amb valors None
+    for domini, imatge in diccionari_imatges.items():
+        if domini in url:
+            return imatge  # ✅ Retorna la imatge si la URL conté el domini
+    return "https://example.com/default-image.png"  # 🔹 Imatge per defecte si no hi ha coincidència

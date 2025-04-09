@@ -14,3 +14,5 @@ emojis = {
     'pollastre': emoji.emojize(':chicken:'),
     'enciam': emoji.emojize(':leafy_green:'),
 }
+
+

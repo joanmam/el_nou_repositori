@@ -137,6 +137,7 @@ df_per_dia = {dia: df_setmana[df_setmana["Data"] == dia] for dia in df_setmana["
 st.subheader(f"📅 Setmana del {primer_dia.strftime('%d/%m/%y')} al {ultim_dia.strftime('%d/%m/%y')}")
 
 
+
 if st.button("Visualitzar"):
     df_setmana["Apat"] = df_setmana["Apat"].apply(
         lambda x: ", ".join(map(str, x)) if isinstance(x, list) else str(x))  # ✅ Convertir llistes a cadenes
@@ -157,14 +158,19 @@ if st.button("Visualitzar"):
         for apat, df_apats in df_agrupat_per_apats:
             st.subheader(f"🍽️ {apat}")  # 🔹 Mostrar nom de l'àpat
             df_apats = df_apats.drop(columns=["Data", "Apat"], errors="ignore")  # ✅ Treure columnes innecessàries
+            for col in ["URL 1", "URL 2", "URL 3"]:
+                if col in df_apats.columns:
+                    df_apats[f"Imatge {col}"] = df_apats[col].apply(assignar_imatge)
 
             columnes_df = {
                 **{col: st.column_config.LinkColumn(width="medium") for col in df_apats.columns if
                    col in ["URL 1", "URL 2", "URL 3"]},
-                **{"Recepte": st.column_config.TextColumn(width="medium")}
+                **{"Recepte": st.column_config.TextColumn(width="medium")},
+                **{col: st.column_config.ImageColumn(width="small") for col in ["Imatge URL 1", "Imatge URL 2", "Imatge URL 3"]}
+
             }
 
             st.dataframe(df_apats, hide_index=True, column_config=columnes_df, use_container_width=True)
-            st.dataframe(df_apats, hide_index=True, column_config=columnes_df, use_container_width=True)
+
 
 

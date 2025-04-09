@@ -59,5 +59,7 @@ from altres.funcions import generar_html_fontawesome2
 import json
 import locale
 from urllib.parse import urlparse
+from altres.funcions import assignar_imatge
+from altres.diccionari import diccionari_imatges
 
 
