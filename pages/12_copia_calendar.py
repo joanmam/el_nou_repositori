@@ -162,8 +162,19 @@ if st.button("Visualitzar"):
                 if col in df_apats.columns:
                     df_apats[f"Imatge {col}"] = df_apats[col].apply(assignar_imatge)
 
+            ordre_columnes = [
+                "Recepte",
+                "Imatge URL 1", "URL 1",
+                "Imatge URL 2", "URL 2",
+                "Imatge URL 3", "URL 3"
+            ]
+            columnes_present = [col for col in ordre_columnes if col in df_apats.columns]
+
+            df_apats = df_apats[columnes_present]  # ✅ Aplicar l'ordre correcte
+
+
             columnes_df = {
-                **{col: st.column_config.LinkColumn(width="medium") for col in df_apats.columns if
+                **{col: st.column_config.LinkColumn(width="small", display_text="Open") for col in df_apats.columns if
                    col in ["URL 1", "URL 2", "URL 3"]},
                 **{"Recepte": st.column_config.TextColumn(width="medium")},
                 **{col: st.column_config.ImageColumn(width="small") for col in ["Imatge URL 1", "Imatge URL 2", "Imatge URL 3"]}
