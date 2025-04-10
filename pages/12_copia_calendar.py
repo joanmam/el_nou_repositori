@@ -85,16 +85,16 @@ df["Apat"] = df["Apat"].apply(json.loads)
 df["Recepte"] = df["Recepte"].apply(json.loads)
 df["URL_Externs"] = df["URL_Externs"].apply(json.loads)
 
-df["URL_Externs"] = df["URL_Externs"].apply(lambda x: x[:3] + [None] * (3 - len(x)))
+df["URL_Externs"] = df["URL_Externs"].apply(lambda x: x[:3] + [None] * (2 - len(x)))
 
 
-df_urls = pd.DataFrame(df["URL_Externs"].to_list(), columns=["URL 1", "URL 2", "URL 3"])
+df_urls = pd.DataFrame(df["URL_Externs"].to_list(), columns=["URL 1", "URL 2"])
 
 
 
 
 # 📌 Fusionar amb `df_final`
-df_final = pd.concat([df.drop(columns=["URL_Externs"]), df_urls[[f"URL {i}" for i in range(1, 4)]]], axis=1)
+df_final = pd.concat([df.drop(columns=["URL_Externs"]), df_urls[[f"URL {i}" for i in range(1, 3)]]], axis=1)
 df_final["Data"] = pd.to_datetime(df_final["Data"]).dt.strftime("%d/%m/%y")
 
 
@@ -165,8 +165,7 @@ if st.button("Visualitzar"):
             ordre_columnes = [
                 "Recepte",
                 "Imatge URL 1", "URL 1",
-                "Imatge URL 2", "URL 2",
-                "Imatge URL 3", "URL 3"
+                "Imatge URL 2", "URL 2"
             ]
             columnes_present = [col for col in ordre_columnes if col in df_apats.columns]
 
@@ -174,14 +173,12 @@ if st.button("Visualitzar"):
 
 
             columnes_df = {
-                **{col: st.column_config.LinkColumn(width="small", display_text="Open") for col in df_apats.columns if
-                   col in ["URL 1", "URL 2", "URL 3"]},
-                **{"Recepte": st.column_config.TextColumn(width="medium")},
-                **{col: st.column_config.ImageColumn(width="small") for col in ["Imatge URL 1", "Imatge URL 2", "Imatge URL 3"]}
+                **{col: st.column_config.LinkColumn( display_text="Open") for col in df_apats.columns if
+                   col in ["URL 1", "URL 2"]},
+                **{"Recepte": st.column_config.TextColumn(width="large")},
+                **{col: st.column_config.ImageColumn(width="small") for col in ["Imatge URL 1", "Imatge URL 2"]}
 
             }
-
             st.dataframe(df_apats, hide_index=True, column_config=columnes_df, use_container_width=True)
-
 
 
