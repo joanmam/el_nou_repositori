@@ -1147,14 +1147,23 @@ def barra_lateral2():
         if archivo.name != "__pycache__"
            and archivo.name.startswith(("5", "6"))
     ]
+    archivos_filtrados4 = [
+        archivo.stem.split("_", 1)[-1]
+        for archivo in pages_dir.iterdir()
+        if archivo.name != "__pycache__"
+           and archivo.name.startswith(("12"))
+    ]
+
     # Agregar una opción neutral al inicio del menú
     opciones1 = ["Selecciona una opción"] + archivos_filtrados1
     opciones2 = ["Selecciona una opción"] + archivos_filtrados2
     opciones3 = ["Selecciona una opción"] + archivos_filtrados3
+    opciones4 = ["Selecciona una opción"] + archivos_filtrados4
     # Crear el radio con la opción neutral
     selection1 = st.sidebar.radio("General", opciones1, index=0)
     selection2 = st.sidebar.radio("Externs", opciones2, index=0)
     selection3 = st.sidebar.radio("Passos", opciones3, index=0)
+    selection4 = st.sidebar.radio("Passos", opciones4, index=0)
     # Manejar el caso en el que no se ha seleccionado ninguna opción significativa
     if selection1 == "crear":
         st.switch_page("pages/1_crear.py")
@@ -1166,10 +1175,6 @@ def barra_lateral2():
         st.switch_page("pages/11_arreglar_passos.py")
     elif selection1 == "editar":
         st.switch_page("pages/10_editar.py")
-    elif selection1 == "calendar":
-        st.switch_page("pages/12_calendar.py")
-    elif selection1 == "copia_calendar":
-        st.switch_page("pages/12_copia_calendar.py")
     else:
         st.write("")
     # Manejar el caso en el que no se ha seleccionado ninguna opción significativa
@@ -1179,10 +1184,14 @@ def barra_lateral2():
         st.switch_page("pages/8_biblioteca_externa.py")
     else:
         st.write("")
+
     if selection3 == "passos":
         st.switch_page("pages/5_passos.py")
     elif selection3 == "protocol":
         st.switch_page("pages/6_protocol.py")
+
+    if selection4 == "calendari":
+        st.switch_page("pages/12_calendari.py")
     else:
         st.write("")
 

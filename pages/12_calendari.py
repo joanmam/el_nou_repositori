@@ -173,12 +173,12 @@ if st.button("Visualitzar"):
 
 
             columnes_df = {
-                **{col: st.column_config.LinkColumn( display_text="Open") for col in df_apats.columns if
+                **{col: st.column_config.LinkColumn(width="small", display_text="Open") for col in df_apats.columns if
                    col in ["URL 1", "URL 2"]},
                 **{"Recepte": st.column_config.TextColumn(width="large")},
-                **{col: st.column_config.ImageColumn(width="small") for col in ["Imatge URL 1", "Imatge URL 2"]}
+                **{col: st.column_config.ImageColumn(width="medium") for col in ["Imatge URL 1", "Imatge URL 2"]}
 
             }
-            st.dataframe(df_apats, hide_index=True, column_config=columnes_df, use_container_width=True)
+            st.dataframe(df_apats, hide_index=True, column_config=columnes_df, use_container_width=False)
 
 
