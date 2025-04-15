@@ -140,7 +140,7 @@ llista_ingredients_sense_ordenar = list(set(obtenir_ingredients()))
 llista_ingredients = sorted(llista_ingredients_sense_ordenar)
 
 
-#Acaba la capçalera
+
 
 
 
@@ -181,15 +181,15 @@ for i in range(st.session_state.num_passos):
 
     with col1:
         lletra_variable()
-        st.markdown('<div class="custom-element2"><p class="custom-title2">Imatge:</p>', unsafe_allow_html=True)
-        image = st.text_input("Puja una URL imatge", )
+        st.markdown('<div class="custom-element2"><p class="custom-title2">Imatge:</p></div>', unsafe_allow_html=True)
+        image = st.text_input("Puja una URL imatge", key=f"imatge_{i}")
 
         if image is not None:
             st.session_state.imatges[i] = image
 
     with col2:
         lletra_variable()
-        st.markdown('<div class="custom-element2"><p class="custom-title2">Pas:</p>', unsafe_allow_html=True)
+        st.markdown('<div class="custom-element2"><p class="custom-title2">Pas:</p></div>', unsafe_allow_html=True)
         pas = st.text_area(f"", key=f"pas_{i}")
 
         if pas:
@@ -205,13 +205,19 @@ separador()
 if st.button("Guardar", key="save_data"):
     current_date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
+    # Recórrer tots els passos guardats
+    for j in range(i + 1):
+        pas = st.session_state.passos[j] if j < len(st.session_state.passos) else ""
+        image = st.session_state.imatges[j] if j < len(st.session_state.imatges) else ""
 
-    cursor.execute('''
-        INSERT INTO Passos (ID_Recepte, Numero, Data_passos, Pas, URL_passos) VALUES (?, ?, ?, ?, ?)
-    ''', (recepte_seleccionada, i+1, current_date, pas, image))
+        # Inserir cada pas a la base de dades
+        cursor.execute('''
+            INSERT INTO Passos (ID_Recepte, Numero, Data_passos, Pas, URL_passos) VALUES (?, ?, ?, ?, ?)
+        ''', (recepte_seleccionada, j + 1, current_date, pas, image))
 
     conn.commit()
-    st.success("Guardado")
+    st.success("Tots els passos s'han guardat correctament!")
+
 
     # Reinicialitzar les llistes i establir el nombre de passos segons el punt d'aturada
     st.session_state.imatges = [None] * max_passos

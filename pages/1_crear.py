@@ -115,8 +115,7 @@ with col3:
 llista_ingredients_sense_ordenar = list(set(obtenir_ingredients()))
 llista_ingredients = sorted(llista_ingredients_sense_ordenar)
 
-separador()
-st.text("")
+
 #Acaba la capçalera
 
 #______________________________________________
@@ -124,7 +123,8 @@ ultimo_id = None
 if 'ultimo_id' not in st.session_state:
     st.session_state.ultimo_id = None
 
-st.subheader("Recepte")
+st.subheader(":material/restaurant: Crear Recepte")
+
 
 
 with st.form(key="Form"):

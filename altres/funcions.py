@@ -1127,13 +1127,17 @@ def generar_html_fontawesome2(ID_Recepte, titol, data_formatejada, imatge_url, i
 
 def barra_lateral2():
     # barra lateral
+    if st.sidebar.button("", icon=":material/chef_hat:", type="primary", use_container_width=True):
+        (st.switch_page("home.py"))
+
+
     pages_dir = Path("pages/")
     archivos_filtrados1 = [
         archivo.stem.split("_", 1)[-1]
         for archivo in pages_dir.iterdir()
         if archivo.name != "__pycache__"
            and "ext" not in archivo.name
-           and not archivo.name.startswith(("5", "6"))
+           and not archivo.name.startswith(("5", "6", "11", "12"))
     ]
     archivos_filtrados2 = [
         archivo.stem.split("_", 1)[-1]
@@ -1155,10 +1159,10 @@ def barra_lateral2():
     ]
 
     # Agregar una opción neutral al inicio del menú
-    opciones1 = ["Selecciona una opción"] + archivos_filtrados1
-    opciones2 = ["Selecciona una opción"] + archivos_filtrados2
-    opciones3 = ["Selecciona una opción"] + archivos_filtrados3
-    opciones4 = ["Selecciona una opción"] + archivos_filtrados4
+    opciones1 = [""] + archivos_filtrados1
+    opciones2 = [""] + archivos_filtrados2
+    opciones3 = [""] + archivos_filtrados3
+    opciones4 = [""] + archivos_filtrados4
     # Crear el radio con la opción neutral
     selection1 = st.sidebar.radio("General", opciones1, index=0)
     selection2 = st.sidebar.radio("Externs", opciones2, index=0)
@@ -1171,8 +1175,6 @@ def barra_lateral2():
         st.switch_page("pages/2_filtrar.py")
     elif selection1 == "borrar":
         st.switch_page("pages/4_borrar.py")
-    elif selection1 == "arreglar_passos":
-        st.switch_page("pages/11_arreglar_passos.py")
     elif selection1 == "editar":
         st.switch_page("pages/10_editar.py")
     else:
@@ -1189,6 +1191,9 @@ def barra_lateral2():
         st.switch_page("pages/5_passos.py")
     elif selection3 == "protocol":
         st.switch_page("pages/6_protocol.py")
+    else:
+        st.write("")
+
 
     if selection4 == "calendari":
         st.switch_page("pages/12_calendari.py")

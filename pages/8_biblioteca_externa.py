@@ -114,7 +114,7 @@ with col3:
     unsafe_allow_html=True)
 
 #final capçalera
-separador()
+
 
 # Inicialitzar l'escurçador
 shortener = pyshorteners.Shortener()
@@ -123,7 +123,7 @@ conn = sqlitecloud.connect(cami_db)
 
 
 
-
+st.subheader(":material/library_books: Biblioteca receptes externes")
 
 #consulta taula externs
 query2 = "SELECT * FROM Externs"

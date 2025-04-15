@@ -16,6 +16,8 @@ st.set_page_config(layout="wide")
 
 barra_lateral2()
 
+
+
 conn = sqlitecloud.connect(cami_db)
 
 

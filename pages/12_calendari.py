@@ -54,7 +54,7 @@ locale.setlocale(locale.LC_TIME, "ca_ES.UTF-8")
 
 
 # 🟢 Formulari d'entrada de dades
-st.title("Ingressar dades en SQLiteCloud")
+st.subheader(":material/app_registration: Ingressar dades ")
 opcions_apats = ["Esmorzar", "Dinar", "Sopar"]
 
 data = st.date_input("Data")
