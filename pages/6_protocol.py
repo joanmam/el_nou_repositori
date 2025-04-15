@@ -115,8 +115,8 @@ with col3:
 llista_ingredients_sense_ordenar = list(set(obtenir_ingredients()))
 llista_ingredients = sorted(llista_ingredients_sense_ordenar)
 
-separador()
-st.text("")
+st.subheader(":material/keyboard_full: Protocol")
+st.divider()
 #Acaba la capçalera
 
 

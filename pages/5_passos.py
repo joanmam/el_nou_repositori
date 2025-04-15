@@ -116,6 +116,8 @@ query = 'SELECT ID_Recepte, Titol, Data_formatejada, Observacions, Preparacio, T
 df = pd.read_sql(query, conn)
 df['Observacions'] = df['Observacions'].apply(process_observacions)
 
+st.subheader(":material/step: Editar passos")
+st.divider()
 st.subheader("Aquestes son les 10 ultimes")
 
 # Aplica l'estil de les files i les columnes
@@ -132,7 +134,7 @@ taula = dataframe_estadistiques(html)
 # Mostra el DataFrame estilitzat utilitzant Streamlit
 st.components.v1.html(taula, height=400, scrolling=True)
 
-separador()
+
 
 #final de les ultimes receptes
 

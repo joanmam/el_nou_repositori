@@ -45,8 +45,7 @@ with col3:
 llista_ingredients_sense_ordenar = list(set(obtenir_ingredients()))
 llista_ingredients = sorted(llista_ingredients_sense_ordenar)
 
-separador()
-st.text("")
+
 #Acaba la capçalera
 
 barra_lateral2()
