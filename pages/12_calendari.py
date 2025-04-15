@@ -51,6 +51,7 @@ llista_ingredients = sorted(llista_ingredients_sense_ordenar)
 barra_lateral2()
 locale.setlocale(locale.LC_TIME, "ca_ES.UTF-8")
 
+st.subheader("Hola")
 
 # 🟢 Formulari d'entrada de dades
 st.subheader(":material/app_registration: Ingressar dades ")
